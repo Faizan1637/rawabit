@@ -2,6 +2,8 @@
 
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { Home, ChevronRight, Mail, Lock, Eye, EyeOff, CheckCircle, UserPlus, LogIn } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 interface LoginFormData {
   email: string;
@@ -10,6 +12,10 @@ interface LoginFormData {
 }
 
 export default function Login() {
+  
+  const { login, loading, error, clearError } = useAuth();
+  const router = useRouter();
+
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
@@ -19,22 +25,45 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
+  // MODIFY your existing handleChange to clear errors when user types
+const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const { name, value, type, checked } = e.target;
+  
+  // Clear error when user starts typing
+  if (error) {
+    clearError();
+  }
+  
+  setFormData(prev => ({
+    ...prev,
+    [name]: type === 'checkbox' ? checked : value
+  }));
+};
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+ 
+ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  clearError(); // Clear any previous errors
+  
+  try {
+    await login({
+      email: formData.email,
+      password: formData.password
+    });
+    
+    // Show success message
     setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-    }, 3000);
-  };
+    
+    // Redirect will happen automatically from useAuth hook
+    // But you can also manually redirect if needed:
+    // setTimeout(() => router.push('/dashboard'), 2000);
+    
+  } catch (err) {
+    // Error is already handled by useAuth hook
+    // Just log it or show custom error message
+    console.error('Login failed:', err);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50">
@@ -84,6 +113,19 @@ export default function Login() {
                   <p className="text-slate-600">Redirecting you to your dashboard...</p>
                 </div>
               ) : (
+                <>
+                {error && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex-shrink-0">
+                          <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <p className="text-red-800 font-medium">{error}</p>
+                      </div>
+                    </div>
+                  )}
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Email */}
                   <div>
@@ -157,16 +199,26 @@ export default function Login() {
                   </div>
 
                   {/* Submit Button */}
-                  <button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold text-lg py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                  >
-                    LOGIN
-                  </button>
-
-
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold text-lg py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {loading ? (
+                    <span className="flex items-center justify-center space-x-2">
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>LOGGING IN...</span>
+                    </span>
+                  ) : (
+                    'LOGIN'
+                  )}
+                </button>
                 </form>
-              )}
+              </>
+            )}
             </div>
 
             {/* Right Side - Register CTA */}
