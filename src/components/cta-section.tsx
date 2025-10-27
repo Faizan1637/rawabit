@@ -1,4 +1,14 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
 export default function CTASection() {
+  const router = useRouter();
+
+  const handleSignUp = () => {
+    router.push('/register'); // Navigate to /register
+  };
+
   return (
     <section className="bg-neutral-100 py-16 md:py-20">
       <div className="container mx-auto px-4">
@@ -15,12 +25,15 @@ export default function CTASection() {
 
           {/* Right Button */}
           <div className="flex-shrink-0">
-            <button className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-4 text-lg transition-colors duration-200 shadow-lg hover:shadow-xl">
+            <button
+              onClick={handleSignUp}
+              className="bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-4 text-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+            >
               SIGN UP
             </button>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

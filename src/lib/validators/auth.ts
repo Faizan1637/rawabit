@@ -27,3 +27,62 @@ export const validateRequiredFields = (
     );
   }
 };
+
+// ADD these new validator functions
+
+export const validateName = (name: string, fieldName: string): void => {
+  if (!name || name.trim().length < 2) {
+    throw new AppError(
+      `${fieldName} must be at least 2 characters`,
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+  
+  if (name.trim().length > 50) {
+    throw new AppError(
+      `${fieldName} must not exceed 50 characters`,
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+};
+
+export const validateGender = (gender: string): void => {
+  const validGenders = ['male', 'female', 'other'];
+  if (!validGenders.includes(gender.toLowerCase())) {
+    throw new AppError(
+      'Gender must be male, female, or other',
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+};
+
+export const validateDateOfBirth = (dateOfBirth: string): void => {
+  // Check if valid date format
+  const date = new Date(dateOfBirth);
+  
+  if (isNaN(date.getTime())) {
+    throw new AppError(
+      'Invalid date of birth format',
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+
+  // Check if user is at least 13 years old
+  const thirteenYearsAgo = new Date();
+  thirteenYearsAgo.setFullYear(thirteenYearsAgo.getFullYear() - 13);
+  
+  if (date > thirteenYearsAgo) {
+    throw new AppError(
+      'You must be at least 13 years old to register',
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+  
+  // Check if date is not in the future
+  if (date > new Date()) {
+    throw new AppError(
+      'Date of birth cannot be in the future',
+      HTTP_STATUS.BAD_REQUEST
+    );
+  }
+};

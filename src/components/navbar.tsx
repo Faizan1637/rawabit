@@ -13,7 +13,7 @@ const navItems = [
   { label: "Tutorials", href: "/tutorial" },
   { label: "How-To-Register", href: "/register-info" },
   { label: "Contact", href: "/contact-us" },
-  { label: "Find Match", href: "#" },
+  { label: "Find Match", href: "/account/findpartner" },
 ]
 
 export default function Navbar() {
