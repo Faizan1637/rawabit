@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import Navbar from "@/components/navbar"
 import BottomBar from "@/components/bottombar"
+import { AuthProvider } from '@/context/AuthContext';
 import "./globals.css"
 
 
@@ -48,9 +49,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`font-sans antialiased pt-20`}>
-        <Navbar />
-        {children}
-        <BottomBar/>
+        <AuthProvider>
+          <Navbar />
+          {children}
+          <BottomBar/>
+        </AuthProvider>
       </body>
     </html>
   )

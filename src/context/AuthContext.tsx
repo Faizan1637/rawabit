@@ -1,95 +1,83 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authApi } from '@/client/api/auth.api';
-import { RegisterFormData, LoginFormData } from '@/types/auth.types';
+import { UserResponse } from '@/types/user';
 
-export const useAuth = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+interface AuthContextType {
+  user: UserResponse | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+  refetchUser: () => Promise<void>;
+  logout: () => void;
+}
 
-  const register = async (formData: RegisterFormData) => {
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<UserResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ Fetch from API (and set localStorage)
+  const fetchUser = async () => {
     try {
-      setLoading(true);
-      setError(null);
-
-      // Frontend validation
-      if (formData.password !== formData.confirmPassword) {
-        throw new Error('Passwords do not match');
-      }
-
-      if (!formData.agreeToTerms) {
-        throw new Error('You must agree to the terms and conditions');
-      }
-
-      if (formData.password.length < 8) {
-        throw new Error('Password must be at least 8 characters');
-      }
-
-      // Call API
-      const response = await authApi.register(formData);
-
-      if (response.success) {
-        router.push('/dashboard');
-        return response.data?.user;
+      const response = await authApi.me();
+      if (response.success && response.data?.user) {
+        setUser(response.data.user);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       } else {
-        throw new Error(response.error || 'Registration failed');
+        setUser(null);
+        localStorage.removeItem('user');
       }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Registration failed';
-      setError(message);
-      throw err;
+    } catch (error) {
+      setUser(null);
+      localStorage.removeItem('user');
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (formData: LoginFormData) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await authApi.login(formData);
-
-      if (response.success) {
-        router.push('/dashboard');
-        return response.data?.user;
-      } else {
-        throw new Error(response.error || 'Login failed');
+  // ✅ Restore from localStorage on first load (for fast UI)
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch {
+        localStorage.removeItem('user');
       }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Login failed';
-      setError(message);
-      throw err;
-    } finally {
-      setLoading(false);
     }
-  };
+    fetchUser(); // still verify with API for valid token/session
+  }, []);
 
+  // ✅ Logout handler
   const logout = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      await authApi.logout();
-      router.push('/login');
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Logout failed';
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
+    setUser(null);
+    localStorage.removeItem('user');
+    await authApi.logout()
+    
   };
 
-  const clearError = () => setError(null);
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        isAuthenticated: !!user,
+        refetchUser: fetchUser,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
 
-  return {
-    register,
-    login,
-    logout,
-    loading,
-    error,
-    clearError,
-  };
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuthContext must be used within AuthProvider');
+  }
+  return context;
 };

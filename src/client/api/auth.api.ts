@@ -33,7 +33,7 @@ export const authApi = {
 
   // Login
   login: async (formData: LoginFormData): Promise<AuthApiResponse> => {
-    const response = await apiClient.post<AuthApiResponse>('/auth/login', {
+    const response = await apiClient.post<AuthApiResponse>('api/auth/login', {
       email: formData.email.trim().toLowerCase(),
       password: formData.password,
     });
@@ -42,12 +42,12 @@ export const authApi = {
 
   // Logout
   logout: async (): Promise<void> => {
-    await apiClient.post('/auth/logout');
+    await apiClient.post('api/auth/logout');
   },
 
   // Get current user
   me: async (): Promise<AuthApiResponse> => {
-    const response = await apiClient.get<AuthApiResponse>('/auth/me');
+    const response = await apiClient.get<AuthApiResponse>('api/auth/me');
     return response.data;
   },
 };
