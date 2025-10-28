@@ -9,14 +9,12 @@ import {
   CreditCardOutlined, 
   WalletOutlined,
   DeleteOutlined,
-  MenuOutlined,
   CloseOutlined,
   LogoutOutlined,
-  BellOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined
 } from "@ant-design/icons"
-import { Button, Avatar, Badge } from "antd"
+import { Button, Avatar } from "antd"
 import MembershipPlans from "@/components/membership-plans"
 
 const Dashboard = () => {
@@ -150,62 +148,21 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50">
-      {/* Top Navigation Bar */}
-      <div className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo/Brand */}
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="lg:hidden text-slate-700 hover:text-orange-600 transition-colors"
-              >
-                <MenuOutlined className="text-2xl" />
-              </button>
-              <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">
-                Rishtey.com
-              </h1>
-            </div>
-
-            {/* Right Side - Notifications & User */}
-            <div className="flex items-center gap-4">
-              <Badge count={3} className="cursor-pointer">
-                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center hover:bg-orange-200 transition-colors">
-                  <BellOutlined className="text-orange-600 text-lg" />
-                </div>
-              </Badge>
-              
-              <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-orange-50 rounded-full border border-orange-200">
-                <Avatar 
-                  size={32} 
-                  icon={<UserOutlined />} 
-                  className="bg-orange-500"
-                />
-                <div className="text-sm">
-                  <div className="font-semibold text-slate-800">{user.name}</div>
-                  <div className="text-xs text-orange-600">{user.subscription}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 pt-0">
       <div className="container mx-auto px-4 py-8">
         <div className="flex gap-8">
           {/* Sidebar */}
           <aside className={`
-            fixed lg:sticky top-0 left-0 h-screen lg:h-auto
+            fixed lg:sticky top-20 left-0 h-[calc(100vh-5rem)] lg:h-auto
             w-72 lg:w-64 bg-white rounded-2xl shadow-xl border border-slate-200 
-            transition-transform duration-300 z-50
+            transition-transform duration-300 z-30
             ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             lg:flex-shrink-0 overflow-y-auto
           `}>
             {/* Mobile Close Button */}
             <button
               onClick={() => setIsSidebarOpen(false)}
-              className="lg:hidden absolute top-4 right-4 text-slate-500 hover:text-slate-700"
+              className="lg:hidden absolute top-4 right-4 text-slate-500 hover:text-slate-700 z-10"
             >
               <CloseOutlined className="text-xl" />
             </button>
@@ -219,7 +176,6 @@ const Dashboard = () => {
                   className="bg-gradient-to-br from-orange-500 to-orange-600 mb-4 shadow-lg"
                 />
                 <h3 className="text-lg font-bold text-slate-800 mb-1">{user.name}</h3>
-                <p className="text-sm text-slate-600 mb-3">{user.email}</p>
                 <div className={`
                   inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold
                   ${user.subscriptionExpired 
@@ -247,7 +203,7 @@ const Dashboard = () => {
                           setIsSidebarOpen(false)
                         }}
                         className={`
-                          w-full flex items-center gap-3 px-4 py-3 rounded-xl
+                          w-full flex items-center gap-3 px-4 py-2 rounded-xl
                           transition-all duration-200 font-medium
                           ${isActive 
                             ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md' 
@@ -274,7 +230,7 @@ const Dashboard = () => {
           {/* Overlay for mobile */}
           {isSidebarOpen && (
             <div 
-              className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+              className="fixed inset-0 bg-black/50 z-20 lg:hidden"
               onClick={() => setIsSidebarOpen(false)}
             />
           )}
