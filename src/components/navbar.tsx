@@ -2,15 +2,15 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import { Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Dropdown, Menu as AntMenu, Button } from 'antd';
 import { useAuthContext } from '@/context/AuthContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user, isAuthenticated, loading, logout } = useAuthContext();
-  const router = useRouter(); 
+  const router = useRouter();
 
   const navItems = [
     { label: 'Home', href: '/' },
@@ -33,7 +33,6 @@ export default function Navbar() {
 
   const allNavItems = [...navItems, ...guestLinks];
 
-  // ✅ Improved handleLogout with error handling
   const handleLogout = async () => {
     try {
       await logout();
@@ -41,11 +40,35 @@ export default function Navbar() {
     } catch (error) {
       console.error('Logout failed:', error);
       alert('Something went wrong while logging out. Please try again.');
-    } finally {
-      setDropdownOpen(false);
-      setIsOpen(false);
     }
   };
+
+  // ✅ Ant Design Dropdown Menu
+  const menuItems = (
+    <AntMenu
+      items={[
+        {
+          key: 'dashboard',
+          label: (
+            <Link href="/account/dashboard" className="flex items-center gap-2">
+              <LayoutDashboard className="w-4 h-4" /> Dashboard
+            </Link>
+          ),
+        },
+        {
+          key: 'logout',
+          label: (
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-red-600 w-full text-left"
+            >
+              <LogOut className="w-4 h-4" /> Logout
+            </button>
+          ),
+        },
+      ]}
+    />
+  );
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
@@ -78,36 +101,21 @@ export default function Navbar() {
           <div className="flex items-center gap-4 relative">
             {!loading && isAuthenticated && (
               <div className="hidden md:flex items-center gap-2 pl-4 border-l border-border">
-                <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
-                >
-                  <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-amber-700">
-                      {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
+                <Dropdown overlay={menuItems} placement="bottomRight" arrow>
+                  <Button
+                    type="text"
+                    className="flex items-center gap-2 hover:opacity-80 cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                      <span className="text-sm font-semibold text-amber-700">
+                        {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
+                      </span>
+                    </div>
+                    <span className="text-sm font-medium text-foreground">
+                      {user?.firstName ?? 'User'}
                     </span>
-                  </div>
-                  <span className="text-sm font-medium text-foreground">
-                    {user?.firstName ?? 'User'}
-                  </span>
-                </button>
-
-                {dropdownOpen && (
-                  <div className="absolute top-14 right-0 w-48 bg-white border border-border rounded-xl shadow-lg">
-                    <Link
-                      href="/account/dashboard"
-                      className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-amber-50 text-foreground"
-                    >
-                      <LayoutDashboard className="w-4 h-4" /> Dashboard
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-sm text-left hover:bg-amber-50 text-red-600"
-                    >
-                      <LogOut className="w-4 h-4" /> Logout
-                    </button>
-                  </div>
-                )}
+                  </Button>
+                </Dropdown>
               </div>
             )}
 
@@ -138,32 +146,17 @@ export default function Navbar() {
 
               {isAuthenticated && (
                 <div className="border-t border-border pt-2 mt-2">
-                  <button
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center gap-2 px-4 py-2 w-full hover:bg-amber-50 rounded-md"
-                  >
-                    <User className="w-5 h-5 text-muted-foreground" />
-                    <span className="text-sm font-medium text-foreground">
-                      {user?.firstName ?? 'User'}
-                    </span>
-                  </button>
-
-                  {dropdownOpen && (
-                    <div className="flex flex-col mt-1 border-t border-border">
-                      <Link
-                        href="/account/dashboard"
-                        className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-amber-50"
-                      >
-                        <LayoutDashboard className="w-4 h-4" /> Dashboard
-                      </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-amber-50"
-                      >
-                        <LogOut className="w-4 h-4" /> Logout
-                      </button>
-                    </div>
-                  )}
+                  <Dropdown overlay={menuItems} placement="bottomRight" arrow>
+                    <Button
+                      type="text"
+                      className="flex items-center gap-2 px-4 py-2 w-full hover:bg-amber-50 rounded-md"
+                    >
+                      <User className="w-5 h-5 text-muted-foreground" />
+                      <span className="text-sm font-medium text-foreground">
+                        {user?.firstName ?? 'User'}
+                      </span>
+                    </Button>
+                  </Dropdown>
                 </div>
               )}
             </div>
