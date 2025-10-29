@@ -173,7 +173,7 @@ export const updateUserProfile = async (
     throw new AppError('Failed to update profile', HTTP_STATUS.INTERNAL_ERROR);
   }
 
-  const profile = await findProfileByUserId(userId);
+  const profile = await findProfileByUserId(userId)
   
   // Update completion status
   if (profile) {
