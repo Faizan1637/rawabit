@@ -1,10 +1,12 @@
 import apiClient from '@/hooks/useAxios';
-import { ProfileFormData, ProfilePayload } from '@/types/profile';
+import { ProfileFormData, ProfilePayload,ProfileResponse } from '@/types/profile';
+import {User} from "@/types"
 
 interface ProfileApiResponse {
   success: boolean;
   data?: {
-    profile: any;
+    profile: ProfileResponse;
+    updatedUser:User|null|boolean
   };
   message?: string;
   error?: string;

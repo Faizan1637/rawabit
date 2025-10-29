@@ -13,11 +13,11 @@ export interface User {
 }
 
 export interface UserResponse {
-  id: string;
+  id?: string;
   email: string;
   firstName: string;      
   lastName: string;       
-  fullName: string;       
+  fullName?: string;       
   gender: string;         
   dateOfBirth: string;    
   role: string;

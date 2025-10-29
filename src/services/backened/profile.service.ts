@@ -11,6 +11,7 @@ import {
 } from '@/repositries/profile.repositories';
 import { findUserById, updateUser } from '@/repositries/user.repositories';
 import { CreateProfileInput, UpdateProfileInput, Profile, ProfileResponse } from '@/types/profile';
+import { User } from '@/types'
 import { AppError } from '@/lib/utils/error-handler';
 import {ERROR_MESSAGES} from "@/constants/responseConstant/message"
 import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
@@ -65,7 +66,7 @@ export const sanitizeProfile = (profile: Profile): ProfileResponse => {
 
 export const createUserProfile = async (
   input: CreateProfileInput
-): Promise<{ profile: ProfileResponse; profileId: string }> => {
+): Promise<{ profile: ProfileResponse; profileId: string; updatedUser: User | null | boolean}> => {
   // Check if user exists
   const user = await findUserById(input.userId);
   if (!user) {
@@ -135,11 +136,12 @@ export const createUserProfile = async (
   if (!profile) {
     throw new AppError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
   }
-  await updateUser(user?._id?.toString() ?? "", { ...user, profileCompleted: true })
+  const updatedUser=await updateUser(user?._id?.toString() ?? "", { ...user, profileCompleted: true })
 
   return {
     profile: sanitizeProfile(profile),
     profileId,
+    updatedUser,
   };
 };
 

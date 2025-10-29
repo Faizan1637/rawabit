@@ -4,11 +4,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { profileApi } from '@/client/api/profile.api';
 import { ProfileFormData } from '@/types/profile';
+import {useAuthContext} from "@/context/AuthContext"
+
 
 export const useProfile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const {setUser} =useAuthContext()
 
   const createProfile = async (formData: ProfileFormData) => {
     try {
@@ -18,6 +21,9 @@ export const useProfile = () => {
       const response = await profileApi.createProfile(formData);
 
       if (response.success) {
+       if (response.data?.updatedUser && typeof response.data.updatedUser === 'object') {
+            setUser(response.data.updatedUser);
+        }
         return response.data?.profile;
       } else {
         throw new Error(response.error || 'Failed to create profile');

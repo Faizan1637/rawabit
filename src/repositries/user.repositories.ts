@@ -23,12 +23,16 @@ export const createUser = async (user: Omit<User, '_id'>): Promise<string> => {
 export const updateUser = async (
   id: string,
   data: Partial<User>
-): Promise<boolean> => {
+): Promise<boolean | User |null> => {
   const db = await getDatabase();
   const result = await db.collection<User>(COLLECTION).updateOne(
     { _id: new ObjectId(id) },
     { $set: { ...data, updatedAt: new Date() } }
   );
+  const user=await db.collection<User>(COLLECTION).findOne({ _id: new ObjectId(id) })
+  if(result.modifiedCount > 0){
+    return user;
+  }
   return result.modifiedCount > 0;
 };
 
