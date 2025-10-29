@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import { useImperativeHandle,forwardRef } from "react"
 import { Form, Input, Select, Row, Col, InputNumber, Divider } from "antd"
 import type { StepProps } from "@/types/form"
 import { ALIVE_OPTIONS,
@@ -39,12 +40,23 @@ const NumberField: React.FC<{
   </Form.Item>
 )
 
-const FamilyBackgroundStep: React.FC<StepProps> = ({ data, onDataChange }) => {
+const FamilyBackgroundStep= forwardRef<unknown, StepProps>(({ data, onDataChange }, ref) => {
   const [form] = Form.useForm()
 
   const handleFormChange = (changedValues: Record<string, any>): void => {
     onDataChange(changedValues)
   }
+  
+  useImperativeHandle(ref, () => ({
+    validate: async () => {
+      try {
+        await form.validateFields()
+        return form.getFieldsValue()
+      } catch (error) {
+        throw error
+      }
+    },
+  }))
 
   return (
     <Form form={form} layout="vertical" onValuesChange={handleFormChange} initialValues={data} className="space-y-6">
@@ -171,6 +183,6 @@ const FamilyBackgroundStep: React.FC<StepProps> = ({ data, onDataChange }) => {
       </div>
     </Form>
   )
-}
+})
 
 export default FamilyBackgroundStep

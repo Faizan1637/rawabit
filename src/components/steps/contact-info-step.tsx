@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect ,useImperativeHandle,forwardRef} from "react"
 import { Form, Input, Select, Row, Col } from "antd"
 import PhoneInput from "react-phone-number-input"
 import { isValidPhoneNumber } from "libphonenumber-js"
@@ -11,7 +11,7 @@ import "react-phone-number-input/style.css"
 import {HOUSE_STATUS_OPTIONS} from "@/constants/createProfile/contact-info-const"
 
 
-const ContactInfoStep: React.FC<StepProps> = ({ data, onDataChange }) => {
+const ContactInfoStep=forwardRef<unknown, StepProps>(({ data, onDataChange }, ref) => {
   const [form] = Form.useForm()
 
   // Lives In States
@@ -110,6 +110,17 @@ const ContactInfoStep: React.FC<StepProps> = ({ data, onDataChange }) => {
     form.setFieldsValue({ fromCity: undefined })
     onDataChange({ fromState: value, fromCity: undefined })
   }
+  
+  useImperativeHandle(ref, () => ({
+    validate: async () => {
+      try {
+        await form.validateFields()
+        return form.getFieldsValue()
+      } catch (error) {
+        throw error
+      }
+    },
+  }))
 
   return (
     <div>
@@ -355,6 +366,6 @@ const ContactInfoStep: React.FC<StepProps> = ({ data, onDataChange }) => {
       </Form>
     </div>
   )
-}
+})
 
 export default ContactInfoStep

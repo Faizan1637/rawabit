@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState , useRef} from "react"
 import { Button, message } from "antd"
 import { UserOutlined, HomeOutlined, PhoneOutlined, CheckCircleOutlined, ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons"
 import PersonalInfoStep from "@/components/steps/personal-info-step"
@@ -15,36 +15,69 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
   const [current, setCurrent] = useState(0)
   const [formData, setFormData] = useState<Partial<FormData>>(initialData || {})
   const [loading, setLoading] = useState(false)
+  const personalInfoRef = useRef<any>(null)
+  const familyRef = useRef<any>(null)
+  const contactRef = useRef<any>(null)
+
   const { createProfile, loading: profileLoading, error: profileError, clearError } = useProfile();
 
   const steps = [
     {
       title: "Personal Info",
       icon: UserOutlined,
+      ref: personalInfoRef,
       content: (
-        <PersonalInfoStep data={formData} onDataChange={(newData) => setFormData({ ...formData, ...newData })} />
+        <PersonalInfoStep
+          ref={personalInfoRef}
+          data={formData}
+          onDataChange={(newData) => setFormData({ ...formData, ...newData })}
+        />
       ),
     },
     {
       title: "Family Background",
       icon: HomeOutlined,
+      ref: familyRef,
       content: (
-        <FamilyBackgroundStep data={formData} onDataChange={(newData) => setFormData({ ...formData, ...newData })} />
+        <FamilyBackgroundStep
+          ref={familyRef}
+          data={formData}
+          onDataChange={(newData) => setFormData({ ...formData, ...newData })}
+        />
       ),
     },
     {
       title: "Contact Information",
       icon: PhoneOutlined,
-      content: <ContactInfoStep data={formData} onDataChange={(newData) => setFormData({ ...formData, ...newData })} />,
+      ref: contactRef,
+      content: (
+        <ContactInfoStep
+          ref={contactRef}
+          data={formData}
+          onDataChange={(newData) => setFormData({ ...formData, ...newData })}
+        />
+      ),
     },
   ]
 
-  const handleNext = (): void => {
-    if (current < steps.length - 1) {
-      setCurrent(current + 1)
+
+  const handleNext = async (): Promise<void> => {
+  const currentRef = steps[current].ref
+  if (currentRef && currentRef.current) {
+    try {
+      const values = await currentRef.current.validate()
+      setFormData((prev) => ({ ...prev, ...values }))
+      setCurrent((prev) => prev + 1)
       window.scrollTo({ top: 0, behavior: 'smooth' })
+    } catch (error) {
+      // Validation failed, show error automatically by AntD
+      message.error("Please fill all required fields before continuing.")
     }
+  } else {
+    setCurrent((prev) => prev + 1)
   }
+}
+
 
   const handlePrevious = (): void => {
     if (current > 0) {

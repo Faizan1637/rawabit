@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState , useImperativeHandle,forwardRef} from "react"
 import { Form, Input, Select, DatePicker, Upload, Row, Col, Button, InputNumber } from "antd"
 import { UserOutlined, CameraOutlined, MailOutlined, CalendarOutlined, ManOutlined } from "@ant-design/icons"
 import type { UploadFile } from "antd"
@@ -20,7 +20,7 @@ import {
   islamicEducationOptions
 } from "@/constants/createProfile/personal-info-const"
 
-const PersonalInfoStep: React.FC<StepProps> = ({ data, onDataChange }) => {
+const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange }, ref) => {
   const { user } = useAuthContext()
   const [form] = Form.useForm()
   const [imageUrl, setImageUrl] = useState<string | null>(data?.profileImage || null)
@@ -54,6 +54,17 @@ const PersonalInfoStep: React.FC<StepProps> = ({ data, onDataChange }) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   }
+  
+  useImperativeHandle(ref, () => ({
+  validate: async () => {
+    try {
+      await form.validateFields()
+      return form.getFieldsValue()
+    } catch (error) {
+      throw error
+    }
+  },
+  }))
 
   return (
     <div>
@@ -330,7 +341,7 @@ const PersonalInfoStep: React.FC<StepProps> = ({ data, onDataChange }) => {
         </div>
       </Form>
     </div>
-  )
-}
+    )
+})
 
 export default PersonalInfoStep
