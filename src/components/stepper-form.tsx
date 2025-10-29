@@ -56,6 +56,7 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
       if (onSubmit) {
         onSubmit(formData as FormData)
       }
+      console.log(formData)
       message.success("Form submitted successfully!")
     } catch (error) {
       message.error("Failed to submit form")
