@@ -10,11 +10,11 @@ export const sanitizeUser = (user: User): UserResponse => {
   return {
     id: user._id!.toString(),
     email: user.email,
-    firstName: user.firstName,                          // NEW
-    lastName: user.lastName,                            // NEW
-    fullName: `${user.firstName} ${user.lastName}`,     // NEW
-    gender: user.gender,                                // NEW
-    dateOfBirth: user.dateOfBirth,                      // NEW
+    firstName: user.firstName,                         
+    lastName: user.lastName,                           
+    fullName: `${user.firstName} ${user.lastName}`,    
+    gender: user.gender,                                
+    dateOfBirth: user.dateOfBirth,                      
     role: user.role,
   };
 };
@@ -41,6 +41,7 @@ export const registerUser = async (
     gender: input.gender,                // NEW
     dateOfBirth: input.dateOfBirth,      // NEW
     role: 'user',
+    profileCompleted:false,
     createdAt: new Date(),
     updatedAt: new Date(),
   });

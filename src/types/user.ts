@@ -1,14 +1,13 @@
-// ADD these new fields to existing types
-
 export interface User {
   _id?: Object;
-  firstName: string;      // NEW - replace 'name'
-  lastName: string;       // NEW
+  firstName: string;     
+  lastName: string;      
   email: string;
   password: string;
-  gender: string;         // NEW
-  dateOfBirth: string;    // NEW (ISO format: YYYY-MM-DD)
+  gender: string;         
+  dateOfBirth: string;    
   role: 'user' | 'admin';
+  profileCompleted:boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -16,25 +15,28 @@ export interface User {
 export interface UserResponse {
   id: string;
   email: string;
-  firstName: string;      // NEW
-  lastName: string;       // NEW
-  fullName: string;       // NEW (computed)
-  gender: string;         // NEW
-  dateOfBirth: string;    // NEW
+  firstName: string;      
+  lastName: string;       
+  fullName: string;       
+  gender: string;         
+  dateOfBirth: string;    
   role: string;
+  profileCompleted?:boolean;
 }
 
 export interface CreateUserInput {
-  firstName: string;      // NEW - replace 'name'
-  lastName: string;       // NEW
+  firstName: string;      
+  lastName: string;       
   email: string;
   password: string;
-  gender: string;         // NEW
-  dateOfBirth: string;    // NEW
+  gender: string;         
+  dateOfBirth: string;    
+  profileCompleted?:boolean;
 }
 export interface UpdateUserInput {
   name?: string;
   email?: string;
+  profileCompleted?:boolean;
 }
 
 export interface LoginInput {

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   UserOutlined,
   DashboardOutlined,
@@ -12,25 +12,44 @@ import {
   CloseOutlined,
   CheckCircleOutlined,
   ClockCircleOutlined
-} from "@ant-design/icons"
-import { Button, Avatar } from "antd"
-import MembershipPlans from "@/components/membership-plans"
-import { useRouter } from "next/navigation"
+} from "@ant-design/icons";
+import { Button, Avatar } from "antd";
+import MembershipPlans from "@/components/membership-plans";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/context/AuthContext"; // ✅ Import global state
 
 const Dashboard = () => {
-  const [activeTab, setActiveTab] = useState("dashboard")
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-  const router = useRouter() // ✅ FIXED: correct hook usage
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const router = useRouter();
 
-  // Mock user data
-  const user = {
-    name: "Hanan Ahmad",
-    email: "faizanakram116@gmail.com",
-    avatar: null,
-    subscription: "Free Trial",
-    subscriptionExpired: true,
-    daysExpired: 2,
-    profileCompleted: false,
+  // ✅ Get logged-in user from AuthContext
+  const { user, isAuthenticated, loading } = useAuthContext();
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen text-lg font-semibold text-orange-600">
+        Loading your dashboard...
+      </div>
+    );
+  }
+
+  if (!isAuthenticated || !user) {
+    // ✅ Redirect or message for unauthenticated users
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center space-y-4">
+        <p className="text-xl text-slate-700 font-semibold">
+          Please log in to access your dashboard.
+        </p>
+        <Button
+          type="primary"
+          className="bg-orange-500 hover:bg-orange-600 font-semibold"
+          onClick={() => router.push("/login")}
+        >
+          Go to Login
+        </Button>
+      </div>
+    );
   }
 
   const menuItems = [
@@ -42,7 +61,7 @@ const Dashboard = () => {
     { id: "payments", label: "Payments", icon: WalletOutlined },
     { id: "payment-methods", label: "Payment Methods", icon: CreditCardOutlined },
     { id: "delete-account", label: "Delete Account", icon: DeleteOutlined },
-  ]
+  ];
 
   const renderContent = () => {
     switch (activeTab) {
@@ -51,8 +70,12 @@ const Dashboard = () => {
           <div className="space-y-6">
             {/* Welcome Section */}
             <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-8 text-white shadow-xl">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome! {user.name}</h1>
-              <p className="text-orange-100 text-lg">Let's find your perfect match today</p>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                Welcome! {user.firstName}
+              </h1>
+              <p className="text-orange-100 text-lg">
+                Let's find your perfect match today
+              </p>
             </div>
 
             {/* Alerts */}
@@ -65,16 +88,18 @@ const Dashboard = () => {
                       <UserOutlined className="text-2xl text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-amber-900 mb-2">Create Profile</h3>
+                      <h3 className="text-xl font-bold text-amber-900 mb-2">
+                        Create Profile
+                      </h3>
                       <p className="text-amber-800 mb-4">
-                        You don't have any <span className="font-semibold">Profile</span> created yet. We recommend you create one first. 
-                        Without a profile you cannot find a match.
+                        You don't have a <span className="font-semibold">Profile</span> yet.
+                        Please create one to start finding matches.
                       </p>
                       <Button
                         type="primary"
                         size="large"
                         className="bg-amber-500 hover:bg-amber-600 border-none font-semibold shadow-md"
-                        onClick={() => router.push("/account/createprofile")} // ✅ Works
+                        onClick={() => router.push("/account/createprofile")}
                       >
                         Create Profile Now
                       </Button>
@@ -83,7 +108,7 @@ const Dashboard = () => {
                 </div>
               )}
 
-              {/* Subscription Alert */}
+              {/* Subscription Alert
               {user.subscriptionExpired && (
                 <div className="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-2xl p-6 shadow-lg">
                   <div className="flex items-start gap-4">
@@ -91,10 +116,12 @@ const Dashboard = () => {
                       <ClockCircleOutlined className="text-2xl text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-red-900 mb-2">Subscription Expired!</h3>
+                      <h3 className="text-xl font-bold text-red-900 mb-2">
+                        Subscription Expired!
+                      </h3>
                       <p className="text-red-800 mb-4">
-                        Your package <span className="font-semibold text-orange-600">{user.subscription}</span> expired{" "}
-                        <span className="font-semibold">{user.daysExpired} days ago</span>. Please renew to access your profile.
+                        Your plan <span className="font-semibold text-orange-600">{user.subscription}</span>{" "}
+                        expired <span className="font-semibold">{user.daysExpired} days ago</span>. Please renew it.
                       </p>
                       <Button
                         type="primary"
@@ -107,13 +134,10 @@ const Dashboard = () => {
                     </div>
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
-        )
-
-      case "subscriptions":
-        return <MembershipPlans />
+        );
 
       default:
         return (
@@ -122,9 +146,9 @@ const Dashboard = () => {
             <h2 className="text-2xl font-bold text-slate-800 mb-2">Coming Soon</h2>
             <p className="text-slate-600">This section is under development</p>
           </div>
-        )
+        );
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 pt-0">
@@ -133,10 +157,10 @@ const Dashboard = () => {
           {/* Sidebar */}
           <aside
             className={`fixed lg:sticky top-20 left-0 h-[calc(100vh-5rem)] lg:h-auto
-            w-72 lg:w-64 bg-white rounded-2xl shadow-xl border border-slate-200 
-            transition-transform duration-300 z-30
-            ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-            lg:flex-shrink-0 overflow-y-auto`}
+              w-72 lg:w-64 bg-white rounded-2xl shadow-xl border border-slate-200 
+              transition-transform duration-300 z-30
+              ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+              lg:flex-shrink-0 overflow-y-auto`}
           >
             {/* Mobile Close */}
             <button
@@ -154,8 +178,8 @@ const Dashboard = () => {
                   icon={<UserOutlined />}
                   className="bg-gradient-to-br from-orange-500 to-orange-600 mb-4 shadow-lg"
                 />
-                <h3 className="text-lg font-bold text-slate-800 mb-1">{user.name}</h3>
-                <div
+                <h3 className="text-lg font-bold text-slate-800 mb-1">{user.firstName}</h3>
+                {/* <div
                   className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${
                     user.subscriptionExpired
                       ? "bg-red-100 text-red-700"
@@ -163,8 +187,8 @@ const Dashboard = () => {
                   }`}
                 >
                   {user.subscriptionExpired ? <ClockCircleOutlined /> : <CheckCircleOutlined />}
-                  {user.subscription}
-                </div>
+                  {user.subscription || "Free Plan"}
+                </div> */}
               </div>
             </div>
 
@@ -172,14 +196,14 @@ const Dashboard = () => {
             <nav className="p-4">
               <ul className="space-y-2">
                 {menuItems.map((item) => {
-                  const Icon = item.icon
-                  const isActive = activeTab === item.id
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
                   return (
                     <li key={item.id}>
                       <button
                         onClick={() => {
-                          setActiveTab(item.id)
-                          setIsSidebarOpen(false)
+                          setActiveTab(item.id);
+                          setIsSidebarOpen(false);
                         }}
                         className={`w-full flex items-center gap-3 px-4 py-2 rounded-xl
                           transition-all duration-200 font-medium
@@ -193,7 +217,7 @@ const Dashboard = () => {
                         <span>{item.label}</span>
                       </button>
                     </li>
-                  )
+                  );
                 })}
               </ul>
             </nav>
@@ -208,11 +232,14 @@ const Dashboard = () => {
           )}
 
           {/* Main Content */}
-          <main className="flex-1 min-w-0">{renderContent()}</main>
+          <main className="flex-1 min-w-0">{renderContent()}
+            //Here i want to show subscriptions cards 
+          </main>
+          
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
