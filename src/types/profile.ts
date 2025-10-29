@@ -189,3 +189,102 @@ export interface UpdateProfileInput {
   houseStatus?: string;
   requirements?: string;
 }
+
+export interface ProfileFormData {
+  // Personal Information
+  firstName: string;
+  lastName: string;
+  email: string;
+  gender: 'male' | 'female' | 'other';
+  dateOfBirth: Date | string;
+  
+  // Physical Attributes
+  height: string;
+  bodyType: string;
+  complexion: string;
+  hasBeard?: string;
+  disabilities?: string;
+  
+  // Family Information
+  fathersName: string;
+  fatherAlive: string;
+  fathersOccupation: string;
+  numberOfBrothers: number;
+  numberOfSisters: number;
+  numberOfMarriedBrothers: number;
+  numberOfSons?: number;
+  numberOfDaughters?: number;
+  parentsMobileNo: string;
+  parentsPhone: string;
+  
+  // Location Information
+  address: string;
+  fromCountry: string;
+  fromState: string;
+  fromCity: string;
+  livesInCountry: string;
+  livesInState: string;
+  livesInCity: string;
+  
+  // Religious & Cultural
+  religion: string;
+  caste: string;
+  islamicEducation: string;
+  
+  // Education & Career
+  qualification: string;
+  degree: string;
+  profession: string;
+  designation?: string;
+  monthlyIncome: number;
+  
+  // Lifestyle
+  maritalStatus: string;
+  lifeStyle: string;
+  houseStatus: string;
+  
+  // Requirements
+  requirements?: string;
+}
+
+export interface ProfilePayload {
+  firstName: string;
+  lastName: string;
+  email: string;
+  gender: string;
+  dateOfBirth: string; // ISO format for API
+  height: string;
+  bodyType: string;
+  complexion: string;
+  hasBeard?: string;
+  disabilities?: string;
+  fathersName: string;
+  fatherAlive: string;
+  fathersOccupation: string;
+  numberOfBrothers: number;
+  numberOfSisters: number;
+  numberOfMarriedBrothers: number;
+  numberOfSons?: number;
+  numberOfDaughters?: number;
+  parentsMobileNo: string;
+  parentsPhone: string;
+  address: string;
+  fromCountry: string;
+  fromState: string;
+  fromCity: string;
+  livesInCountry: string;
+  livesInState: string;
+  livesInCity: string;
+  religion: string;
+  caste: string;
+  islamicEducation: string;
+  qualification: string;
+  degree: string;
+  profession: string;
+  designation?: string;
+  monthlyIncome: number;
+  maritalStatus: string;
+  lifeStyle: string;
+  houseStatus: string;
+  requirements?: string;
+}
