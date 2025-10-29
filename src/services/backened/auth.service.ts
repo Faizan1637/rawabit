@@ -16,6 +16,7 @@ export const sanitizeUser = (user: User): UserResponse => {
     gender: user.gender,                                
     dateOfBirth: user.dateOfBirth,                      
     role: user.role,
+    profileCompleted:user.profileCompleted,
   };
 };
 
