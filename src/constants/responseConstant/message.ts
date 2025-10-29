@@ -9,6 +9,8 @@ export const ERROR_MESSAGES = {
   MISSING_FIELDS: 'Missing required fields',
   INVALID_EMAIL: 'Invalid email format',
   WEAK_PASSWORD: 'Password must be at least 8 characters',
+  PROFILE_EXISTS: 'Profile already exists for this user',
+  PROFILE_NOT_FOUND: 'Profile not found',
 } as const;
 
 export const SUCCESS_MESSAGES = {
@@ -17,4 +19,7 @@ export const SUCCESS_MESSAGES = {
   USER_DELETED: 'User deleted successfully',
   LOGIN_SUCCESS: 'Login successful',
   LOGOUT_SUCCESS: 'Logout successful',
+  PROFILE_CREATED: 'Profile created successfully',
+  PROFILE_UPDATED: 'Profile updated successfully',
+  PROFILE_DELETED: 'Profile deleted successfully',
 } as const;
