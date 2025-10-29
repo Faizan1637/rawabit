@@ -9,7 +9,7 @@ import {
   findAllProfiles,
   checkProfileCompletion,
 } from '@/repositries/profile.repositories';
-import { findUserById } from '@/repositries/user.repositories';
+import { findUserById, updateUser } from '@/repositries/user.repositories';
 import { CreateProfileInput, UpdateProfileInput, Profile, ProfileResponse } from '@/types/profile';
 import { AppError } from '@/lib/utils/error-handler';
 import {ERROR_MESSAGES} from "@/constants/responseConstant/message"
@@ -135,6 +135,7 @@ export const createUserProfile = async (
   if (!profile) {
     throw new AppError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
   }
+  await updateUser(user?._id?.toString() ?? "", { ...user, profileCompleted: true })
 
   return {
     profile: sanitizeProfile(profile),
