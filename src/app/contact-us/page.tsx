@@ -1,38 +1,49 @@
 'use client';
 
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { Home, ChevronRight, Mail, Phone, MapPin, Clock, Send, CheckCircle } from 'lucide-react';
-
-interface FormData {
-  name: string;
-  email: string;
-  phone: string;
-  message: string;
-}
+import { Home, ChevronRight, Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { useInquiry } from '@/hooks/useInquiry'; 
+import { InquiryFormData } from '@/client/api/inquiry.api'; 
 
 export default function ContactUs() {
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
+  const { sendInquiry, loading, error, success, clearError, clearSuccess } = useInquiry();
+  
+  const [formData, setFormData] = useState<InquiryFormData>({
+    fullName: '',
     email: '',
-    phone: '',
-    message: ''
+    phoneNumber: '',
+    message: '',
   });
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    
+    if (error) clearError();
+    if (success) clearSuccess();
+    
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', phone: '', message: '' });
-    }, 3000);
+    
+    try {
+      await sendInquiry(formData);
+      
+      // Clear form on success
+      setFormData({
+        fullName: '',
+        email: '',
+        phoneNumber: '',
+        message: '',
+      });
+      
+    } catch (err) {
+      console.error('Failed to send inquiry:', err);
+    }
   };
 
   return (
@@ -47,7 +58,7 @@ export default function ContactUs() {
         <div className="container mx-auto px-4 py-16 relative z-10">
           <div className="flex items-center space-x-2 text-slate-300 mb-6">
             <Home className="w-4 h-4" />
-            <a href="#" className="hover:text-orange-400 transition-colors">Home</a>
+            <a href="/" className="hover:text-orange-400 transition-colors">Home</a>
             <ChevronRight className="w-4 h-4" />
             <span className="text-orange-400">Contact Us</span>
           </div>
@@ -75,89 +86,126 @@ export default function ContactUs() {
                 Fill out the form below and we'll get back to you shortly
               </p>
 
-              {isSubmitted ? (
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-8 text-center">
-                  <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-2xl font-bold text-slate-900 mb-2">Message Sent!</h3>
-                  <p className="text-slate-600">Thank you for contacting us. We'll get back to you soon In Shaa ALLAH.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+              {/* Success Message */}
+              {success && (
+                <div className="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-500 rounded-xl p-6 animate-fadeIn">
+                  <div className="flex items-start gap-4">
+                    <CheckCircle className="w-8 h-8 text-green-500 flex-shrink-0" />
                     <div>
-                      <label htmlFor="name" className="block text-slate-700 font-semibold mb-2">
-                        Full Name <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
-                        placeholder="Enter your full name"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="phone" className="block text-slate-700 font-semibold mb-2">
-                        Phone Number <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
-                        placeholder="+92-XXX-XXXXXXX"
-                      />
+                      <h3 className="text-xl font-bold text-green-900 mb-2">Message Sent Successfully! ✅</h3>
+                      <p className="text-green-700">
+                        Thank you for contacting us. We'll get back to you within 24-48 hours In Shaa ALLAH.
+                      </p>
                     </div>
                   </div>
+                </div>
+              )}
 
+              {/* Error Message */}
+              {error && (
+                <div className="mb-6 bg-gradient-to-r from-red-50 to-orange-50 border-2 border-red-500 rounded-xl p-6 animate-fadeIn">
+                  <div className="flex items-start gap-4">
+                    <AlertCircle className="w-8 h-8 text-red-500 flex-shrink-0" />
+                    <div>
+                      <h3 className="text-xl font-bold text-red-900 mb-2">Error Sending Message ❌</h3>
+                      <p className="text-red-700">{error}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="email" className="block text-slate-700 font-semibold mb-2">
-                      Email Address <span className="text-red-500">*</span>
+                    <label htmlFor="fullName" className="block text-slate-700 font-semibold mb-2">
+                      Full Name <span className="text-red-500">*</span>
                     </label>
                     <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      value={formData.fullName}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
-                      placeholder="your.email@example.com"
+                      disabled={loading}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all disabled:bg-slate-100 disabled:cursor-not-allowed"
+                      placeholder="Enter your full name"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-slate-700 font-semibold mb-2">
-                      Message <span className="text-red-500">*</span>
+                    <label htmlFor="phoneNumber" className="block text-slate-700 font-semibold mb-2">
+                      Phone Number <span className="text-red-500">*</span>
                     </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      value={formData.phoneNumber}
                       onChange={handleChange}
                       required
-                      rows={6}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all resize-none"
-                      placeholder="Write your message here..."
-                    ></textarea>
+                      disabled={loading}
+                      className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all disabled:bg-slate-100 disabled:cursor-not-allowed"
+                      placeholder="+92-XXX-XXXXXXX"
+                    />
                   </div>
+                </div>
 
-                  <button
-                    type="submit"
-                    className="w-full md:w-auto flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl"
-                  >
-                    <Send className="w-5 h-5" />
-                    <span>Send Message</span>
-                  </button>
-                </form>
-              )}
+                <div>
+                  <label htmlFor="email" className="block text-slate-700 font-semibold mb-2">
+                    Email Address <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all disabled:bg-slate-100 disabled:cursor-not-allowed"
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-slate-700 font-semibold mb-2">
+                    Message <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                    rows={6}
+                    className="w-full px-4 py-3 rounded-xl border-2 border-slate-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all resize-none disabled:bg-slate-100 disabled:cursor-not-allowed"
+                    placeholder="Write your message here..."
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full md:w-auto flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {loading ? (
+                    <>
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Sending...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      <span>Send Message</span>
+                    </>
+                  )}
+                </button>
+              </form>
             </div>
           </div>
 
@@ -252,6 +300,22 @@ export default function ContactUs() {
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 }
