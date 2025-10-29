@@ -138,7 +138,8 @@ const Dashboard = () => {
             </div>
           </div>
         );
-
+      case "profile":
+        // router.push('/account/createprofile')
       default:
         return (
           <div className="bg-white rounded-2xl p-12 shadow-lg border border-slate-200 text-center">
@@ -201,21 +202,26 @@ const Dashboard = () => {
                   return (
                     <li key={item.id}>
                       <button
-                        onClick={() => {
-                          setActiveTab(item.id);
-                          setIsSidebarOpen(false);
-                        }}
-                        className={`w-full flex items-center gap-3 px-4 py-2 rounded-xl
-                          transition-all duration-200 font-medium
-                          ${
-                            isActive
-                              ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
-                              : "text-slate-700 hover:bg-orange-50 hover:text-orange-600"
-                          }`}
-                      >
-                        <Icon className="text-lg" />
-                        <span>{item.label}</span>
-                      </button>
+                          onClick={() => {
+                            setIsSidebarOpen(false);
+                            if (item.id === "profile") {
+                              router.push("/account/createprofile");
+                            } else {
+                              setActiveTab(item.id);
+                            }
+                          }}
+                          className={`w-full flex items-center gap-3 px-4 py-2 rounded-xl
+                            transition-all duration-200 font-medium
+                            ${
+                              isActive
+                                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md"
+                                : "text-slate-700 hover:bg-orange-50 hover:text-orange-600"
+                            }`}
+                        >
+                          <Icon className="text-lg" />
+                          <span>{item.label}</span>
+                        </button>
+
                     </li>
                   );
                 })}
@@ -233,7 +239,6 @@ const Dashboard = () => {
 
           {/* Main Content */}
           <main className="flex-1 min-w-0">{renderContent()}
-            //Here i want to show subscriptions cards 
           </main>
           
         </div>
