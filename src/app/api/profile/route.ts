@@ -13,8 +13,11 @@ import {
 
 export async function POST(req: NextRequest) {
   try {
+    console.log("Entering ")
     const userId = await verifyAuth(req);
+    console.log("User Id is ",userId)
     const body = await req.json();
+    console.log("Body is ", body)
 
     // Validate required fields
     const requiredFields = [

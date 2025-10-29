@@ -63,19 +63,19 @@ export const profileApi = {
   // Create Profile
   createProfile: async (formData: ProfileFormData): Promise<ProfileApiResponse> => {
     const payload = transformFormDataToPayload(formData);
-    const response = await apiClient.post<ProfileApiResponse>('/profile', payload);
+    const response = await apiClient.post<ProfileApiResponse>('/api/profile', payload);
     return response.data;
   },
 
   // Get My Profile
   getMyProfile: async (): Promise<ProfileApiResponse> => {
-    const response = await apiClient.get<ProfileApiResponse>('/profile');
+    const response = await apiClient.get<ProfileApiResponse>('/api/profile');
     return response.data;
   },
 
   // Get Profile by ID
   getProfileById: async (id: string): Promise<ProfileApiResponse> => {
-    const response = await apiClient.get<ProfileApiResponse>(`/profile/${id}`);
+    const response = await apiClient.get<ProfileApiResponse>(`/api/profile/${id}`);
     return response.data;
   },
 
@@ -88,7 +88,7 @@ export const profileApi = {
       ? transformFormDataToPayload(formData as ProfileFormData)
       : formData;
       
-    const response = await apiClient.put<ProfileApiResponse>(`/profile/${id}`, payload);
+    const response = await apiClient.put<ProfileApiResponse>(`/api/profile/${id}`, payload);
     return response.data;
   },
 
