@@ -46,16 +46,6 @@ export const validateNumberOfSiblings = (count: number, field: string): void => 
   }
 };
 
-export const validateMaritalStatus = (status: string): void => {
-  const validStatuses = ['single', 'divorced', 'widowed'];
-  if (!validStatuses.includes(status.toLowerCase())) {
-    throw new AppError(
-      'Marital status must be single, divorced, or widowed',
-      HTTP_STATUS.BAD_REQUEST
-    );
-  }
-};
-
 export const validateRequiredProfileFields = (data: any, fields: string[]): void => {
   const missing = fields.filter(field => {
     const value = data[field];
