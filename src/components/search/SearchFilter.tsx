@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { SearchFilters as SearchFiltersType } from '@/types/search';
+import { Country, State, City, ICountry, IState, ICity } from 'country-state-city';
 
 interface SearchFiltersProps {
   onSearch: (filters: Partial<SearchFiltersType>) => void;
@@ -11,6 +12,34 @@ interface SearchFiltersProps {
 
 export default function SearchFilters({ onSearch, onClear, loading }: SearchFiltersProps) {
   const [filters, setFilters] = useState<Partial<SearchFiltersType>>({});
+
+  // Country-State-City dynamic data
+  const [allCountries, setAllCountries] = useState<ICountry[]>([]);
+  const [states, setStates] = useState<IState[]>([]);
+  const [cities, setCities] = useState<ICity[]>([]);
+
+  useEffect(() => {
+    setAllCountries(Country.getAllCountries());
+  }, []);
+
+  // Load states when country changes
+  useEffect(() => {
+    if (filters.country) {
+      const countryStates = State.getStatesOfCountry(filters.country);
+      setStates(countryStates);
+      setCities([]); // reset cities
+      setFilters((prev) => ({ ...prev, state: '', city: '' }));
+    }
+  }, [filters.country]);
+
+  // Load cities when state changes
+  useEffect(() => {
+    if (filters.country && filters.state) {
+      const stateCities = City.getCitiesOfState(filters.country, filters.state);
+      setCities(stateCities);
+      setFilters((prev) => ({ ...prev, city: '' }));
+    }
+  }, [filters.state]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -26,10 +55,12 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
 
   const handleClear = () => {
     setFilters({});
+    setStates([]);
+    setCities([]);
     onClear();
   };
 
-  // Age options (18-80)
+  // Age options (18–80)
   const ageOptions = Array.from({ length: 63 }, (_, i) => i + 18);
 
   return (
@@ -45,11 +76,11 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
           >
             <option value="">Select</option>
-            <option value="PK">Pakistan</option>
-            <option value="SA">Saudi Arabia</option>
-            <option value="AE">UAE</option>
-            <option value="UK">United Kingdom</option>
-            <option value="US">United States</option>
+            {allCountries.map((c) => (
+              <option key={c.isoCode} value={c.isoCode}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -60,13 +91,17 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             name="state"
             value={filters.state || ''}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
+            disabled={!filters.country || states.length === 0}
+            className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none disabled:opacity-60"
           >
-            <option value="">Select</option>
-            <option value="PB">Punjab</option>
-            <option value="SD">Sindh</option>
-            <option value="KP">Khyber Pakhtunkhwa</option>
-            <option value="BA">Balochistan</option>
+            <option value="">
+              {filters.country ? 'Select' : 'Select a country first'}
+            </option>
+            {states.map((s) => (
+              <option key={s.isoCode} value={s.isoCode}>
+                {s.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -77,14 +112,17 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             name="city"
             value={filters.city || ''}
             onChange={handleChange}
-            className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
+            disabled={!filters.state || cities.length === 0}
+            className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none disabled:opacity-60"
           >
-            <option value="">Select</option>
-            <option value="Lahore">Lahore</option>
-            <option value="Karachi">Karachi</option>
-            <option value="Islamabad">Islamabad</option>
-            <option value="Rawalpindi">Rawalpindi</option>
-            <option value="Faisalabad">Faisalabad</option>
+            <option value="">
+              {filters.state ? 'Select' : 'Select a state first'}
+            </option>
+            {cities.map((c) => (
+              <option key={c.name} value={c.name}>
+                {c.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -157,7 +195,7 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
 
         {/* Marital Status */}
         <div>
-          <label className="block text-white font-semibold mb-2">Marital-Status</label>
+          <label className="block text-white font-semibold mb-2">Marital Status</label>
           <select
             name="maritalStatus"
             value={filters.maritalStatus || ''}
