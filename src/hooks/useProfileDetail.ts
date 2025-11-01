@@ -13,7 +13,7 @@ export const useProfileDetail = (profileId: string) => {
       try {
         setLoading(true);
         setError(null);
-        const data = await profileApi.getPublicProfileById(profileId);
+        const data = await profileApi.getProfileById(profileId);
         setProfile(data);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Failed to fetch profile';

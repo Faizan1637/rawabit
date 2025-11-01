@@ -10,7 +10,8 @@ export async function GET(
 ) {
   try {
     await verifyAuth(req);
-    const profile = await getProfileById(params.id);
+    const profileId=await params?.id
+    const profile = await getProfileById("690220a8792277b2382c6276");
     return createSuccessResponse({ profile });
   } catch (error) {
     return handleError(error);

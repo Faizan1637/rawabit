@@ -7,6 +7,7 @@ interface ProfileDetailViewProps {
 }
 
 export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
+    const profileData=profile.data.profile
   return (
     <div className="space-y-6">
       {/* Profile Header Card */}
@@ -19,23 +20,25 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
 
           {/* Basic Info */}
           <div className="flex-1 text-center md:text-left">
-            <h1 className="text-4xl font-bold mb-2">{profile.fullName}</h1>
+            <h1 className="text-4xl font-bold mb-2">{profileData.fullName}</h1>
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-lg">
               <span className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
-                {profile.age} Years
+                {profileData.age} Years
               </span>
               <span>•</span>
-              <span className="capitalize">{profile.gender}</span>
+              <span className="capitalize">{profileData.gender}</span>
               <span>•</span>
-              <span className="capitalize">{profile.maritalStatus}</span>
+              <span className="capitalize">{profileData.maritalStatus}</span>
             </div>
             <div className="flex items-center justify-center md:justify-start gap-2 mt-3 text-white/90">
               <MapPin className="w-5 h-5" />
-              <span>{profile.city}, {profile.state}, {profile.country}</span>
+              <span>{profileData.city}, {profileData.state}, {profileData.country}</span>
             </div>
             <div className="mt-4 inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-              <span className="text-sm font-semibold">Serial No: {profile.serialNo || profile.id.slice(-6)}</span>
+             <span className="text-sm font-semibold">
+                Serial No: {profileData.serialNo || (profileData?.id ? profileData.id.slice(-6) : 'N/A')}
+            </span>
             </div>
           </div>
         </div>
@@ -54,45 +57,45 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
           <div className="space-y-4">
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Full Name</p>
-              <p className="text-slate-900 text-lg font-medium">{profile.fullName}</p>
+              <p className="text-slate-900 text-lg font-medium">{profileData.fullName}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Gender</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.gender}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.gender}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Date of Birth</p>
-              <p className="text-slate-900 text-lg font-medium">{profile.dateOfBirth}</p>
+              <p className="text-slate-900 text-lg font-medium">{profileData.dateOfBirth}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Age</p>
-              <p className="text-slate-900 text-lg font-medium">{profile.age} Years</p>
+              <p className="text-slate-900 text-lg font-medium">{profileData.age} Years</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Height</p>
-              <p className="text-slate-900 text-lg font-medium">{profile.height}</p>
+              <p className="text-slate-900 text-lg font-medium">{profileData.height}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Body Type</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.bodyType}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.bodyType}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Complexion</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.complexion}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.complexion}</p>
             </div>
-            {profile.hasBeard && (
+            {profileData.hasBeard && (
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">Has Beard</p>
-                <p className="text-slate-900 text-lg font-medium capitalize">{profile.hasBeard}</p>
+                <p className="text-slate-900 text-lg font-medium capitalize">{profileData.hasBeard}</p>
               </div>
             )}
-            {profile.disabilities && (
+            {profileData.disabilities && (
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">Disabilities</p>
-                <p className="text-slate-900 text-lg font-medium capitalize">{profile.disabilities}</p>
+                <p className="text-slate-900 text-lg font-medium capitalize">{profileData.disabilities}</p>
               </div>
             )}
           </div>
@@ -112,22 +115,22 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
           <div className="space-y-4">
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Religion</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.religion}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.religion}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Caste</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.caste}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.caste}</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Islamic Education</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.islamicEducation}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.islamicEducation}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Marital Status</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.maritalStatus}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.maritalStatus}</p>
             </div>
           </div>
         </div>
@@ -146,15 +149,15 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
           <div className="space-y-4">
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Qualification</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.qualification}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.qualification}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Degree</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.degree}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.degree}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Profession</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.profession}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.profession}</p>
             </div>
           </div>
 
@@ -162,12 +165,12 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
             {profile.designation && (
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">Designation</p>
-                <p className="text-slate-900 text-lg font-medium capitalize">{profile.designation}</p>
+                <p className="text-slate-900 text-lg font-medium capitalize">{profileData.designation}</p>
               </div>
             )}
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Monthly Income</p>
-              <p className="text-slate-900 text-lg font-medium">PKR {profile.monthlyIncome?.toLocaleString()}</p>
+              <p className="text-slate-900 text-lg font-medium">PKR {profileData.monthlyIncome?.toLocaleString()}</p>
             </div>
           </div>
         </div>
@@ -186,41 +189,41 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
           <div className="space-y-4">
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Father's Name</p>
-              <p className="text-slate-900 text-lg font-medium">{profile.fathersName}</p>
+              <p className="text-slate-900 text-lg font-medium">{profileData.fathersName}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Father Status</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.fatherAlive}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.fatherAlive}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Father's Occupation</p>
-              <p className="text-slate-900 text-lg font-medium capitalize">{profile.fathersOccupation}</p>
+              <p className="text-slate-900 text-lg font-medium capitalize">{profileData.fathersOccupation}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Number of Brothers</p>
-              <p className="text-slate-900 text-lg font-medium">{profile.numberOfBrothers}</p>
+              <p className="text-slate-900 text-lg font-medium">{profileData.numberOfBrothers}</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Number of Sisters</p>
-              <p className="text-slate-900 text-lg font-medium">{profile.numberOfSisters}</p>
+              <p className="text-slate-900 text-lg font-medium">{profileData.numberOfSisters}</p>
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Married Brothers</p>
-              <p className="text-slate-900 text-lg font-medium">{profile.numberOfMarriedBrothers}</p>
+              <p className="text-slate-900 text-lg font-medium">{profileData.numberOfMarriedBrothers}</p>
             </div>
-            {profile.numberOfSons !== undefined && (
+            {profileData.numberOfSons !== undefined && (
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">Number of Sons</p>
-                <p className="text-slate-900 text-lg font-medium">{profile.numberOfSons}</p>
+                <p className="text-slate-900 text-lg font-medium">{profileData.numberOfSons}</p>
               </div>
             )}
-            {profile.numberOfDaughters !== undefined && (
+            {profileData.numberOfDaughters !== undefined && (
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">Number of Daughters</p>
-                <p className="text-slate-900 text-lg font-medium">{profile.numberOfDaughters}</p>
+                <p className="text-slate-900 text-lg font-medium">{profileData.numberOfDaughters}</p>
               </div>
             )}
           </div>
@@ -245,15 +248,15 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
             <div className="space-y-3 pl-7">
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">Country</p>
-                <p className="text-slate-900 font-medium">{profile.fromCountry}</p>
+                <p className="text-slate-900 font-medium">{profileData.fromCountry}</p>
               </div>
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">State/Province</p>
-                <p className="text-slate-900 font-medium">{profile.fromState}</p>
+                <p className="text-slate-900 font-medium">{profileData.fromState}</p>
               </div>
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">City</p>
-                <p className="text-slate-900 font-medium">{profile.fromCity}</p>
+                <p className="text-slate-900 font-medium">{profileData.fromCity}</p>
               </div>
             </div>
           </div>
@@ -266,15 +269,15 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
             <div className="space-y-3 pl-7">
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">Country</p>
-                <p className="text-slate-900 font-medium">{profile.country}</p>
+                <p className="text-slate-900 font-medium">{profileData.country}</p>
               </div>
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">State/Province</p>
-                <p className="text-slate-900 font-medium">{profile.state}</p>
+                <p className="text-slate-900 font-medium">{profileData.state}</p>
               </div>
               <div>
                 <p className="text-slate-500 text-sm font-semibold mb-1">City</p>
-                <p className="text-slate-900 font-medium">{profile.city}</p>
+                <p className="text-slate-900 font-medium">{profileData.city}</p>
               </div>
             </div>
           </div>
@@ -283,7 +286,7 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
         <div className="mt-6 pt-6 border-t border-slate-200">
           <div>
             <p className="text-slate-500 text-sm font-semibold mb-1">Complete Address</p>
-            <p className="text-slate-900 font-medium">{profile.address}</p>
+            <p className="text-slate-900 font-medium">{profileData.address}</p>
           </div>
         </div>
       </div>
@@ -300,11 +303,11 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <p className="text-slate-500 text-sm font-semibold mb-1">Lifestyle</p>
-            <p className="text-slate-900 text-lg font-medium capitalize">{profile.lifeStyle}</p>
+            <p className="text-slate-900 text-lg font-medium capitalize">{profileData.lifeStyle}</p>
           </div>
           <div>
             <p className="text-slate-500 text-sm font-semibold mb-1">House Status</p>
-            <p className="text-slate-900 text-lg font-medium capitalize">{profile.houseStatus}</p>
+            <p className="text-slate-900 text-lg font-medium capitalize">{profileData.houseStatus}</p>
           </div>
         </div>
       </div>
@@ -321,7 +324,7 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
 
           <div className="bg-slate-50 rounded-xl p-6">
             <p className="text-slate-900 text-lg leading-relaxed whitespace-pre-wrap">
-              {profile.requirements}
+              {profileData.requirements}
             </p>
           </div>
         </div>
