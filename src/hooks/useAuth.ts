@@ -34,7 +34,7 @@ export const useAuth = () => {
       const response = await authApi.register(formData);
 
       if (response.success) {
-        router.push('/account/createprofile');
+        router.push('/account/dashboard');
         return response.data?.user;
       } else {
         throw new Error(response.error || 'Registration failed');
