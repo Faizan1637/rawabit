@@ -3,6 +3,16 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { SearchFilters as SearchFiltersType } from '@/types/search';
 import { Country, State, City, ICountry, IState, ICity } from 'country-state-city';
+import { 
+         CASTE_OPTIONS,
+         MASLAK_OPTIONS,
+         RELIGION_OPTIONS} from "@/constants/createProfile/background-family-const"
+import {
+  maritalStatusOptions,
+  qualificationOptions,
+  islamicEducationOptions
+} from "@/constants/createProfile/personal-info-const"
+
 
 interface SearchFiltersProps {
   onSearch: (filters: Partial<SearchFiltersType>) => void;
@@ -136,7 +146,11 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
           >
             <option value="">Select</option>
-            <option value="muslim">Muslim</option>
+            {RELIGION_OPTIONS.map((r) => (
+              <option key={r.value} value={r.value}>
+                {r.label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -150,10 +164,11 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
           >
             <option value="">Select</option>
-            <option value="ahleHadith">Ahle Hadith</option>
-            <option value="ahleSunnat">Ahle Sunnat</option>
-            <option value="deobandi">Deobandi</option>
-            <option value="barelvi">Barelvi</option>
+            {MASLAK_OPTIONS.map((m) => (
+              <option key={m.value} value={m.value}>
+                {m.label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -167,11 +182,11 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
           >
             <option value="">Select</option>
-            <option value="qaidaNoorani">Qaida Noorani</option>
-            <option value="nazirah">Nazirah</option>
-            <option value="hifz">Hifz</option>
-            <option value="aalim">Aalim</option>
-            <option value="darseNizami">Darse Nizami</option>
+            {islamicEducationOptions.map((edu) => (
+              <option key={edu.value} value={edu.value}>
+                {edu.label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -185,11 +200,11 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
           >
             <option value="">Select</option>
-            <option value="matric">Matric</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="bachelors">Bachelors</option>
-            <option value="masters">Masters</option>
-            <option value="phd">PhD</option>
+            {qualificationOptions.map((q) => (
+              <option key={q.value} value={q.value}>
+                {q.label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -203,9 +218,11 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
           >
             <option value="">Select</option>
-            <option value="single">Single</option>
-            <option value="divorced">Divorced</option>
-            <option value="widowed">Widowed</option>
+            {maritalStatusOptions.map((m) => (
+              <option key={m.value} value={m.value}>
+                {m.label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -219,15 +236,14 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
           >
             <option value="">Select</option>
-            <option value="rajput">Rajput</option>
-            <option value="jat">Jat</option>
-            <option value="arain">Arain</option>
-            <option value="malik">Malik</option>
-            <option value="sheikh">Sheikh</option>
-            <option value="syed">Syed</option>
-            <option value="other">Other</option>
+            {CASTE_OPTIONS.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.label}
+              </option>
+            ))}
           </select>
         </div>
+
 
         {/* Minimum Age */}
         <div>
