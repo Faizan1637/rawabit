@@ -16,7 +16,9 @@ import {
 import { Button, Avatar } from "antd";
 import MembershipPlans from "@/components/membership-plans";
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/context/AuthContext"; // ✅ Import global state
+import { useAuthContext } from "@/context/AuthContext"; 
+import ChangePasswordForm from "@/components/ChangePasswordForm";
+import PaymentMethods from "@/components/PaymentMethod"
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -140,6 +142,25 @@ const Dashboard = () => {
         );
       case "profile":
         // router.push('/account/createprofile')
+
+      case "account":
+        return  <ChangePasswordForm/>
+
+      case "payment-methods":
+        return (
+            <div
+              style={{
+                minHeight: "100vh",
+                backgroundColor: "#f5f5f5",
+                padding: "2rem",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <PaymentMethods />
+            </div>
+            )
+
       default:
         return (
           <div className="bg-white rounded-2xl p-12 shadow-lg border border-slate-200 text-center">
