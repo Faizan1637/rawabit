@@ -6,12 +6,14 @@ import { handleError } from '@/lib/utils/error-handler';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await verifyAuth(req);
-    const profileId=await params?.id
-    const profile = await getProfileById("690220a8792277b2382c6276");
+
+    const { id } = await params;
+    const profile = await getProfileById(id);
+
     return createSuccessResponse({ profile });
   } catch (error) {
     return handleError(error);
