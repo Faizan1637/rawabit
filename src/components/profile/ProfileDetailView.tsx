@@ -1,6 +1,7 @@
 'use client';
 
 import { User, MapPin, Briefcase, GraduationCap, Heart, Home, Users, BookOpen, Calendar, Crown } from 'lucide-react';
+import { calculateAge } from '@/lib/utils/age-calculator';
 
 interface ProfileDetailViewProps {
   profile: any;
@@ -24,7 +25,7 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-lg">
               <span className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
-                {profileData.age} Years
+                {calculateAge(profileData.dateOfBirth)} Years
               </span>
               <span>•</span>
               <span className="capitalize">{profileData.gender}</span>
@@ -33,7 +34,7 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
             </div>
             <div className="flex items-center justify-center md:justify-start gap-2 mt-3 text-white/90">
               <MapPin className="w-5 h-5" />
-              <span>{profileData.city}, {profileData.state}, {profileData.country}</span>
+              <span>{profileData.livesInCity}, {profileData.livesInState}, {profileData.livesInCountry}</span>
             </div>
             <div className="mt-4 inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
              <span className="text-sm font-semibold">
@@ -69,7 +70,7 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold mb-1">Age</p>
-              <p className="text-slate-900 text-lg font-medium">{profileData.age} Years</p>
+              <p className="text-slate-900 text-lg font-medium">{calculateAge(profileData.dateOfBirth)} Years</p>
             </div>
           </div>
 
