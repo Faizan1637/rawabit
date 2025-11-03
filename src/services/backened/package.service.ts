@@ -7,7 +7,7 @@ export const sanitizePackage = (pkg: Package): PackageResponse => {
     name: pkg.name,
     price: pkg.price,
     validity: pkg.validity,
-    totalCount: pkg.total Count,
+    totalCount: pkg.totalCount,
     features: pkg.features,
     isActive: pkg.isActive,
   };
