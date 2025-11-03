@@ -37,7 +37,7 @@
     "**/*.mts",
     ".next\\dev/types/**/*.ts",
     ".next\\dev/types/**/*.ts"
-, "src/app/register-info"  ],
+, "src/app/register-info", "src/app/api/transactions"  ],
   "exclude": [
     "node_modules"
   ]

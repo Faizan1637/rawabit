@@ -1,20 +1,11 @@
-// src/client/api/subscription.api.ts
 import apiClient from '@/hooks/useAxios';
-import { SubscriptionResponse } from '@/types/subscription';
-
-interface SubscriptionResponseData {
-  success: boolean;
-  data?: {
-    subscriptions: SubscriptionResponse[];
-    activeSubscription: SubscriptionResponse | null;
-  };
-  message?: string;
-  error?: string;
-}
 
 export const subscriptionApi = {
-  getAll: async (): Promise<SubscriptionResponseData> => {
-    const res = await apiClient.get<SubscriptionResponseData>('/api/subscriptions');
-    return res.data;
+  getUserSubscriptions: async () => {
+    const response = await apiClient.get('/subscriptions');
+    if (response.data.success && response.data.data) {
+      return response.data.data;
+    }
+    throw new Error('Failed to fetch subscriptions');
   },
 };

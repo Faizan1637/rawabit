@@ -1,7 +1,7 @@
 // src/app/(dashboard)/packages/page.tsx
 'use client';
 
-import { PackageList } from '@/components/packages/PackageList';
+import  PackageList  from '@/components/packages/PackageList';
 import { usePackages } from '@/hooks/usePackage';
 import { Spin, Alert } from 'antd';
 
@@ -26,7 +26,7 @@ export default function PackagesPage() {
 
         {error && <Alert message={error} type="error" showIcon style={{ marginBottom: 24 }} />}
 
-        {!loading && !error && <PackageList packages={packages} />}
+        {!loading && !error && <PackageList packages={packages} loading={loading}/>}
       </div>
     </div>
   );

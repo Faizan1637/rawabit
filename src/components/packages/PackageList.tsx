@@ -1,23 +1,32 @@
-// src/client/components/packages/PackageList.tsx
 'use client';
 
-import { PackageResponse } from '@/types/package';
-import { PackageCard } from '@/components/packages/PackageCard';
-import { Empty } from 'antd';
+import PackageCard from './PackageCard';
 
-interface Props {
-  packages: PackageResponse[];
+interface PackageListProps {
+  packages: any[];
+  loading: boolean;
 }
 
-export function PackageList({ packages }: Props) {
-  if (packages.length === 0) {
-    return <Empty description="No packages available" />;
+export default function PackageList({ packages, loading }: PackageListProps) {
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-orange-500 mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading packages...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-      {packages.map((pkg) => (
-        <PackageCard key={pkg.id} pkg={pkg} />
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {packages.map((pkg, index) => (
+        <PackageCard
+          key={pkg.id}
+          package={pkg}
+          popular={index === 1} // Middle package (Platinum) is popular
+        />
       ))}
     </div>
   );

@@ -1,29 +1,34 @@
-// src/client/api/transaction.api.ts
 import apiClient from '@/hooks/useAxios';
-import { CreateTransactionInput, TransactionResponse } from '@/types/transaction';
 
-interface CreateTransactionResponse {
-  success: boolean;
-  data?: { transaction: TransactionResponse };
-  message?: string;
-  error?: string;
-}
-
-interface TransactionListResponse {
-  success: boolean;
-  data?: { transactions: TransactionResponse[] };
-  message?: string;
-  error?: string;
+export interface CreateTransactionData {
+  packageId: string;
+  paymentMethod: 'bank_transfer' | 'cash' | 'telenor_easypaisa';
+  mobileNo: string;
+  transactionRefNo?: string;
 }
 
 export const transactionApi = {
-  create: async (input: CreateTransactionInput): Promise<CreateTransactionResponse> => {
-    const res = await apiClient.post<CreateTransactionResponse>('/api/transactions', input);
-    return res.data;
+  createTransaction: async (data: CreateTransactionData) => {
+    const response = await apiClient.post('/api/transactions', data);
+    if (response.data.success) {
+      return response.data;
+    }
+    throw new Error(response.data.error || 'Failed to create transaction');
   },
 
-  getAll: async (): Promise<TransactionListResponse> => {
-    const res = await apiClient.get<TransactionListResponse>('/api/transactions');
-    return res.data;
+  getUserTransactions: async () => {
+    const response = await apiClient.get('/transactions');
+    if (response.data.success && response.data.data) {
+      return response.data.data.transactions;
+    }
+    throw new Error('Failed to fetch transactions');
+  },
+
+  viewContact: async (profileId: string) => {
+    const response = await apiClient.post(`/profile/${profileId}/contact`);
+    if (response.data.success && response.data.data) {
+      return response.data.data;
+    }
+    throw new Error(response.data.error || 'Failed to view contact');
   },
 };

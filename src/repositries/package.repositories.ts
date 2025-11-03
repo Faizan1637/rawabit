@@ -15,10 +15,19 @@ export const findAllPackages = async () => {
 
 export const findPackageById = async (id: string): Promise<Package | null> => {
   const db = await getDatabase();
-  return await db
-    .collection<Package>(COLLECTION)
-    .findOne({ _id: new ObjectId(id) });
+  const collection = db.collection<Package>(COLLECTION);
+
+  try {
+    const objectId = new ObjectId(id);
+    const byObjectId = await collection.findOne({ _id: objectId });
+    if (byObjectId) return byObjectId;
+  } catch (err) {}
+
+  // fallback for string _id
+  return await collection.findOne({ _id: id } as any);
 };
+
+
 
 export const createPackage = async (pkg: Omit<Package, '_id'>): Promise<string> => {
   const db = await getDatabase();

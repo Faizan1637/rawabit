@@ -1,29 +1,23 @@
-// src/app/payment/page.tsx
 'use client';
 
-import  PaymentForm  from '@/components/payment/PaymentForm';
-import { useSearchParams } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { packageApi } from '@/client/api/package.api';
-import { PackageResponse } from '@/types/package';
+import PaymentForm from '@/components/payment/PaymentForm';
 import { Spin, Alert } from 'antd';
 
-export default function PaymentPage() {
-  const searchParams = useSearchParams();
-  const packageId = searchParams.get('packageId');
-  const [pkg, setPkg] = useState<PackageResponse | null>(null);
+export default function CheckoutPage() {
+  const { id } = useParams();
+  const [pkg, setPkg] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!packageId) {
-      setError('Invalid package');
-      setLoading(false);
-      return;
-    }
-
+    console.log("Before Checking ID in useeffect",id)
+    if (!id) return;
+     console.log("Checking ID in useeffect",id)
     packageApi
-      .getById(packageId)
+      .getById(id as string)
       .then((res) => {
         if (res.success && res.data?.package) {
           setPkg(res.data.package);
@@ -33,9 +27,9 @@ export default function PaymentPage() {
       })
       .catch(() => setError('Failed to load package'))
       .finally(() => setLoading(false));
-  }, [packageId]);
+  }, [id]);
 
-  if (loading) return <div style={{ textAlign: 'center', padding: 40 }}><Spin size="large" /></div>;
+  if (loading) return <div className="text-center py-20"><Spin size="large" /></div>;
   if (error) return <Alert message={error} type="error" showIcon />;
   if (!pkg) return null;
 
