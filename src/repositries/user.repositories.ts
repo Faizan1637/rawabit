@@ -58,3 +58,30 @@ export const findAllUsers = async (skip = 0, limit = 10) => {
   
   return { users, total };
 };
+
+export const setResetOTP = async (userId: string, otp: string, expires: Date): Promise<boolean> => {
+  const db = await getDatabase();
+  const result = await db.collection<User>(COLLECTION).updateOne(
+    { _id: new ObjectId(userId) },
+    {
+      $set: {
+        resetOTP: otp,
+        resetOTPExpires: expires,
+        updatedAt: new Date(),
+      },
+    }
+  );
+  return result.modifiedCount > 0;
+};
+
+export const clearResetOTP = async (userId: string): Promise<boolean> => {
+  const db = await getDatabase();
+  const result = await db.collection<User>(COLLECTION).updateOne(
+    { _id: new ObjectId(userId) },
+    {
+      $unset: { resetOTP: '', resetOTPExpires: '' },
+      $set: { updatedAt: new Date() },
+    }
+  );
+  return result.modifiedCount > 0;
+};
