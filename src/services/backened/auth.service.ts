@@ -1,5 +1,5 @@
 import { hashPassword, verifyPassword } from '@/lib/auth/password';
-import { findUserByEmail, createUser, findUserById } from '@/repositries/user.repositories';
+import { findUserByEmail, createUser, findUserById,updateUser } from '@/repositries/user.repositories';
 import { CreateUserInput, LoginInput, User, UserResponse } from '@/types';
 import { AppError } from '@/lib/utils/error-handler';
 import { ERROR_MESSAGES } from '@/constants/responseConstant/message';
@@ -84,3 +84,29 @@ export const getUserById = async (id: string): Promise<UserResponse> => {
   }
   return sanitizeUser(user);
 };
+
+export const changeUserPassword = async (
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<void> => {
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new AppError(ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+  }
+
+  // Verify current password
+  const isValid = await verifyPassword(currentPassword, user.password);
+  if (!isValid) {
+    throw new AppError(ERROR_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
+  }
+
+  // Hash new password
+  const hashedPassword = await hashPassword(newPassword);
+
+  // Update
+  const updated = await updateUser(userId, { password: hashedPassword });
+  if (!updated) {
+    throw new AppError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
+  }
+}
