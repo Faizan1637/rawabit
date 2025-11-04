@@ -53,3 +53,19 @@ export interface User {
   dateOfBirth: string;
   role: string;
 }
+
+export interface ForgotPasswordInput {
+  email: string;
+}
+
+export interface VerifyOTPInput {
+  email: string;
+  otp: string;
+}
+
+export interface ResetPasswordInput {
+  email: string;
+  otp: string;  // Required for verification
+  newPassword: string;
+  confirmPassword: string;
+}
