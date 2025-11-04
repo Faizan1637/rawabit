@@ -1,30 +1,32 @@
+// src/client/hooks/useSubscription.ts
 'use client';
 
 import { useState, useEffect } from 'react';
 import { subscriptionApi } from '@/client/api/subscription.api';
+import { SubscriptionResponse } from '@/types/subscription';
 
 export const useSubscription = () => {
-  const [subscriptions, setSubscriptions] = useState<any[]>([]);
-  const [activeSubscription, setActiveSubscription] = useState<any | null>(null);
+  const [list, setList] = useState<SubscriptionResponse[]>([]);
+  const [active, setActive] = useState<SubscriptionResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSubscriptions = async () => {
+  const fetch = async () => {
     try {
       setLoading(true);
-      const data = await subscriptionApi.getUserSubscriptions();
-      setSubscriptions(data.subscriptions || []);
-      setActiveSubscription(data.activeSubscription || null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch subscriptions');
+      const res = await subscriptionApi.getAll();
+      if (res.success) {
+        setList(res.data?.subscriptions || []);
+        setActive(res.data?.activeSubscription || null);
+      } else throw new Error(res.error);
+    } catch (err: any) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchSubscriptions();
-  }, []);
+  useEffect(() => { fetch(); }, []);
 
-  return { subscriptions, activeSubscription, loading, error, refetch: fetchSubscriptions };
+  return { list, active, loading, error, refetch: fetch };
 };

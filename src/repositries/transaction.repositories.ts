@@ -64,3 +64,19 @@ export const findPendingTransactions = async () => {
     .sort({ createdAt: -1 })
     .toArray();
 };
+
+export const getPendingTransactions = async () => {
+  const db = await getDatabase();
+  const txns = await db
+    .collection('transactions')
+    .find({ status: 'verifying' })
+    .toArray();
+
+  return txns.map(t => ({
+    id: t._id.toString(),
+    packageTitle: t.packageTitle,
+    amount: t.amount,
+    paymentMethod: t.paymentMethod,
+    mobileNo: t.mobileNo,
+  }));
+};

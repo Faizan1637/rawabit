@@ -1,10 +1,10 @@
+// src/app/api/profile/[id]/contact/route.ts
 import { NextRequest } from 'next/server';
-import { verifyAuth } from '@/middleware/auth';
 import { viewProfileContact } from '@/services/backened/subscription.service';
 import { getProfileById } from '@/services/backened/profile.service';
+import { verifyAuth } from '@/middleware/auth';
 import { createSuccessResponse } from '@/lib/utils/api-response';
-import { handleError, AppError } from '@/lib/utils/error-handler';
-import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
+import { handleError } from '@/lib/utils/error-handler';
 
 export async function POST(
   req: NextRequest,
@@ -12,22 +12,11 @@ export async function POST(
 ) {
   try {
     const userId = await verifyAuth(req);
-    
-    // Get profile to get contact info
     const profile = await getProfileById(params.id);
-    
-    // Record view and check subscription
-    const result = await viewProfileContact(
-      userId,
-      params.id,
-      profile.fullName
-    );
+    const result = await viewProfileContact(userId, params.id, profile.fullName);
 
-    if (!result.canView) {
-      throw new AppError(result.message, HTTP_STATUS.FORBIDDEN);
-    }
+    if (!result.canView) throw new Error(result.message);
 
-    // Return contact information
     return createSuccessResponse({
       parentsMobileNo: profile.parentsMobileNo,
       parentsPhone: profile.parentsPhone,
