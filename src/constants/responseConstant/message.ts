@@ -11,8 +11,7 @@ export const ERROR_MESSAGES = {
   WEAK_PASSWORD: 'Password must be at least 8 characters',
   PROFILE_EXISTS: 'Profile already exists for this user',
   PROFILE_NOT_FOUND: 'Profile not found',
-  INQUIRY_SENT: 'Your message has been sent successfully',
-  INQUIRY_UPDATED: 'Inquiry updated successfully',
+  INQUIRY_NOT_FOUND: 'Inquiry not found',
 } as const;
 
 export const SUCCESS_MESSAGES = {
@@ -24,5 +23,7 @@ export const SUCCESS_MESSAGES = {
   PROFILE_CREATED: 'Profile created successfully',
   PROFILE_UPDATED: 'Profile updated successfully',
   PROFILE_DELETED: 'Profile deleted successfully',
-  INQUIRY_NOT_FOUND: 'Inquiry not found',
+  PASSWORD_CHANGED: 'Password changed successfully',
+  INQUIRY_SENT: 'Your message has been sent successfully',
+  INQUIRY_UPDATED: 'Inquiry updated successfully',
 } as const;
