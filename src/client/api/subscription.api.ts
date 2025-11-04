@@ -12,7 +12,7 @@ interface Response {
 
 export const subscriptionApi = {
   getAll: async (): Promise<Response> => {
-    const res = await apiClient.get<Response>('/api/subscriptions');
+    const res = await apiClient.get<Response>('/api/subscription');
     return res.data;
   },
 };

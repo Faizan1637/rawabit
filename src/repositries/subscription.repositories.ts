@@ -10,20 +10,21 @@ export const findActiveSubscription = async (
 ): Promise<Subscription | null> => {
   const db = await getDatabase();
   const now = new Date();
-  
+
+  // ✅ userId is a string, so match as string
   return await db.collection<Subscription>(SUBSCRIPTION_COLLECTION).findOne({
-    userId: new ObjectId(userId),
+    userId: userId,
     status: 'active',
     endDate: { $gte: now },
     remainingCount: { $gt: 0 },
   });
 };
 
-export const findUserSubscriptions = async (userId: string) => {
+export const findUserSubscriptions = async (id: string) => {
   const db = await getDatabase();
   return await db
     .collection<Subscription>(SUBSCRIPTION_COLLECTION)
-    .find({ userId: new ObjectId(userId) })
+    .find({ userId: id }) // ✅ string match
     .sort({ createdAt: -1 })
     .toArray();
 };
@@ -43,7 +44,7 @@ export const incrementViewedCount = async (subscriptionId: string): Promise<bool
   const result = await db
     .collection<Subscription>(SUBSCRIPTION_COLLECTION)
     .updateOne(
-      { _id: new ObjectId(subscriptionId) },
+      { _id: new ObjectId(subscriptionId) }, // ✅ _id remains ObjectId
       {
         $inc: { viewedCount: 1, remainingCount: -1 },
         $set: { updatedAt: new Date() },
@@ -70,7 +71,7 @@ export const hasViewedProfile = async (
   const count = await db
     .collection<ProfileView>(PROFILE_VIEW_COLLECTION)
     .countDocuments({
-      subscriptionId: new ObjectId(subscriptionId),
+      subscriptionId: new ObjectId(subscriptionId), // ✅ these are ObjectIds
       viewedProfileId: new ObjectId(profileId),
     });
   return count > 0;

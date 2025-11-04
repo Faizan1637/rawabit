@@ -70,6 +70,7 @@ export const getUserActiveSubscription = async (
   userId: string
 ): Promise<SubscriptionResponse | null> => {
   const subscription = await findActiveSubscription(userId);
+  console.log("Active subcritpion in service in active subscription function ..",subscription)
   if (!subscription) {
     return null;
   }
@@ -78,6 +79,7 @@ export const getUserActiveSubscription = async (
 
 export const getUserSubscriptions = async (userId: string) => {
   const subscriptions = await findUserSubscriptions(userId);
+  console.log(" User Subscriptions in service file is ..",subscriptions)
   return subscriptions.map(sanitizeSubscription);
 };
 

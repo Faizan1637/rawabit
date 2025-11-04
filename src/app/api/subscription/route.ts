@@ -7,10 +7,13 @@ import { handleError } from '@/lib/utils/error-handler';
 export async function GET(req: NextRequest) {
   try {
     const userId = await verifyAuth(req);
-    
+    console.log("User id in backened subscription function is ",userId)
     const subscriptions = await getUserSubscriptions(userId);
     const activeSubscription = await getUserActiveSubscription(userId);
     
+    console.log("subscriptions of the User...",subscriptions)
+    console.log("Active subscriptions of the User...",activeSubscription)
+
     return createSuccessResponse({
       subscriptions,
       activeSubscription,

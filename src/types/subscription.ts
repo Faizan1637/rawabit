@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 
 export interface Subscription {
   _id?: ObjectId;
-  userId: ObjectId;
+  userId: string ;
   packageId: ObjectId;
   packageName: string;
   startDate: Date;
@@ -33,7 +33,7 @@ export interface SubscriptionResponse {
 export interface ProfileView {
   _id?: ObjectId;
   subscriptionId: ObjectId;
-  userId: ObjectId;
+  userId: string;
   viewedProfileId: ObjectId;
   profileName: string;
   trackingCode: string;
