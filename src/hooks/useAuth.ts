@@ -88,6 +88,80 @@ export const useAuth = () => {
     }
   };
 
+  const forgotPassword = async (email: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await authApi.forgotPassword({ email });
+
+      if (response.success) {
+        return response;
+      } else {
+        throw new Error(response.error || 'Failed to send OTP');
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed';
+      setError(message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const verifyOTP = async (email: string, otp: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await authApi.verifyOTP({ email, otp });
+
+      if (response.success) {
+        return response;
+      } else {
+        throw new Error(response.error || 'Invalid OTP');
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed';
+      setError(message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetPassword = async (
+    email: string,
+    otp: string,
+    newPassword: string,
+    confirmPassword: string
+  ) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await authApi.resetPassword({
+        email,
+        otp,
+        newPassword,
+        confirmPassword,
+      });
+
+      if (response.success) {
+        router.push('/login');
+        return response;
+      } else {
+        throw new Error(response.error || 'Failed to reset password');
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed';
+      setError(message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const clearError = () => setError(null);
 
   return {
@@ -97,5 +171,8 @@ export const useAuth = () => {
     loading,
     error,
     clearError,
+    forgotPassword,
+    resetPassword,
+    verifyOTP,
   };
 };

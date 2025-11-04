@@ -8,6 +8,8 @@ export interface User {
   dateOfBirth: string;    
   role: 'user' | 'admin';
   profileCompleted:boolean;
+  resetOTP?:string;
+  resetOTPExpires?:Date;
   createdAt: Date;
   updatedAt: Date;
 }

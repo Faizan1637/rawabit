@@ -12,9 +12,12 @@ export const ERROR_MESSAGES = {
   PROFILE_EXISTS: 'Profile already exists for this user',
   PROFILE_NOT_FOUND: 'Profile not found',
   INQUIRY_NOT_FOUND: 'Inquiry not found',
+  INVALID_OTP: 'Invalid or expired OTP',
+  OTP_EXPIRED: 'OTP has expired',
 } as const;
 
 export const SUCCESS_MESSAGES = {
+  PASSWORD_RESET: 'Password reset successfully',
   USER_CREATED: 'User created successfully',
   USER_UPDATED: 'User updated successfully',
   USER_DELETED: 'User deleted successfully',

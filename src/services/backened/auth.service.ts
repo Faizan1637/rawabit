@@ -4,6 +4,8 @@ import { CreateUserInput, LoginInput, User, UserResponse } from '@/types';
 import { AppError } from '@/lib/utils/error-handler';
 import { ERROR_MESSAGES } from '@/constants/responseConstant/message';
 import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
+import { setResetOTP, clearResetOTP } from '@/repositries/user.repositories';
+import { sendResetOTPEmail } from './email.service';  
 
 // UPDATE the sanitizeUser function
 export const sanitizeUser = (user: User): UserResponse => {
@@ -110,3 +112,69 @@ export const changeUserPassword = async (
     throw new AppError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
   }
 }
+
+
+export const sendResetOTP = async (email: string): Promise<void> => {
+  const user = await findUserByEmail(email);
+  if (!user) {
+    throw new AppError(ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+  }
+
+  // Generate 6-digit OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  // Set expiry (10 minutes)
+  const expires = new Date(Date.now() + 10 * 60 * 1000);
+
+  // Save to user
+  const saved = await setResetOTP(user._id!.toString(), otp, expires);
+  if (!saved) {
+    throw new AppError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
+  }
+
+  // Send email
+  await sendResetOTPEmail({ email, otp });
+};
+
+export const verifyResetOTP = async (email: string, otp: string): Promise<boolean> => {
+  const user = await findUserByEmail(email);
+  if (!user || !user.resetOTP || !user.resetOTPExpires) {
+    throw new AppError(ERROR_MESSAGES.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
+  }
+
+  // Check expiry
+  if (new Date() > user.resetOTPExpires) {
+    await clearResetOTP(user._id!.toString());
+    throw new AppError(ERROR_MESSAGES.OTP_EXPIRED, HTTP_STATUS.BAD_REQUEST);
+  }
+
+  // Check OTP
+  if (user.resetOTP !== otp) {
+    throw new AppError(ERROR_MESSAGES.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
+  }
+
+  return true;
+};
+
+export const resetUserPassword = async (
+  email: string,
+  otp: string,
+  newPassword: string
+): Promise<void> => {
+  // Verify OTP first
+  const valid = await verifyResetOTP(email, otp);
+  if (!valid) {
+    throw new AppError(ERROR_MESSAGES.INVALID_OTP, HTTP_STATUS.BAD_REQUEST);
+  }
+
+  const user = await findUserByEmail(email);
+  const hashed = await hashPassword(newPassword);
+
+  const updated = await updateUser(user!._id!.toString(), { password: hashed });
+  if (!updated) {
+    throw new AppError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
+  }
+
+  // Clear OTP
+  await clearResetOTP(user!._id!.toString());
+};
