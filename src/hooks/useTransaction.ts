@@ -1,4 +1,3 @@
-// src/client/hooks/useTransaction.ts
 'use client';
 
 import { useState } from 'react';
@@ -14,7 +13,7 @@ export const useTransaction = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await transactionApi.create(input);
+      const response = await transactionApi.createTransaction(input);
       if (response.success && response.data?.transaction) {
         console.log(response.message || 'Payment submitted!');
         return response.data.transaction;
@@ -32,7 +31,7 @@ export const useTransaction = () => {
   };
 
   const getTransactions = async (): Promise<TransactionResponse[]> => {
-    const response = await transactionApi.getAll();
+    const response = await transactionApi.getUserTransactions();
     if (response.success && response.data?.transactions) {
       return response.data.transactions;
     }

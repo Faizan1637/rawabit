@@ -17,7 +17,7 @@ export const transactionApi = {
   },
 
   getUserTransactions: async () => {
-    const response = await apiClient.get('/transactions');
+    const response = await apiClient.get('/api/transactions');
     if (response.data.success && response.data.data) {
       return response.data.data.transactions;
     }
@@ -25,7 +25,7 @@ export const transactionApi = {
   },
 
   viewContact: async (profileId: string) => {
-    const response = await apiClient.post(`/profile/${profileId}/contact`);
+    const response = await apiClient.post(`/api/profile/${profileId}/contact`);
     if (response.data.success && response.data.data) {
       return response.data.data;
     }
