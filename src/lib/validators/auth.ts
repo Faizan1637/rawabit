@@ -86,3 +86,10 @@ export const validateDateOfBirth = (dateOfBirth: string): void => {
     );
   }
 };
+
+export const validateOTP = (otp: string): void => {
+  const otpRegex = /^\d{6}$/;  // 6-digit number
+  if (!otpRegex.test(otp)) {
+    throw new AppError('Invalid OTP format', HTTP_STATUS.BAD_REQUEST);
+  }
+};
