@@ -5,7 +5,7 @@ import { packageApi } from '@/client/api/package.api';
 
 export const usePackages = () => {
   const [packages, setPackages] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [packagesLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,5 +24,5 @@ export const usePackages = () => {
     fetchPackages();
   }, []);
 
-  return { packages, loading, error };
+  return { packages, packagesLoading, error };
 };

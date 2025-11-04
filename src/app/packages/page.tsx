@@ -6,7 +6,7 @@ import { usePackages } from '@/hooks/usePackage';
 import { Spin, Alert } from 'antd';
 
 export default function PackagesPage() {
-  const { packages, loading, error } = usePackages();
+  const { packages, packagesLoading, error } = usePackages();
 
   return (
     <div style={{ padding: '48px 24px', background: '#f5f5f5', minHeight: '100vh' }}>
@@ -18,7 +18,7 @@ export default function PackagesPage() {
           Unlock contact details of verified profiles
         </p>
 
-        {loading && (
+        {packagesLoading && (
           <div style={{ textAlign: 'center', padding: 40 }}>
             <Spin size="large" />
           </div>
@@ -26,7 +26,7 @@ export default function PackagesPage() {
 
         {error && <Alert message={error} type="error" showIcon style={{ marginBottom: 24 }} />}
 
-        {!loading && !error && <PackageList packages={packages} loading={loading}/>}
+        {!packagesLoading && !error && <PackageList packages={packages} packagesLoading={packagesLoading}/>}
       </div>
     </div>
   );

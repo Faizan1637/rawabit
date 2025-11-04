@@ -4,23 +4,23 @@ import PackageCard from './PackageCard';
 
 interface PackageListProps {
   packages: any[];
-  loading: boolean;
+  packagesLoading: boolean;
 }
 
-export default function PackageList({ packages, loading }: PackageListProps) {
-  if (loading) {
+export default function PackageList({ packages, packagesLoading }: PackageListProps) {
+  if (packagesLoading) {
     return (
-      <div className="flex justify-center items-center py-20">
+      <div className="flex justify-center items-center py-12">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading packages...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-4 border-orange-500 mx-auto mb-3"></div>
+          <p className="text-slate-600 text-sm">Loading packages...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
       {packages.map((pkg, index) => (
         <PackageCard
           key={pkg.id}
