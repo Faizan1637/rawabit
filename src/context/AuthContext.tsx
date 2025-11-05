@@ -31,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('user');
       }
     } catch (error) {
+      console.error(error)
       setUser(null);
       localStorage.removeItem('user');
     } finally {

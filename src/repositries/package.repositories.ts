@@ -21,7 +21,9 @@ export const findPackageById = async (id: string): Promise<Package | null> => {
     const objectId = new ObjectId(id);
     const byObjectId = await collection.findOne({ _id: objectId });
     if (byObjectId) return byObjectId;
-  } catch (err) {}
+  } catch (err) {
+    console.log(err)
+  }
 
   // fallback for string _id
   return await collection.findOne({ _id: id } as any);

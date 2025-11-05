@@ -3,7 +3,6 @@ import {
   findProfileByUserId,
   findProfileById,
   createProfile,
-  updateProfile,
   updateProfileByUserId,
   deleteProfile,
   findAllProfiles,

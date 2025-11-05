@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, Eye, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Calendar, CheckCircle, XCircle, Clock } from 'lucide-react';
 
 interface SubscriptionStatusProps {
   subscription: {

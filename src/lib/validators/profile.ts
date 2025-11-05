@@ -1,5 +1,4 @@
 import { AppError } from '@/lib/utils/error-handler';
-import { ERROR_MESSAGES } from '@/constants/responseConstant/message';
 import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
 
 export const validateHeight = (height: string): void => {

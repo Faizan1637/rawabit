@@ -257,7 +257,7 @@ export default function Subscription() {
           </div>
           <h3 className="text-xl font-bold text-slate-700 mb-2">No Subscription History</h3>
           <p className="text-slate-500 text-sm">
-            You haven't subscribed to any packages yet
+            You haven&apos;t subscribed to any packages yet
           </p>
         </div>
       )}
