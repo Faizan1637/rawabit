@@ -10,18 +10,15 @@ import {
   WalletOutlined,
   DeleteOutlined,
   CloseOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined
 } from "@ant-design/icons";
 import { Button, Avatar, Spin, Alert } from "antd";
-import MembershipPlans from "@/components/membership-plans";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/context/AuthContext"; 
 import ChangePasswordForm from "@/components/ChangePasswordForm";
-import PaymentMethods from "@/components/PaymentMethod"
+import PaymentMethods from "@/components/PaymentMethod";
 import PackageList from '@/components/packages/PackageList';
+import Subscription from '@/components/subscription/Subscription';
 import { usePackages } from '@/hooks/usePackage';
-
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -139,42 +136,17 @@ const Dashboard = () => {
                 <PackageList packages={packages} packagesLoading={packagesLoading} />
               )}
             </div>
-
-            {/* Subscription Alert - Uncomment when needed */}
-            {/* {user.subscriptionExpired && (
-              <div className="bg-gradient-to-br from-red-50 to-orange-50 border-2 border-red-200 rounded-xl p-4 shadow-md">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <ClockCircleOutlined className="text-xl text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-red-900 mb-1">
-                      Subscription Expired!
-                    </h3>
-                    <p className="text-red-800 text-sm mb-3">
-                      Your plan <span className="font-semibold text-orange-600">{user.subscription}</span>{" "}
-                      expired <span className="font-semibold">{user.daysExpired} days ago</span>. Please renew it.
-                    </p>
-                    <Button
-                      type="primary"
-                      className="bg-red-500 hover:bg-red-600 border-none font-semibold shadow-md"
-                      onClick={() => setActiveTab("subscriptions")}
-                    >
-                      View Plans
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )} */}
           </div>
         );
 
       case "profile":
-        // router.push('/account/createprofile')
         return null;
 
       case "account":
         return <ChangePasswordForm />;
+
+      case "subscriptions":
+        return <Subscription />;
 
       case "payment-methods":
         return (
@@ -225,16 +197,6 @@ const Dashboard = () => {
                   className="bg-gradient-to-br from-orange-500 to-orange-600 mb-3 shadow-md"
                 />
                 <h3 className="text-base font-bold text-slate-800">{user.firstName}</h3>
-                {/* <div
-                  className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold mt-2 ${
-                    user.subscriptionExpired
-                      ? "bg-red-100 text-red-700"
-                      : "bg-green-100 text-green-700"
-                  }`}
-                >
-                  {user.subscriptionExpired ? <ClockCircleOutlined /> : <CheckCircleOutlined />}
-                  {user.subscription || "Free Plan"}
-                </div> */}
               </div>
             </div>
 
