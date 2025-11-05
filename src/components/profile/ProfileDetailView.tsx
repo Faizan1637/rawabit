@@ -35,10 +35,10 @@ interface ProfileDetailViewProps {
   profile: any;
 }
 
-function ContactSection({ profileId, profileName }: { profileId: string; profileName: string }) {
+function ContactSection({ profileId}: { profileId: string; profileName: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [contactInfo, setContactInfo] = useState<any>(null);
+  const [contactInfo, setContactInfo] = useState<any(null);
 
   const handleViewContact = async () => {
     setLoading(true);
