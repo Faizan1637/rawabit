@@ -1,6 +1,5 @@
 "use client"
 
-import type React from "react"
 import { useState , useImperativeHandle,forwardRef} from "react"
 import { Form, Input, Select, DatePicker, Upload, Row, Col, Button, InputNumber } from "antd"
 import { UserOutlined, CameraOutlined, MailOutlined, CalendarOutlined, ManOutlined } from "@ant-design/icons"
@@ -19,6 +18,7 @@ import {
   qualificationOptions,
   islamicEducationOptions
 } from "@/constants/createProfile/personal-info-const"
+import Image from 'next/image';
 
 // eslint-disable-next-line react/display-name
 const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange }, ref) => {
@@ -28,7 +28,7 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
   const [selectedQualification, setSelectedQualification] = useState<string | undefined>(data?.qualification)
   const [selectedMaritalStatus, setSelectedMaritalStatus] = useState<string | undefined>(data?.maritalStatus)
 
-  const handleFormChange = (changedValues: Record<string, any>): void => {
+  const handleFormChange = (changedValues: Record<string, unknown>): void => {
     onDataChange(changedValues)
   }
 
@@ -39,7 +39,7 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
       setImageUrl(base64)
       onDataChange({ profileImage: base64 })
     }
-    reader.readAsDataURL(file as any)
+    reader.readAsDataURL(file as unknown as Blob)
     return false
   }
 
@@ -77,10 +77,12 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
             <div className="flex flex-col items-center">
               <div className="relative w-32 h-32">
                 {imageUrl ? (
-                  <img
+                  <Image
                     src={imageUrl}
                     alt="Profile Preview"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-orange-400 shadow-lg"
+                    width={128} // same as w-32
+                    height={128} // same as h-32
+                    className="rounded-full object-cover border-4 border-orange-400 shadow-lg"
                   />
                 ) : (
                   <div className="w-32 h-32 rounded-full bg-white flex items-center justify-center border-2 border-dashed border-orange-300 text-orange-400 shadow-md">

@@ -20,7 +20,7 @@ export const findInquiryById = async (id: string): Promise<Inquiry | null> => {
 export const findAllInquiries = async (
   skip = 0,
   limit = 10,
-  filters?: any
+  filters?: Record<string, unknown>
 ) => {
   const db = await getDatabase();
   

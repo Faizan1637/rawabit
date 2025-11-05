@@ -22,7 +22,6 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
 ) {
   try {
     const userId = await verifyAuth(req);

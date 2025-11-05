@@ -44,12 +44,15 @@ export const validateMessage = (message: string): void => {
   }
 };
 
-export const validateInquiryFields = (data: any, fields: string[]): void => {
-  const missing = fields.filter(field => {
+export const validateInquiryFields = <T extends Record<string, unknown>>(
+  data: T,
+  fields: string[]
+): void => {
+  const missing = fields.filter((field) => {
     const value = data[field];
     return value === undefined || value === null || value === '';
   });
-  
+
   if (missing.length > 0) {
     throw new AppError(
       `Missing required fields: ${missing.join(', ')}`,

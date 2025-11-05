@@ -59,7 +59,7 @@ export const deleteProfile = async (id: string): Promise<boolean> => {
 export const findAllProfiles = async (
   skip = 0,
   limit = 10,
-  filters?: any
+  filters?: Partial<Profile>
 ) => {
   const db = await getDatabase();
   
@@ -79,14 +79,42 @@ export const findAllProfiles = async (
 
 export const checkProfileCompletion = (profile: Profile): boolean => {
   const requiredFields = [
-    'firstName', 'lastName', 'email', 'gender', 'dateOfBirth',
-    'height', 'bodyType', 'complexion', 'fathersName', 'fatherAlive',
-    'fathersOccupation', 'address', 'fromCountry', 'fromState', 'fromCity',
-    'religion', 'caste', 'qualification', 'profession', 'maritalStatus'
-  ];
-  
-  return requiredFields.every(field => {
-    const value = (profile as any)[field];
-    return value !== undefined && value !== null && value !== '';
-  });
+    'firstName',
+    'lastName',
+    'email',
+    'gender',
+    'dateOfBirth',
+    'height',
+    'bodyType',
+    'complexion',
+    'fathersName',
+    'fatherAlive',
+    'fathersOccupation',
+    'address',
+    'fromCountry',
+    'fromState',
+    'fromCity',
+    'religion',
+    'caste',
+    'qualification',
+    'profession',
+    'maritalStatus'
+  ] as const;
+
+  type RequiredField = (typeof requiredFields)[number];
+
+  // Use unknown and narrow it safely — avoids `any`
+  const rec = profile as unknown as Record<RequiredField, unknown>;
+
+  for (const field of requiredFields) {
+    const value = rec[field];
+
+    // missing or null
+    if (value === undefined || value === null) return false;
+
+    // empty string check
+    if (typeof value === 'string' && value.trim() === '') return false;
+  }
+
+  return true;
 };

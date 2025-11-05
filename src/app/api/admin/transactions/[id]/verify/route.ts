@@ -13,7 +13,7 @@ export async function POST(
     
     await verifyTransaction(id, userId);
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json(
       { success: false, error: error.message },
       { status: 400 }

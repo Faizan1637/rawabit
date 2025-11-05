@@ -1,7 +1,6 @@
 "use client"
 
-import type React from "react"
-import { useState, useEffect ,useImperativeHandle,forwardRef} from "react"
+import { useState, useMemo ,useImperativeHandle,forwardRef} from "react"
 import { Form, Input, Select, Row, Col } from "antd"
 import PhoneInput from "react-phone-number-input"
 import { isValidPhoneNumber } from "libphonenumber-js"
@@ -10,7 +9,7 @@ import { Country, State, City, type ICountry, type IState, type ICity } from "co
 import "react-phone-number-input/style.css"
 import {HOUSE_STATUS_OPTIONS} from "@/constants/createProfile/contact-info-const"
 
-
+// eslint-disable-next-line react/display-name
 const ContactInfoStep=forwardRef<unknown, StepProps>(({ data, onDataChange }, ref) => {
   const [form] = Form.useForm()
 
@@ -34,33 +33,35 @@ const ContactInfoStep=forwardRef<unknown, StepProps>(({ data, onDataChange }, re
   const allCountries: ICountry[] = Country.getAllCountries()
 
   // Load states and cities on mount if data exists
-  useEffect(() => {
-    if (data?.livesInCountry) {
-      const states = State.getStatesOfCountry(data.livesInCountry)
-      setLivesInStates(states)
-      setLivesInCountry(data.livesInCountry)
-    }
-    if (data?.livesInCountry && data?.livesInState) {
+  useMemo(() => {
+  if (data?.livesInCountry) {
+    const states = State.getStatesOfCountry(data.livesInCountry)
+    setLivesInStates(states)
+    setLivesInCountry(data.livesInCountry)
+    
+    if (data?.livesInState) {
       const cities = City.getCitiesOfState(data.livesInCountry, data.livesInState)
       setLivesInCities(cities)
       setLivesInState(data.livesInState)
     }
-  }, [data?.livesInCountry, data?.livesInState])
+  }
+}, [data?.livesInCountry, data?.livesInState])
 
-  useEffect(() => {
-    if (data?.fromCountry) {
-      const states = State.getStatesOfCountry(data.fromCountry)
-      setFromStates(states)
-      setFromCountry(data.fromCountry)
-    }
-    if (data?.fromCountry && data?.fromState) {
+useMemo(() => {
+  if (data?.fromCountry) {
+    const states = State.getStatesOfCountry(data.fromCountry)
+    setFromStates(states)
+    setFromCountry(data.fromCountry)
+    
+    if (data?.fromState) {
       const cities = City.getCitiesOfState(data.fromCountry, data.fromState)
       setFromCities(cities)
       setFromState(data.fromState)
     }
-  }, [data?.fromCountry, data?.fromState])
+  }
+}, [data?.fromCountry, data?.fromState])
 
-  const handleFormChange = (changedValues: Record<string, any>): void => {
+  const handleFormChange = (changedValues: Record<string, unknown>): void => {
     onDataChange(changedValues)
   }
 

@@ -1,4 +1,3 @@
-// components/Subscription.tsx
 'use client';
 
 import { useSubscription } from '@/hooks/useSubscription';
@@ -211,7 +210,7 @@ export default function Subscription() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-slate-200">
-                {list.map((subscription: any) => (
+                {list.map((subscription) => (
                   <tr key={subscription.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-semibold text-slate-900">{subscription.packageName}</div>

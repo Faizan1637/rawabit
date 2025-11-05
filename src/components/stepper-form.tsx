@@ -15,9 +15,9 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
   const [current, setCurrent] = useState(0)
   const [formData, setFormData] = useState<Partial<FormData>>(initialData || {})
   const [loading, setLoading] = useState(false)
-  const personalInfoRef = useRef<any>(null)
-  const familyRef = useRef<any>(null)
-  const contactRef = useRef<any>(null)
+  const personalInfoRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
+  const familyRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
+  const contactRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
 
   const { createProfile, loading: profileLoading, error: profileError, clearError } = useProfile();
 

@@ -45,12 +45,15 @@ export const validateNumberOfSiblings = (count: number, field: string): void => 
   }
 };
 
-export const validateRequiredProfileFields = (data: any, fields: string[]): void => {
-  const missing = fields.filter(field => {
+export const validateRequiredProfileFields = (
+  data: Record<string, unknown>,
+  fields: string[]
+): void => {
+  const missing = fields.filter((field) => {
     const value = data[field];
     return value === undefined || value === null || value === '';
   });
-  
+
   if (missing.length > 0) {
     throw new AppError(
       `Missing required fields: ${missing.join(', ')}`,

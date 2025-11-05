@@ -4,7 +4,7 @@ import { sendResetOTP } from '@/services/backened/auth.service';
 import { createSuccessResponse } from '@/lib/utils/api-response';
 import { handleError } from '@/lib/utils/error-handler';
 import { validateRequiredFields, validateEmail } from '@/lib/validators/auth';
-import { SUCCESS_MESSAGES } from '@/constants/responseConstant/message';
+
 
 export async function POST(req: NextRequest) {
   try {
