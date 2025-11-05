@@ -18,7 +18,9 @@ export const transactionApi = {
 
   getUserTransactions: async () => {
     const response = await apiClient.get('/api/transactions');
-    if (response.data.success && response.data.data) {
+    console.log('API Response:', response.data); // Debug log
+    
+    if (response.data.success && response.data.data?.transactions) {
       return response.data.data.transactions;
     }
     throw new Error('Failed to fetch transactions');

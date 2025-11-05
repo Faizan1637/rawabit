@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 
 export interface Transaction {
   _id?: ObjectId;
-  userId: ObjectId;
+  userId: string;
   packageId: ObjectId;
   packageTitle: string;
   amount: number;
@@ -18,7 +18,7 @@ export interface Transaction {
 }
 
 export interface TransactionResponse {
-  id: string;
+  id?: string;
   packageTitle: string;
   mobileNo: string;
   transactionDetails: string;

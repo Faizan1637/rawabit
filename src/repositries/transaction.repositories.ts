@@ -19,11 +19,11 @@ export const findTransactionById = async (id: string): Promise<Transaction | nul
     .findOne({ _id: new ObjectId(id) });
 };
 
-export const findUserTransactions = async (userId: string) => {
+export const findUserTransactions = async (id: string) => {
   const db = await getDatabase();
   return await db
     .collection<Transaction>(COLLECTION)
-    .find({ userId: new ObjectId(userId) })
+    .find({ userId: id })
     .sort({ createdAt: -1 })
     .toArray();
 };

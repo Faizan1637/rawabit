@@ -18,12 +18,15 @@ import ChangePasswordForm from "@/components/ChangePasswordForm";
 import PaymentMethods from "@/components/PaymentMethod";
 import PackageList from '@/components/packages/PackageList';
 import Subscription from '@/components/subscription/Subscription';
+import Transaction from '@/components/transaction/Transaction';
 import { usePackages } from '@/hooks/usePackage';
+import { useTransaction } from "@/hooks/useTransaction";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { packages, packagesLoading, error } = usePackages();
+  
   const router = useRouter();
 
   // ✅ Get logged-in user from AuthContext
@@ -147,6 +150,9 @@ const Dashboard = () => {
 
       case "subscriptions":
         return <Subscription />;
+
+      case "payments":
+        return <Transaction />;
 
       case "payment-methods":
         return (
