@@ -4,7 +4,6 @@ import { useState, FormEvent, ChangeEvent } from 'react';
 import { Home, ChevronRight, Mail, Lock, Eye, EyeOff, CheckCircle, UserPlus, LogIn } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 
 interface LoginFormData {
@@ -15,7 +14,6 @@ interface LoginFormData {
 
 export default function Login() {
   const { login, loading, error, clearError } = useAuth();
-  const router = useRouter();
 
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',

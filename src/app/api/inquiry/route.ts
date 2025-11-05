@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { createNewInquiry } from '@/services/backened/inquiry.service';
-import { createSuccessResponse, createCreatedResponse } from '@/lib/utils/api-response';
+import { createCreatedResponse } from '@/lib/utils/api-response';
 import { handleError } from '@/lib/utils/error-handler';
 import {
   validateInquiryFields,
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create inquiry
-    const { inquiry, inquiryId } = await createNewInquiry({
+    const { inquiry } = await createNewInquiry({
       fullName,
       email,
       phoneNumber,
@@ -55,15 +55,15 @@ export async function POST(req: NextRequest) {
 }
 
 // GET all inquiries (admin only - optional for future)
-export async function GET(req: NextRequest) {
-  try {
-    // You can add admin authentication here
-    // For now, just return error
-    return createSuccessResponse(
-      null,
-      'This endpoint requires admin access'
-    );
-  } catch (error) {
-    return handleError(error);
-  }
-}
+// export async function GET(req: NextRequest) {
+//   try {
+//     // You can add admin authentication here
+//     // For now, just return error
+//     return createSuccessResponse(
+//       null,
+//       'This endpoint requires admin access'
+//     );
+//   } catch (error) {
+//     return handleError(error);
+//   }
+// }

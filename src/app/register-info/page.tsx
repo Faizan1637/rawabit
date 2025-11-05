@@ -1,5 +1,6 @@
 "use client"
-import { Home, ChevronRight, User, Search, CreditCard, MessageSquare, CheckCircle, Phone, Mail, Building2, Globe } from "lucide-react"
+import { Home, ChevronRight, User, Search, CreditCard, MessageSquare, CheckCircle, Phone, Mail, Building2} from "lucide-react"
+import Image from "next/image";
 
 export default function HowToRegister() {
   return (
@@ -39,11 +40,15 @@ export default function HowToRegister() {
               {/* Profile Image */}
               <div className="mb-6">
                 <div className="w-full aspect-[3/4] bg-slate-100 rounded-xl overflow-hidden">
-                  <img 
-                    src="https://al-nikaah.com/Content/images/hafiz-saifi-ullah-siddiqui-full.jpg" 
-                    alt="Hafiz Safi Ullah Siddiqui"
-                    className="w-full h-full object-cover"
-                  />
+                  <div className="relative w-full h-full">
+  <Image
+    src="https://al-nikaah.com/Content/images/hafiz-saifi-ullah-siddiqui-full.jpg"
+    alt="Hafiz Safi Ullah Siddiqui"
+    fill
+    className="object-cover"
+    priority  // optional: ensures faster load for above-the-fold images
+  />
+</div>
                 </div>
                 <p className="text-center text-sm text-slate-600 mt-3 italic">need more details</p>
               </div>
@@ -124,10 +129,13 @@ export default function HowToRegister() {
               </div>
 
               <div className="flex items-center justify-center mb-6">
-                <img 
-                  src="/meezan.png" 
-                  alt="Meezan Bank" 
-                  className="h-16"
+                <Image 
+                  src="/meezan.png"
+                  alt="Meezan Bank"
+                  width={200}   // You must specify width and height (or use fill)
+                  height={64}
+                  className="h-16 w-auto"
+                  priority      // optional: ensures faster loading for above-the-fold images
                 />
               </div>
 
@@ -178,19 +186,40 @@ export default function HowToRegister() {
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-center">
-                  <img src="/westernUnion.png" alt="Western Union" className="h-12" />
+                  <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-center">
+                    <Image 
+                      src="/westernUnion.png" 
+                      alt="Western Union" 
+                      width={120} 
+                      height={48} 
+                      className="h-12 w-auto"
+                    />
+                  </div>
+
+                  <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-center">
+                    <Image 
+                      src="/xpressMoney.jpeg" 
+                      alt="Xpress Money" 
+                      width={120} 
+                      height={48} 
+                      className="h-12 w-auto"
+                    />
+                  </div>
+
+                  <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-center">
+                    <Image 
+                      src="/ria.png" 
+                      alt="Ria" 
+                      width={120} 
+                      height={48} 
+                      className="h-12 w-auto"
+                    />
+                  </div>
+
+                  <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-center">
+                    <span className="text-green-700 font-bold text-lg">HBL FastTransfer</span>
+                  </div>
                 </div>
-                <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-center">
-                  <img src="/xpressMoney.jpeg" alt="Xpress Money" className="h-12" />
-                </div>
-                <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-center">
-                  <img src="ria.png" alt="Ria" className="h-12" />
-                </div>
-                <div className="bg-slate-50 p-4 rounded-lg flex items-center justify-center">
-                  <span className="text-green-700 font-bold text-lg">HBL FastTransfer</span>
-                </div>
-              </div>
 
               <div className="space-y-2 text-slate-700">
                 <p><span className="font-semibold">First Name:</span> Hafiz Muhammad</p>

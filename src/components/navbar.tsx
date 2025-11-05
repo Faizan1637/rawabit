@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Menu, X, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { Dropdown, Menu as AntMenu, Button } from 'antd';
 import { useAuthContext } from '@/context/AuthContext';
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -76,10 +77,13 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <img
+            <Image
               src="/logo.png"
               alt="Rawabit Logo"
+              width={120} // or adjust to your preferred size
+              height={48}
               className="h-10 w-auto object-contain md:h-12 transition-transform duration-300 hover:scale-105"
+              priority
             />
           </Link>
 

@@ -1,5 +1,6 @@
 "use client"
 import { Home, ChevronRight, Play, Star, Quote } from "lucide-react"
+import Image from 'next/image'
 
 interface Feedback {
   id: number
@@ -91,12 +92,12 @@ export default function CustomerFeedback() {
             <Home className="w-4 h-4" />
             <a href="#" className="hover:text-orange-400 transition-colors">Home</a>
             <ChevronRight className="w-4 h-4" />
-            <span className="text-orange-400">Customer's Feedback</span>
+            <span className="text-orange-400">Customer&apos;s Feedback</span>
           </div>
 
           {/* Title */}
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
-            CUSTOMER'S FEEDBACK
+            CUSTOMER&apos;S FEEDBACK
           </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
         </div>
@@ -130,14 +131,18 @@ export default function CustomerFeedback() {
                 className="relative aspect-video overflow-hidden cursor-pointer"
                 onClick={() => openVideo(feedback.videoId)}
               >
-                <img
-                  src={feedback.thumbnail}
-                  alt={feedback.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  onError={(e) => {
-                    e.currentTarget.src = `https://img.youtube.com/vi/${feedback.videoId}/hqdefault.jpg`
-                  }}
-                />
+              <Image
+                src={feedback.thumbnail || `https://img.youtube.com/vi/${feedback.videoId}/hqdefault.jpg`}
+                alt={feedback.title}
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-300"
+                onError={(e) => {
+                  // Fallback logic (optional)
+                  const target = e.target as HTMLImageElement
+                  target.src = `https://img.youtube.com/vi/${feedback.videoId}/hqdefault.jpg`
+                }}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
                 
                 {/* Play Button Overlay */}
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
@@ -191,7 +196,7 @@ export default function CustomerFeedback() {
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-8 border border-orange-200 max-w-4xl mx-auto">
             <p className="text-slate-600 mb-6">
-              We'd love to hear about your success story and how we helped you find your perfect match
+              We&apos;d love to hear about your success story and how we helped you find your perfect match
             </p>
           </div>
         </div>

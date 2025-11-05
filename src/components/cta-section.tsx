@@ -19,7 +19,7 @@ export default function CTASection() {
               LIKE WHAT YOU SEE? SIGN UP!
             </h2>
             <p className="text-lg text-muted-foreground">
-              Don't waste another minute. Create an account now and search right candidate.
+              Don&apos;t waste another minute. Create an account now and search right candidate.
             </p>
           </div>
 

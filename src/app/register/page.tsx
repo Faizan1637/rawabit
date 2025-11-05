@@ -133,7 +133,7 @@ export default function RegisterPage() {
                   Registration Successful!
                 </h3>
                 <p className="text-slate-600">
-                  Welcome to Al-Nikaah. We'll send you a confirmation email shortly In Shaa ALLAH.
+                  Welcome to Al-Nikaah. We&apos;ll send you a confirmation email shortly In Shaa ALLAH.
                 </p>
               </div>
             ) : (
@@ -322,7 +322,7 @@ export default function RegisterPage() {
                       className="w-5 h-5 mt-0.5 text-orange-500 border-slate-300 rounded focus:ring-2 focus:ring-orange-200"
                     />
                     <span className="ml-3 text-slate-700 text-sm leading-relaxed">
-                      By clicking "Sign up", you agree to our{' '}
+                      By clicking &quot;Sign up&quot;, you agree to our{' '}
                       <a href="#" className="text-orange-600 font-semibold hover:text-orange-700">
                         terms of service
                       </a>{' '}

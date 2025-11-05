@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import { useState, ChangeEvent, FormEvent} from 'react';
 import { useRouter } from 'next/navigation';
 import { transactionApi, CreateTransactionData } from '@/client/api/transaction.api';
 import { CreditCard, DollarSign, Smartphone, CheckCircle, AlertCircle } from 'lucide-react';
@@ -25,10 +25,6 @@ export default function PaymentForm({ package: pkg }: PaymentFormProps) {
     mobileNo: '',
     transactionRefNo: '',
   });
-
-  useEffect(()=>{
-    console.log(formData)
-  },[])
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

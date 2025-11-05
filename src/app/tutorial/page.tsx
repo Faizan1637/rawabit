@@ -1,7 +1,8 @@
 "use client"
 import { Home, ChevronRight, Play, Star, Video } from "lucide-react"
+import Image from "next/image";
 
-interface tutorial {
+interface Tutorial {
   id: number
   name: string
   title: string
@@ -10,7 +11,7 @@ interface tutorial {
   rating: number
 }
 
-const vlogs: tutorial[] = [
+const vlogs: Tutorial[] = [
   {
     id: 1,
     name: "registration tutorial",
@@ -21,7 +22,7 @@ const vlogs: tutorial[] = [
   }
 ]
 
-export default function tutorial() {
+export default function Tutorial() {
   const openVideo = (videoId: string) => {
     window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank')
   }
@@ -82,12 +83,15 @@ export default function tutorial() {
                 className="relative aspect-video overflow-hidden cursor-pointer"
                 onClick={() => openVideo(vlog.videoId)}
               >
-                <img
+                <Image
                   src={vlog.thumbnail}
                   alt={vlog.title}
+                  width={800}
+                  height={450}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   onError={(e) => {
-                    e.currentTarget.src = `https://img.youtube.com/vi/${vlog.videoId}/hqdefault.jpg`
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.src = `https://img.youtube.com/vi/${vlog.videoId}/hqdefault.jpg`;
                   }}
                 />
                 

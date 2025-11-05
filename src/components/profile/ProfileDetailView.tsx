@@ -5,7 +5,6 @@ import { useState } from 'react';
 import {
   User,
   MapPin,
-  Briefcase,
   GraduationCap,
   Heart,
   Home,
@@ -14,7 +13,6 @@ import {
   Calendar,
   Crown,
   Phone,
-  Lock,
   CheckCircle,
   AlertCircle,
 } from 'lucide-react';
@@ -23,7 +21,6 @@ import { calculateAge } from '@/lib/utils/age-calculator';
 import {
   Card,
   Descriptions,
-  Tag,
   Button,
   Typography,
   message,
