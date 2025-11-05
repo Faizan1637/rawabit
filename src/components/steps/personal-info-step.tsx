@@ -20,6 +20,7 @@ import {
   islamicEducationOptions
 } from "@/constants/createProfile/personal-info-const"
 
+// eslint-disable-next-line react/display-name
 const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange }, ref) => {
   const { user } = useAuthContext()
   const [form] = Form.useForm()

@@ -34,6 +34,7 @@ export default function ForgotPasswordForm() {
         setStep(2);
       }, 1500);
     } catch (err) {
+      console.error(err)
       setLocalError('Failed to send OTP. Please try again.');
     }
   };
@@ -55,6 +56,7 @@ export default function ForgotPasswordForm() {
         setStep(3);
       }, 1500);
     } catch (err) {
+      console.error(err)
       setLocalError('Invalid OTP. Please try again.');
     }
   };
@@ -77,6 +79,7 @@ export default function ForgotPasswordForm() {
       await resetPassword(email, otp, newPassword, confirmPassword);
       setSuccessMessage('Password reset successfully!');
     } catch (err) {
+      console.error(err)
       setLocalError('Failed to reset password. Please try again.');
     }
   };
@@ -229,7 +232,7 @@ export default function ForgotPasswordForm() {
               disabled={loading}
               className="w-full text-orange-600 hover:text-orange-700 font-medium text-sm py-2 transition-colors disabled:opacity-50"
             >
-              Didn't receive OTP? Resend
+              Didn&apos;t receive OTP? Resend
             </button>
           </div>
         )}

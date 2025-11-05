@@ -40,10 +40,11 @@ const NumberField: React.FC<{
   </Form.Item>
 )
 
+// eslint-disable-next-line react/display-name
 const FamilyBackgroundStep= forwardRef<unknown, StepProps>(({ data, onDataChange }, ref) => {
   const [form] = Form.useForm()
 
-  const handleFormChange = (changedValues: Record<string, any>): void => {
+  const handleFormChange = (changedValues: Record<string, unknown>): void => {
     onDataChange(changedValues)
   }
   
@@ -62,12 +63,12 @@ const FamilyBackgroundStep= forwardRef<unknown, StepProps>(({ data, onDataChange
     <Form form={form} layout="vertical" onValuesChange={handleFormChange} initialValues={data} className="space-y-6">
       {/* Father's Information Section */}
       <div>
-        <h3 className="text-lg font-semibold text-slate-700 mb-1">Father's Information</h3>
+        <h3 className="text-lg font-semibold text-slate-700 mb-1">Father&apos;s Information</h3>
         <div className="border-b-2 border-orange-400 w-20 mb-6"></div>
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12}>
             <Form.Item
-              label={<span className="font-medium">Father's Name</span>}
+              label={<span className="font-medium">Father&apos;s Name</span>}
               name="fathersName"
               rules={[{ required: true, message: "Please enter father's name" }]}
             >
@@ -76,7 +77,7 @@ const FamilyBackgroundStep= forwardRef<unknown, StepProps>(({ data, onDataChange
           </Col>
           <Col xs={24} sm={12}>
             <Form.Item
-              label={<span className="font-medium">Father's Occupation</span>}
+              label={<span className="font-medium">Father&apos;s Occupation</span>}
               name="fathersOccupation"
               rules={[{ required: true, message: "Please enter father's occupation" }]}
             >

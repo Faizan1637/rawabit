@@ -219,10 +219,10 @@ export default function SuccessStoriesHero() {
               {/* Main Message */}
               <div className="prose prose-lg max-w-none mb-12">
                 <p className="text-slate-700 leading-relaxed text-lg mb-6">
-                  <span className="font-semibold text-slate-900">Praise be to the Lord (Alhamdulillah)</span>, thank to Allah (Almighty) Who chose us to ensure purity of the society by providing us opportunity to bind people's home with sacred relation of Nikaah. Underneath are the details and photos of couples whose weddings are carried out through Al-Nikaah.com.
+                  <span className="font-semibold text-slate-900">Praise be to the Lord (Alhamdulillah)</span>, thank to Allah (Almighty) Who chose us to ensure purity of the society by providing us opportunity to bind people&apos;s home with sacred relation of Nikaah. Underneath are the details and photos of couples whose weddings are carried out through Al-Nikaah.com.
                 </p>
                 <p className="text-slate-700 leading-relaxed text-lg mb-6">
-                  This is the Muslim's Nikaah website through which hundreds of Muslims have been put through to marriage. If you're concerned about the relations of your loved ones, don't waste to log in in; order to find your match. Subsequent to registration get your required profile's number from us!
+                  This is the Muslim&apos;s Nikaah website through which hundreds of Muslims have been put through to marriage. If you&apos;re concerned about the relations of your loved ones, don&lsquo;t waste to log in in; order to find your match. Subsequent to registration get your required profile&apos;s number from us!
                 </p>
                 <p className="text-slate-700 leading-relaxed text-lg">
                   For more information contact us telephonically.
@@ -315,7 +315,7 @@ export default function SuccessStoriesHero() {
                     {/* Testimonial */}
                     <div className="bg-slate-50 rounded-xl p-4 border-l-4 border-orange-500">
                       <p className="text-slate-700 italic text-sm leading-relaxed">
-                        "{story.testimonial}"
+                        &quot;{story.testimonial}&quot;
                       </p>
                     </div>
 

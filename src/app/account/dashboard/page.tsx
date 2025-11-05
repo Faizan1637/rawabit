@@ -20,7 +20,6 @@ import PackageList from '@/components/packages/PackageList';
 import Subscription from '@/components/subscription/Subscription';
 import Transaction from '@/components/transaction/Transaction';
 import { usePackages } from '@/hooks/usePackage';
-import { useTransaction } from "@/hooks/useTransaction";
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -80,7 +79,7 @@ const Dashboard = () => {
                 Welcome! {user.firstName}
               </h1>
               <p className="text-orange-100">
-                Let's find your perfect match today
+                Let&apos;s find your perfect match today
               </p>
             </div>
 
@@ -96,7 +95,7 @@ const Dashboard = () => {
                       Create Profile
                     </h3>
                     <p className="text-amber-800 text-sm mb-3">
-                      You don't have a <span className="font-semibold">Profile</span> yet.
+                      You don&apos;t have a <span className="font-semibold">Profile</span> yet.
                       Please create one to start finding matches.
                     </p>
                     <Button
