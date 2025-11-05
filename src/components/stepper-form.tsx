@@ -71,6 +71,7 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (error) {
       // Validation failed, show error automatically by AntD
+      console.error(error)
       message.error("Please fill all required fields before continuing.")
     }
   } else {

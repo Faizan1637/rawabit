@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { searchApi } from '@/client/api/search.api';
 import { SearchFilters, ProfileSearchResult } from '@/types/search';
 
@@ -16,7 +16,7 @@ export const useSearch = (initialFilters: SearchFilters = {}) => {
     totalPages: 0,
   });
 
-  const searchProfiles = async (newFilters?: SearchFilters) => {
+  const searchProfiles = useCallback(async (newFilters?: SearchFilters) => {
     try {
       setLoading(true);
       setError(null);
@@ -38,10 +38,10 @@ export const useSearch = (initialFilters: SearchFilters = {}) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]); 
 
   const updateFilters = (newFilters: Partial<SearchFilters>) => {
-    const updated = { ...filters, ...newFilters, page: 1 }; // Reset to page 1
+    const updated = { ...filters, ...newFilters, page: 1 }; 
     setFilters(updated);
     searchProfiles(updated);
   };
@@ -60,7 +60,7 @@ export const useSearch = (initialFilters: SearchFilters = {}) => {
 
   useEffect(() => {
     searchProfiles();
-  }, []);
+  }, [searchProfiles]);
 
   return {
     profiles,

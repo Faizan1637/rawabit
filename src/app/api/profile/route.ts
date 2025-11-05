@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     
 
     // Create profile
-    const { profile, profileId } = await createUserProfile({
+    const { profile } = await createUserProfile({
       userId,
       ...body,
     });

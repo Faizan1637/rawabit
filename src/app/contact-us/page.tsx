@@ -3,6 +3,7 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
 import { Home, ChevronRight, Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import { useInquiry } from '@/hooks/useInquiry'; 
+import Link from 'next/link';
 import { InquiryFormData } from '@/client/api/inquiry.api'; 
 
 export default function ContactUs() {
@@ -58,7 +59,7 @@ export default function ContactUs() {
         <div className="container mx-auto px-4 py-16 relative z-10">
           <div className="flex items-center space-x-2 text-slate-300 mb-6">
             <Home className="w-4 h-4" />
-            <a href="/" className="hover:text-orange-400 transition-colors">Home</a>
+            <Link href="/" className="hover:text-orange-400 transition-colors">Home</Link>
             <ChevronRight className="w-4 h-4" />
             <span className="text-orange-400">Contact Us</span>
           </div>
@@ -68,7 +69,7 @@ export default function ContactUs() {
           </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
           <p className="text-slate-300 text-lg mt-6 max-w-2xl">
-            We would love to hear from you. Send us a message and we'll respond as soon as possible.
+            We would love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
           </p>
         </div>
       </div>
@@ -83,7 +84,7 @@ export default function ContactUs() {
                 Send Us a Message
               </h2>
               <p className="text-slate-600 mb-8">
-                Fill out the form below and we'll get back to you shortly
+                Fill out the form below and we&apos;ll get back to you shortly
               </p>
 
               {/* Success Message */}
@@ -94,7 +95,7 @@ export default function ContactUs() {
                     <div>
                       <h3 className="text-xl font-bold text-green-900 mb-2">Message Sent Successfully! ✅</h3>
                       <p className="text-green-700">
-                        Thank you for contacting us. We'll get back to you within 24-48 hours In Shaa ALLAH.
+                        Thank you for contacting us. We&apos;ll get back to you within 24-48 hours In Shaa ALLAH.
                       </p>
                     </div>
                   </div>
