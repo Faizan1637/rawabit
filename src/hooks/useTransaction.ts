@@ -1,30 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { transactionApi } from '@/client/api/transaction.api';
-import { CreateTransactionInput } from '@/types/transaction';
-
-interface Transaction {
-  id: string;
-  packageTitle: string;
-  mobileNo: string;
-  transactionDetails: string;
-  amount: number;
-  status: string;
-  createdAt: string;
-}
+import { CreateTransactionInput, TransactionResponse } from '@/types/transaction';
 
 export const useTransaction = () => {
+  const [transactions, setTransactions] = useState<TransactionResponse[]>([]);
   const [transactionLoading, setLoading] = useState(false);
   const [errorTransaction, setError] = useState<string | null>(null);
 
-  const createTransaction = async (input: CreateTransactionInput): Promise<Transaction | null> => {
+  // Fetch transactions on mount
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
+  const fetchTransactions = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await transactionApi.getUserTransactions();
+      console.log('Fetched transactions:', data);
+      setTransactions(data || []);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to load transactions';
+      setError(message);
+      console.error('Transaction fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createTransaction = async (input: CreateTransactionInput): Promise<TransactionResponse | null> => {
     try {
       setLoading(true);
       setError(null);
       const response = await transactionApi.createTransaction(input);
+      
       if (response.success && response.data?.transaction) {
         console.log(response.message || 'Payment submitted!');
+        // Refresh transactions list after creating new transaction
+        await fetchTransactions();
         return response.data.transaction;
       } else {
         throw new Error(response.error || 'Failed to submit payment');
@@ -39,24 +54,14 @@ export const useTransaction = () => {
     }
   };
 
-  const getTransactions = async (): Promise<Transaction[]> => {
-    try {
-      setLoading(true);
-      setError(null);
-      const transactions = await transactionApi.getUserTransactions();
-      console.log('Hook received transactions:', transactions);
-      return transactions || [];
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to fetch transactions';
-      setError(message);
-      console.error('Get transactions error:', message);
-      return [];
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const clearError = () => setError(null);
 
-  return { createTransaction, getTransactions, transactionLoading, errorTransaction, clearError };
+  return { 
+    transactions,
+    createTransaction, 
+    fetchTransactions,
+    transactionLoading, 
+    errorTransaction, 
+    clearError 
+  };
 };
