@@ -4,6 +4,7 @@ import { Transaction } from '@/types/transaction';
 
 const COLLECTION = 'transactions';
 
+/** Insert a new transaction and return its string id */
 export const createTransaction = async (
   transaction: Omit<Transaction, '_id'>
 ): Promise<string> => {
@@ -12,30 +13,43 @@ export const createTransaction = async (
   return result.insertedId.toString();
 };
 
+/** Find one transaction by its id */
 export const findTransactionById = async (id: string): Promise<Transaction | null> => {
   const db = await getDatabase();
-  return await db
+  return db
     .collection<Transaction>(COLLECTION)
     .findOne({ _id: new ObjectId(id) });
 };
 
-export const findUserTransactions = async (id: string) => {
+/** All transactions of a user (newest first) */
+export const findUserTransactions = async (userId: string): Promise<Transaction[]> => {
   const db = await getDatabase();
-  return await db
+  return db
     .collection<Transaction>(COLLECTION)
-    .find({ userId: id })
+    .find({ userId })
     .sort({ createdAt: -1 })
     .toArray();
 };
 
+/** Update status (and optional verification fields) */
 export const updateTransactionStatus = async (
   id: string,
-  status: string,
+  status: Transaction['status'],
   verifiedBy?: string,
   rejectionReason?: string
 ): Promise<boolean> => {
   const db = await getDatabase();
-  const updateData: any = {
+
+  const updateData: Partial<
+    Pick<
+      Transaction,
+      | 'status'
+      | 'updatedAt'
+      | 'verifiedBy'
+      | 'verifiedAt'
+      | 'rejectionReason'
+    >
+  > = {
     status,
     updatedAt: new Date(),
   };
@@ -56,24 +70,34 @@ export const updateTransactionStatus = async (
   return result.modifiedCount > 0;
 };
 
-export const findPendingTransactions = async () => {
+/** All transactions that are waiting for admin verification */
+export const findPendingTransactions = async (): Promise<Transaction[]> => {
   const db = await getDatabase();
-  return await db
+  return db
     .collection<Transaction>(COLLECTION)
     .find({ status: 'verifying' })
     .sort({ createdAt: -1 })
     .toArray();
 };
 
-export const getPendingTransactions = async () => {
+/** Light-weight list for admin UI (no sensitive fields) */
+export const getPendingTransactions = async (): Promise<
+  {
+    id: string;
+    packageTitle: string;
+    amount: number;
+    paymentMethod: Transaction['paymentMethod'];
+    mobileNo: string;
+  }[]
+> => {
   const db = await getDatabase();
-  const txns = await db
-    .collection('transactions')
+  const transactions = await db
+    .collection<Transaction>(COLLECTION)
     .find({ status: 'verifying' })
     .toArray();
 
-  return txns.map(t => ({
-    id: t._id.toString(),
+  return transactions.map(t => ({
+    id: t._id!.toString(),
     packageTitle: t.packageTitle,
     amount: t.amount,
     paymentMethod: t.paymentMethod,

@@ -204,7 +204,7 @@ export const removeProfile = async (userId: string): Promise<boolean> => {
 export const getAllProfiles = async (
   page = 1,
   limit = 10,
-  filters?: any
+  filters:Partial<Profile>
 ) => {
   const skip = (page - 1) * limit;
   const { profiles, total } = await findAllProfiles(skip, limit, filters);

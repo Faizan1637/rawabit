@@ -9,6 +9,7 @@ import { Transaction, TransactionResponse, CreateTransactionInput } from '@/type
 import { AppError } from '@/lib/utils/error-handler';
 import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
 import { createNewSubscription } from './subscription.service';
+import { ObjectId } from 'mongodb';
 
 export const sanitizeTransaction = (txn: Transaction): TransactionResponse => {
   let transactionDetails = `${txn.paymentMethod.replace('_', ' ').toUpperCase()}`;
@@ -37,8 +38,8 @@ export const createNewTransaction = async (
   }
 
   const transactionData: Omit<Transaction, '_id'> = {
-    userId: userId as any,
-    packageId: input.packageId as any,
+    userId: userId,
+    packageId: new ObjectId(input.packageId),
     packageTitle: pkg.name,
     amount: pkg.price,
     paymentMethod: input.paymentMethod,
@@ -50,7 +51,7 @@ export const createNewTransaction = async (
   };
 
   const transactionId = await createTransaction(transactionData);
-  const transaction = { ...transactionData, _id: transactionId as any };
+  const transaction = { ...transactionData, _id:new ObjectId(transactionId) };
   
   return sanitizeTransaction(transaction as Transaction);
 };

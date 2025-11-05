@@ -11,6 +11,7 @@ import { findPackageById } from '@/repositries/package.repositories';
 import { Subscription, SubscriptionResponse } from '@/types/subscription';
 import { AppError } from '@/lib/utils/error-handler';
 import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
+import { ObjectId } from 'mongodb';
 
 export const sanitizeSubscription = (sub: Subscription): SubscriptionResponse => {
   const now = new Date();
@@ -46,8 +47,8 @@ export const createNewSubscription = async (
   endDate.setMonth(endDate.getMonth() + pkg.validity);
 
   const subscriptionData: Omit<Subscription, '_id'> = {
-    userId: userId as any,
-    packageId: packageId as any,
+    userId: userId,
+    packageId: new ObjectId(packageId),
     packageName: pkg.name,
     startDate,
     endDate,
@@ -61,7 +62,7 @@ export const createNewSubscription = async (
   };
 
   const subscriptionId = await createSubscription(subscriptionData);
-  const subscription = { ...subscriptionData, _id: subscriptionId as any };
+  const subscription = { ...subscriptionData, _id:new ObjectId(subscriptionId) };
   
   return sanitizeSubscription(subscription as Subscription);
 };
@@ -123,7 +124,7 @@ export const viewProfileContact = async (
   await recordProfileView({
     subscriptionId: subscription._id!,
     userId: subscription.userId,
-    viewedProfileId: profileId as any,
+    viewedProfileId: new ObjectId(profileId),
     profileName,
     trackingCode,
     profileLink: `/account/profile/${profileId}`,

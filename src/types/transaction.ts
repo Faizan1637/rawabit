@@ -17,6 +17,7 @@ export interface Transaction {
   updatedAt: Date;
 }
 
+/** Response shape sent to the client */
 export interface TransactionResponse {
   id?: string;
   packageTitle: string;
@@ -27,6 +28,7 @@ export interface TransactionResponse {
   createdAt: string;
 }
 
+/** Input for creating a new transaction */
 export interface CreateTransactionInput {
   packageId: string;
   paymentMethod: 'bank_transfer' | 'cash' | 'telenor_easypaisa';

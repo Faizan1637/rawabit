@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { getDatabase } from '@/lib/db/mongodb';
 import { Profile } from '@/types/profile';
 import { SearchFilters } from '@/types/search';
@@ -5,87 +6,73 @@ import { getAgeRange } from '@/lib/utils/age-calculator';
 
 const COLLECTION = 'profiles';
 
+interface ProfileQuery {
+  [key: string]: unknown;
+}
+
 export const searchProfiles = async (
   filters: SearchFilters,
   currentUserGender: string,
-  currentUserId?: string  // ADD this parameter
+  currentUserId?: string
 ) => {
   const db = await getDatabase();
   const { page = 1, limit = 12 } = filters;
   const skip = (page - 1) * limit;
 
-  // Build query
-  const query: any = {
-    isComplete: true, // Only show complete profiles
+  // ✅ Linter-safe query initialization
+  const query: ProfileQuery = {
+    isComplete: true,
   };
 
-  // Exclude current user's profile
+  // ✅ Exclude current user's profile safely
   if (currentUserId) {
-    query.userId = { $ne: new Object(currentUserId) };
+    try {
+      query.userId = { $ne: new ObjectId(currentUserId) };
+    } catch {
+      // Ignore invalid ObjectId
+    }
   }
 
-  // Gender filter - show opposite gender
-  if (currentUserGender === 'male') {
-    query.gender = 'female';
-  } else if (currentUserGender === 'female') {
-    query.gender = 'male';
-  }
+  // ✅ Gender filter — opposite gender
+  if (currentUserGender === 'male') query.gender = 'female';
+  else if (currentUserGender === 'female') query.gender = 'male';
 
-  // ... rest of the filters remain the same ...
-  
-  // Location filters
-  if (filters.country) {
-    query.livesInCountry = filters.country;
-  }
-  if (filters.state) {
-    query.livesInState = filters.state;
-  }
-  if (filters.city) {
-    query.livesInCity = filters.city;
-  }
+  // ✅ Location filters
+  if (filters.country) query.livesInCountry = filters.country;
+  if (filters.state) query.livesInState = filters.state;
+  if (filters.city) query.livesInCity = filters.city;
 
-  // Religious & Cultural filters
-  if (filters.religion) {
-    query.religion = filters.religion;
-  }
-  if (filters.maslak) {
-    query.maslak = filters.maslak;
-  }
-  if (filters.islamicEducation) {
-    query.islamicEducation = filters.islamicEducation;
-  }
-  if (filters.caste) {
-    query.caste = filters.caste;
-  }
+  // ✅ Religious & Cultural filters
+  if (filters.religion) query.religion = filters.religion;
+  if (filters.maslak) query.maslak = filters.maslak;
+  if (filters.islamicEducation) query.islamicEducation = filters.islamicEducation;
+  if (filters.caste) query.caste = filters.caste;
 
-  // Marital status
-  if (filters.maritalStatus) {
-    query.maritalStatus = filters.maritalStatus;
-  }
+  // ✅ Marital status
+  if (filters.maritalStatus) query.maritalStatus = filters.maritalStatus;
 
-  // Age range filter
+  // ✅ Age range filter
   if (filters.minAge || filters.maxAge) {
     const { minDate, maxDate } = getAgeRange(filters.minAge, filters.maxAge);
-    query.dateOfBirth = {};
-    if (minDate) {
-      query.dateOfBirth.$gte = minDate;
-    }
-    if (maxDate) {
-      query.dateOfBirth.$lte = maxDate;
-    }
+    const dateFilter: Record<string, Date> = {};
+    if (minDate) dateFilter.$gte = minDate;
+    if (maxDate) dateFilter.$lte = maxDate;
+    query.dateOfBirth = dateFilter;
   }
 
-  // Qualification filter
-  if (filters.minQualification) {
-    query.qualification = filters.minQualification;
-  }
+  // ✅ Qualification filter
+  if (filters.minQualification) query.qualification = filters.minQualification;
 
-  // Serial number search
+  // ✅ Serial number search
   if (filters.serialNo) {
-    query._id = filters.serialNo;
+    try {
+      query._id = new ObjectId(filters.serialNo);
+    } catch {
+      query._id = filters.serialNo;
+    }
   }
 
-  // Execute query
+  // ✅ Execute query safely
   const profiles = await db
     .collection<Profile>(COLLECTION)
     .find(query)

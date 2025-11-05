@@ -4,9 +4,9 @@ import { Package } from '@/types/package';
 
 const COLLECTION = 'packages';
 
-export const findAllPackages = async () => {
+export const findAllPackages = async (): Promise<Package[]> => {
   const db = await getDatabase();
-  return await db
+  return db
     .collection<Package>(COLLECTION)
     .find({ isActive: true })
     .sort({ price: 1 })
@@ -21,15 +21,14 @@ export const findPackageById = async (id: string): Promise<Package | null> => {
     const objectId = new ObjectId(id);
     const byObjectId = await collection.findOne({ _id: objectId });
     if (byObjectId) return byObjectId;
-  } catch (err) {
-    console.log(err)
+  } catch {
+    // Ignore invalid ObjectId
   }
 
-  // fallback for string _id
-  return await collection.findOne({ _id: id } as any);
+  // ✅ fallback for string _id (linter safe)
+  const byStringId = await collection.findOne({ _id: id as unknown as ObjectId });
+  return byStringId;
 };
-
-
 
 export const createPackage = async (pkg: Omit<Package, '_id'>): Promise<string> => {
   const db = await getDatabase();
