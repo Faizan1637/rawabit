@@ -44,7 +44,7 @@ export default function Carousel() {
     return () => clearInterval(interval)
   }, [isAutoPlay])
 
-  const goToSlide = (index) => {
+  const goToSlide = (index:number) => {
     setCurrentSlide(index)
     setIsAutoPlay(false)
     setTimeout(() => setIsAutoPlay(true), 10000)

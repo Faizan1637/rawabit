@@ -8,14 +8,18 @@ export async function POST(
   context: { params: Promise<{ id: string }> }   
 ) {
   try {
-    const { id } = await context.params;         
+    const { id } = await context.params;
     const userId = await verifyAuth(request);
-    
+
     await verifyTransaction(id, userId);
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: unknown) {
+    // ✅ Type-safe error handling
+    const message =
+      error instanceof Error ? error.message : 'An unexpected error occurred';
+
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: message },
       { status: 400 }
     );
   }
