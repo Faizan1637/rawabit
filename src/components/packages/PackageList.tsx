@@ -1,9 +1,10 @@
 'use client';
 
 import PackageCard from './PackageCard';
+import { PackageResponse } from '@/types/package'; 
 
 interface PackageListProps {
-  packages: any[];
+  packages: PackageResponse[]; 
   packagesLoading: boolean;
 }
 
@@ -25,7 +26,7 @@ export default function PackageList({ packages, packagesLoading }: PackageListPr
         <PackageCard
           key={pkg.id}
           package={pkg}
-          popular={index === 1} // Middle package (Platinum) is popular
+          popular={index === 1} 
         />
       ))}
     </div>

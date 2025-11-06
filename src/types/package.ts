@@ -5,7 +5,7 @@ export interface Package {
   name: string;
   price: number;
   validity: number; // in months
-  totalCount?: number; // total profiles that can be viewed
+  totalCount: number; 
   features: string[];
   isActive?: boolean;
   createdAt: Date;
@@ -17,7 +17,7 @@ export interface PackageResponse {
   name: string;
   price: number;
   validity: number;
-  totalCount?: number;
+  totalCount: number;
   features: string[];
   isActive?: boolean;
 }

@@ -5,28 +5,30 @@ import { useEffect, useState } from 'react';
 import { packageApi } from '@/client/api/package.api';
 import PaymentForm from '@/components/payment/PaymentForm';
 import { Spin, Alert } from 'antd';
+import { PackageResponse } from '@/types/package';
 
 export default function CheckoutPage() {
   const { id } = useParams();
-  const [pkg, setPkg] = useState<any>(null);
+  const [pkg, setPkg] = useState<PackageResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("Before Checking ID in useeffect",id)
     if (!id) return;
-     console.log("Checking ID in useeffect",id)
-    packageApi
-      .getById(id as string)
-      .then((res) => {
-        if (res.success && res.data?.package) {
-          setPkg(res.data.package);
-        } else {
-          setError(res.error || 'Package not found');
-        }
-      })
-      .catch(() => setError('Failed to load package'))
-      .finally(() => setLoading(false));
+
+    const fetchPackage = async () => {
+      try {
+        setLoading(true);
+        const pkgData = await packageApi.getById(id as string);
+        setPkg(pkgData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load package');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPackage();
   }, [id]);
 
   if (loading) return <div className="text-center py-20"><Spin size="large" /></div>;

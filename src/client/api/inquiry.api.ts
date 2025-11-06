@@ -1,4 +1,5 @@
 import apiClient from '@/hooks/useAxios';
+import { Inquiry } from '@/types/inquiry';  
 
 export interface InquiryFormData {
   fullName: string;
@@ -10,14 +11,14 @@ export interface InquiryFormData {
 interface InquiryApiResponse {
   success: boolean;
   data?: {
-    inquiry: any;
+    inquiry: Inquiry;  
   };
   message?: string;
   error?: string;
 }
 
 export const inquiryApi = {
-  // Create Inquiry (PUBLIC - No authentication required)
+  
   createInquiry: async (formData: InquiryFormData): Promise<InquiryApiResponse> => {
     const response = await apiClient.post<InquiryApiResponse>('/api/inquiry', {
       fullName: formData.fullName.trim(),

@@ -14,9 +14,9 @@ export default function ChangePasswordForm() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+      const { name, value } = e.target;
+      setFormData(prev => ({ ...prev, [name]: value }));
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,12 +30,14 @@ export default function ChangePasswordForm() {
       await authApi.changePassword(formData);
       message.success('Password changed successfully!');
       setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    } catch (err: any) {
-      message.error(err.message || 'Failed to change password');
+    } catch (err) {
+      // Remove : any
+      const errorMessage = err instanceof Error ? err.message : 'Failed to change password';
+      message.error(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+};
 
   return (
     <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 max-w-lg mx-auto">
