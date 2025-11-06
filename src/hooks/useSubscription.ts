@@ -18,15 +18,23 @@ export const useSubscription = () => {
       if (res.success) {
         setList(res.data?.subscriptions || []);
         setActive(res.data?.activeSubscription || null);
-      } else throw new Error(res.error);
-    } catch (err: any) {
-      setError(err.message);
+      } else {
+        throw new Error(res.error);
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { fetch(); }, []);
+  useEffect(() => {
+    fetch();
+  }, []);
 
   return { list, active, loading, error, refetch: fetch };
 };
