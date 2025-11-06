@@ -21,6 +21,7 @@ import Subscription from '@/components/subscription/Subscription';
 import Transaction from '@/components/transaction/Transaction';
 import { usePackages } from '@/hooks/usePackage';
 
+
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -217,8 +218,13 @@ const Dashboard = () => {
                         onClick={() => {
                           setIsSidebarOpen(false);
                           if (item.id === "profile") {
+                            // Navigate to profile creation page
                             router.push("/account/createprofile");
+                          } else if (item.id === "find-match") {
+                            // Navigate to find match page
+                            router.push("/account/findpartner");
                           } else {
+                            // Set active tab for other menu items
                             setActiveTab(item.id);
                           }
                         }}

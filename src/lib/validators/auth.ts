@@ -16,10 +16,19 @@ export const validatePassword = (password: string): void => {
 };
 
 export const validateRequiredFields = (
-  data: Record<string, any>,
+  data: Record<string, unknown>,
   fields: string[]
 ): void => {
-  const missing = fields.filter(field => !data[field] || data[field].trim() === '');
+  const missing = fields.filter(field => {
+    const value = data[field];
+
+    if (value === undefined || value === null) return true;
+
+    if (typeof value === 'string' && value.trim() === '') return true;
+
+    return false;
+  });
+
   if (missing.length > 0) {
     throw new AppError(
       `${ERROR_MESSAGES.MISSING_FIELDS}: ${missing.join(', ')}`,
@@ -27,6 +36,7 @@ export const validateRequiredFields = (
     );
   }
 };
+
 
 // ADD these new validator functions
 

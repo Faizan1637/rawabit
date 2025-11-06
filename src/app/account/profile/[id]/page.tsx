@@ -1,16 +1,19 @@
 'use client';
 
+import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useProfileDetail } from '@/hooks/useProfileDetail';
 import { useAuthContext } from '@/context/AuthContext';
 import ProfileDetailView from '@/components/profile/ProfileDetailView';
 import { ArrowLeft, Home, ChevronRight } from 'lucide-react';
+
 import Link from 'next/link';
 
-export default function ProfileDetailPage({ params }: { params: { id: string } }) {
+export default function ProfileDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
   const router = useRouter();
   const { user, loading: authLoading } = useAuthContext();
-  const { profile, loading, error } = useProfileDetail(params.id);
+  const { profile, loading, error } = useProfileDetail(resolvedParams.id);
 
   // Show loading while checking auth
   if (authLoading || loading) {
@@ -31,12 +34,12 @@ export default function ProfileDetailPage({ params }: { params: { id: string } }
         <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md text-center">
           <h2 className="text-2xl font-bold text-slate-900 mb-2">Authentication Required</h2>
           <p className="text-slate-600 mb-6">Please login to view profiles</p>
-          <Link
-              href="/login"
-              className="inline-block bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold px-8 py-3 rounded-lg"
-            >
-              Login Now
-          </Link>
+          <a
+            href="/login"
+            className="inline-block bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold px-8 py-3 rounded-lg"
+          >
+            Login Now
+          </a>
         </div>
       </div>
     );

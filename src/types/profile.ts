@@ -109,6 +109,7 @@ export interface ProfileResponse {
   houseStatus: string;
   requirements?: string;
   isComplete: boolean;
+  serialNo?:string;
 }
 
 export interface CreateProfileInput {

@@ -28,17 +28,24 @@ import {
   Divider,
   Space,
 } from 'antd';
+import { ProfileResponse } from '@/types/profile';
 
 const { Title, Text } = Typography;
 
-interface ProfileDetailViewProps {
-  profile: any;
+
+interface ContactInfo {
+  message: string;
+  parentsMobileNo: string;
+  parentsPhone?: string;
+  subscription?: {
+    remainingCount: number;
+  };
 }
 
-function ContactSection({ profileId}: { profileId: string; profileName: string }) {
+function ContactSection({ profileId }: { profileId: string; profileName: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [contactInfo, setContactInfo] = useState<any(null);
+  const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null);
 
   const handleViewContact = async () => {
     setLoading(true);
@@ -154,8 +161,8 @@ function ContactSection({ profileId}: { profileId: string; profileName: string }
   );
 }
 
-export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
-  const p = profile.data.profile;
+export default function ProfileDetailView({ profile }: { profile: ProfileResponse }) {
+  const p = profile;
 
   return (
     <div className="space-y-6">
@@ -292,9 +299,9 @@ export default function ProfileDetailView({ profile }: ProfileDetailViewProps) {
               <MapPin className="w-5 h-5 text-orange-500" /> Current
             </Title>
             <Descriptions layout="vertical" column={1}>
-              <Descriptions.Item label="Country">{p.country}</Descriptions.Item>
-              <Descriptions.Item label="State">{p.state}</Descriptions.Item>
-              <Descriptions.Item label="City">{p.city}</Descriptions.Item>
+              <Descriptions.Item label="Country">{p.livesInCountry}</Descriptions.Item>
+              <Descriptions.Item label="State">{p.livesInState}</Descriptions.Item>
+              <Descriptions.Item label="City">{p.livesInCity}</Descriptions.Item>
             </Descriptions>
           </div>
         </div>

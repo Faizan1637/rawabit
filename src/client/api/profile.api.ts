@@ -3,8 +3,8 @@ import { ProfileFormData, ProfilePayload,ProfileResponse } from '@/types/profile
 import {User} from "@/types"
 
 interface ProfileApiResponse {
-  success: boolean;
-  data?: {
+  success?: boolean;
+  data: {
     profile: ProfileResponse;
     updatedUser:User|null|boolean
   };

@@ -1,18 +1,18 @@
 'use client';
 
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useMemo, ChangeEvent } from 'react';
 import { SearchFilters as SearchFiltersType } from '@/types/search';
 import { Country, State, City, ICountry, IState, ICity } from 'country-state-city';
 import { 
-         CASTE_OPTIONS,
-         MASLAK_OPTIONS,
-         RELIGION_OPTIONS} from "@/constants/createProfile/background-family-const"
+  CASTE_OPTIONS,
+  MASLAK_OPTIONS,
+  RELIGION_OPTIONS
+} from "@/constants/createProfile/background-family-const";
 import {
   maritalStatusOptions,
   qualificationOptions,
   islamicEducationOptions
-} from "@/constants/createProfile/personal-info-const"
-
+} from "@/constants/createProfile/personal-info-const";
 
 interface SearchFiltersProps {
   onSearch: (filters: Partial<SearchFiltersType>) => void;
@@ -23,40 +23,50 @@ interface SearchFiltersProps {
 export default function SearchFilters({ onSearch, onClear, loading }: SearchFiltersProps) {
   const [filters, setFilters] = useState<Partial<SearchFiltersType>>({});
 
-  // Country-State-City dynamic data
-  const [allCountries, setAllCountries] = useState<ICountry[]>([]);
-  const [states, setStates] = useState<IState[]>([]);
-  const [cities, setCities] = useState<ICity[]>([]);
-
-  useEffect(() => {
-    setAllCountries(Country.getAllCountries());
+  // Memoize countries - only compute once
+  const allCountries = useMemo<ICountry[]>(() => {
+    return Country.getAllCountries();
   }, []);
 
-  // Load states when country changes
-  useEffect(() => {
-    if (filters.country) {
-      const countryStates = State.getStatesOfCountry(filters.country);
-      setStates(countryStates);
-      setCities([]); // reset cities
-      setFilters((prev) => ({ ...prev, state: '', city: '' }));
-    }
+  // Memoize states based on selected country
+  const states = useMemo<IState[]>(() => {
+    if (!filters.country) return [];
+    return State.getStatesOfCountry(filters.country);
   }, [filters.country]);
 
-  // Load cities when state changes
-  useEffect(() => {
-    if (filters.country && filters.state) {
-      const stateCities = City.getCitiesOfState(filters.country, filters.state);
-      setCities(stateCities);
-      setFilters((prev) => ({ ...prev, city: '' }));
-    }
-  }, [filters.state]);
+  // Memoize cities based on selected country and state
+  const cities = useMemo<ICity[]>(() => {
+    if (!filters.country || !filters.state) return [];
+    return City.getCitiesOfState(filters.country, filters.state);
+  }, [filters.country, filters.state]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFilters(prev => ({
-      ...prev,
-      [name]: value || undefined,
-    }));
+    
+    // Handle country change - reset state and city
+    if (name === 'country') {
+      setFilters(prev => ({
+        ...prev,
+        country: value || undefined,
+        state: undefined,
+        city: undefined,
+      }));
+    }
+    // Handle state change - reset city
+    else if (name === 'state') {
+      setFilters(prev => ({
+        ...prev,
+        state: value || undefined,
+        city: undefined,
+      }));
+    }
+    // Handle other fields normally
+    else {
+      setFilters(prev => ({
+        ...prev,
+        [name]: value || undefined,
+      }));
+    }
   };
 
   const handleSearch = () => {
@@ -65,13 +75,13 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
 
   const handleClear = () => {
     setFilters({});
-    setStates([]);
-    setCities([]);
     onClear();
   };
 
-  // Age options (18–80)
-  const ageOptions = Array.from({ length: 63 }, (_, i) => i + 18);
+  // Memoize age options
+  const ageOptions = useMemo(() => {
+    return Array.from({ length: 63 }, (_, i) => i + 18);
+  }, []);
 
   return (
     <div className="bg-gradient-to-br from-orange-500 to-red-500 p-6 rounded-2xl shadow-xl mb-8">
@@ -243,7 +253,6 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             ))}
           </select>
         </div>
-
 
         {/* Minimum Age */}
         <div>
