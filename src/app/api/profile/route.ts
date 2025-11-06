@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 import { verifyAuth } from '@/middleware/auth';
-import { createUserProfile, getProfileByUserId } from '@/services/backened/profile.service';
+import { createUserProfile, getProfileByUserId,removeProfile } from '@/services/backened/profile.service';
 import { createSuccessResponse, createCreatedResponse } from '@/lib/utils/api-response';
 import { handleError } from '@/lib/utils/error-handler';
 import {
@@ -63,6 +63,16 @@ export async function GET(req: NextRequest) {
   try {
     const userId = await verifyAuth(req);
     const profile = await getProfileByUserId(userId);
+    return createSuccessResponse({ profile });
+  } catch (error) {
+    return handleError(error);
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const userId = await verifyAuth(req);
+    const profile = await removeProfile(userId);
     return createSuccessResponse({ profile });
   } catch (error) {
     return handleError(error);

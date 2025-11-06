@@ -96,6 +96,6 @@ export const profileApi = {
 
   // Delete Profile
   deleteProfile: async (): Promise<void> => {
-    await apiClient.delete('/profile');
+    await apiClient.delete(`/api/profile`);
   },
 };

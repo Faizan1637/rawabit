@@ -20,7 +20,7 @@ import PackageList from '@/components/packages/PackageList';
 import Subscription from '@/components/subscription/Subscription';
 import Transaction from '@/components/transaction/Transaction';
 import { usePackages } from '@/hooks/usePackage';
-
+import DeleteProfile from "@/components/DeleteProfile"
 
 const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -160,7 +160,14 @@ const Dashboard = () => {
             <PaymentMethods />
           </div>
         );
-
+        
+      case "delete-account":
+        return (
+          <div className="bg-white rounded-xl p-5 shadow-md border border-slate-200">
+            <DeleteProfile />
+          </div>
+        )
+        
       default:
         return (
           <div className="bg-white rounded-xl p-8 shadow-md border border-slate-200 text-center">
