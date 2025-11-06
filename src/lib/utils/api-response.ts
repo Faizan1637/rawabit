@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { ApiResponse } from '@/types';
+import { ApiResponse } from '@/types/api';
 import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
 
 export const createSuccessResponse = <T>(

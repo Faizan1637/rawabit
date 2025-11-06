@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { packageApi } from '@/client/api/package.api';
+import { PackageResponse } from '@/types/package'; // adjust path if needed
 
 export const usePackages = () => {
-  const [packages, setPackages] = useState<any[]>([]);
+  const [packages, setPackages] = useState<PackageResponse[]>([]);
   const [packagesLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
