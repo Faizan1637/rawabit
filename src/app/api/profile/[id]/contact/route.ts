@@ -6,12 +6,16 @@ import { verifyAuth } from '@/middleware/auth';
 import { createSuccessResponse } from '@/lib/utils/api-response';
 import { handleError } from '@/lib/utils/error-handler';
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+
+type RouteContext = {
+  params: Awaited<{ id: string }>;
+};
+
+export async function POST(req: NextRequest, context: RouteContext) {
   try {
+    const { params } = await Promise.resolve(context); 
     const userId = await verifyAuth(req);
+
     const profile = await getProfileById(params.id);
     const result = await viewProfileContact(userId, params.id, profile.fullName);
 
