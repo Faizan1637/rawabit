@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
 import { Button, Modal, Alert } from "antd"
 import { DeleteOutlined, WarningOutlined } from "@ant-design/icons"
-import { useRouter } from "next/navigation"
+import { useProfile } from "@/hooks/useProfile"
+import { useAuthContext } from "@/context/AuthContext"
 
 const DeleteProfile = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const { deleteProfile, loading, error } = useProfile()
+  const { logout } = useAuthContext()
 
   const showDeleteConfirm = () => {
     Modal.confirm({
@@ -24,46 +24,31 @@ const DeleteProfile = () => {
       okText: "Yes, Delete My Account",
       okType: "danger",
       cancelText: "Cancel",
-      onOk() {
-        handleDeleteProfile()
+      async onOk() {
+        await handleDeleteProfile()
       },
     })
   }
 
   const handleDeleteProfile = async () => {
     try {
-      setIsLoading(true)
-      // API call to delete profile
-      const response = await fetch("/api/delete-profile", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      await deleteProfile()
+      
+      // Show success message
+      Modal.success({
+        title: "Account Deleted",
+        content: "Your account has been successfully deleted. You will be redirected to the home page.",
+        onOk: async () => {
+          // Logout user and clear auth state
+          await logout()
         },
       })
-
-      if (response.ok) {
-        // Show success message
-        Modal.success({
-          title: "Account Deleted",
-          content: "Your account has been successfully deleted. Redirecting to home page...",
-          onOk: () => {
-            router.push("/")
-          },
-        })
-      } else {
-        Modal.error({
-          title: "Error",
-          content: "Failed to delete your account. Please try again.",
-        })
-      }
-    } catch (error) {
-      console.error("Error deleting profile:", error)
+    } catch (err) {
+      console.error("Error deleting profile:", err)
       Modal.error({
         title: "Error",
-        content: "An error occurred while deleting your account. Please try again.",
+        content: error || "An error occurred while deleting your account. Please try again.",
       })
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -77,6 +62,18 @@ const DeleteProfile = () => {
         showIcon
         className="border-red-200 bg-red-50"
       />
+
+      {/* Error Alert */}
+      {error && (
+        <Alert
+          message="Error"
+          description={error}
+          type="error"
+          showIcon
+          closable
+          className="border-red-200"
+        />
+      )}
 
       {/* Delete Account Card */}
       <div className="bg-white rounded-xl p-6 shadow-md border border-slate-200">
@@ -99,7 +96,7 @@ const DeleteProfile = () => {
             danger
             type="primary"
             size="large"
-            loading={isLoading}
+            loading={loading}
             onClick={showDeleteConfirm}
             className="bg-red-600 hover:bg-red-700 border-none font-semibold"
             icon={<DeleteOutlined />}
@@ -120,6 +117,14 @@ const DeleteProfile = () => {
           <li className="flex gap-2">
             <span className="text-red-500 font-bold">•</span>
             <span>No one will see your detail</span>
+          </li>
+          <li className="flex gap-2">
+            <span className="text-red-500 font-bold">•</span>
+            <span>All your matches and conversations will be deleted</span>
+          </li>
+          <li className="flex gap-2">
+            <span className="text-red-500 font-bold">•</span>
+            <span>Your subscription and payment history will be removed</span>
           </li>
         </ul>
       </div>
