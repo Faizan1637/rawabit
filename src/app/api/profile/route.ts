@@ -28,8 +28,7 @@ export async function POST(req: NextRequest) {
       'numberOfMarriedBrothers', 'parentsMobileNo', 'parentsPhone',
       'address', 'fromCountry', 'fromState', 'fromCity',
       'livesInCountry', 'livesInState', 'livesInCity',
-      'religion', 'caste', 'islamicEducation', 'qualification',
-      'degree', 'profession', 'monthlyIncome', 'maritalStatus',
+      'religion', 'caste', 'islamicEducation', 'qualification', 'profession', 'monthlyIncome', 'maritalStatus',
       'lifeStyle', 'houseStatus'
     ];
 
