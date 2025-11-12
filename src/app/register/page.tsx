@@ -396,7 +396,7 @@ export default function RegisterPage() {
             <p className="text-slate-700 text-center text-sm">
               Need help with registration? Contact us at{' '}
               <a
-                href="tel:+923034750787"
+                href="tel:+923334829932"
                 className="text-orange-600 hover:text-orange-700 font-semibold"
               >
                 +92-333-4829932
