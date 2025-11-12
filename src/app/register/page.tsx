@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { RegisterFormData } from '@/types/auth.types';
+import { calculateAge } from '@/lib/utils/age-calculator';
 import {
   Home,
   ChevronRight,
@@ -14,6 +15,7 @@ import {
   Eye,
   EyeOff,
   CheckCircle,
+  AlertCircle,
 } from 'lucide-react';
 
 export default function RegisterPage() {
@@ -34,6 +36,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [ageError, setAgeError] = useState<string | null>(null);
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const months = [
@@ -52,11 +55,41 @@ export default function RegisterPage() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
+
+    // Clear age error when date fields change
+    if (name === 'day' || name === 'month' || name === 'year') {
+      setAgeError(null);
+    }
+  };
+
+  const validateAge = (): boolean => {
+    const monthIndex = months.indexOf(formData.month);
+    const dateOfBirth = new Date(
+      parseInt(formData.year),
+      monthIndex,
+      parseInt(formData.day)
+    );
+
+    const age = calculateAge(dateOfBirth);
+
+    if (age < 18) {
+      setAgeError(`You must be at least 18 years old to register. Your current age is ${age} years.`);
+      return false;
+    }
+
+    setAgeError(null);
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     clearError();
+    setAgeError(null);
+
+    // Validate age first
+    if (!validateAge()) {
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       alert('Passwords do not match!');
@@ -121,8 +154,19 @@ export default function RegisterPage() {
             </div>
 
             {error && (
-              <div className="bg-red-50 text-red-600 border border-red-200 rounded-xl p-4 mb-6 text-center">
-                {error}
+              <div className="bg-red-50 text-red-600 border border-red-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {ageError && (
+              <div className="bg-amber-50 text-amber-800 border border-amber-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold mb-1">Age Requirement Not Met</p>
+                  <p className="text-sm">{ageError}</p>
+                </div>
               </div>
             )}
 
@@ -251,8 +295,9 @@ export default function RegisterPage() {
                 {/* Birthday */}
                 <div>
                   <label className="block text-slate-700 font-semibold mb-2">
-                    <Calendar className="inline w-5 h-5 mr-2" /> Birthday
+                    <Calendar className="inline w-5 h-5 mr-2" /> Birthday <span className="text-red-500">*</span>
                   </label>
+                  <p className="text-sm text-slate-600 mb-3">You must be at least 18 years old to register</p>
                   <div className="grid grid-cols-3 gap-4">
                     <select
                       name="day"
