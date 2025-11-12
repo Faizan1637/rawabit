@@ -72,15 +72,17 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
+  <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
+    <div className="container mx-auto px-4">
+      <div className="flex items-center justify-between h-20">
+        {/* Left Section: Logo + Nav Links (Grouped Together) */}
+        <div className="flex items-center gap-8 flex-1 justify-center md:justify-start">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/logo.png"
               alt="Rawabit Logo"
-              width={120} // or adjust to your preferred size
+              width={120}
               height={48}
               className="h-10 w-auto object-contain md:h-12 transition-transform duration-300 hover:scale-105"
               priority
@@ -88,7 +90,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center justify-center flex-[0.8] gap-1">
+          <div className="hidden md:flex items-center gap-1">
             {allNavItems.map((item) => (
               <Link
                 key={item.label}
@@ -100,21 +102,63 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
+        </div>
 
-          {/* Right Side: User Dropdown / Mobile Menu */}
-          <div className="flex items-center gap-4 relative">
-            {!loading && isAuthenticated && (
-              <div className="hidden md:flex items-center gap-2 pl-4 border-l border-border">
+        {/* Right Side: User Dropdown / Mobile Menu */}
+        <div className="flex items-center gap-4 relative">
+          {!loading && isAuthenticated && (
+            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-border">
+              <Dropdown overlay={menuItems} placement="bottomRight" arrow>
+                <Button
+                  type="text"
+                  className="flex items-center gap-2 hover:opacity-80 cursor-pointer"
+                >
+                  <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                    <span className="text-sm font-semibold text-amber-700">
+                      {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
+                    </span>
+                  </div>
+                  <span className="text-sm font-medium text-foreground">
+                    {user?.firstName ?? 'User'}
+                  </span>
+                </Button>
+              </Dropdown>
+            </div>
+          )}
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 rounded-md text-foreground hover:bg-accent/50 transition-colors"
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Navigation */}
+      {isOpen && (
+        <div className="md:hidden pb-4 border-t border-border">
+          <div className="flex flex-col gap-2">
+            {allNavItems.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-amber-600 hover:bg-amber-50 rounded-md transition-all"
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            {isAuthenticated && (
+              <div className="border-t border-border pt-2 mt-2">
                 <Dropdown overlay={menuItems} placement="bottomRight" arrow>
                   <Button
                     type="text"
-                    className="flex items-center gap-2 hover:opacity-80 cursor-pointer"
+                    className="flex items-center gap-2 px-4 py-2 w-full hover:bg-amber-50 rounded-md"
                   >
-                    <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                      <span className="text-sm font-semibold text-amber-700">
-                        {user?.firstName?.[0]?.toUpperCase() ?? 'U'}
-                      </span>
-                    </div>
+                    <User className="w-5 h-5 text-muted-foreground" />
                     <span className="text-sm font-medium text-foreground">
                       {user?.firstName ?? 'User'}
                     </span>
@@ -122,51 +166,10 @@ export default function Navbar() {
                 </Dropdown>
               </div>
             )}
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-md text-foreground hover:bg-accent/50 transition-colors"
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
           </div>
         </div>
-
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <div className="md:hidden pb-4 border-t border-border">
-            <div className="flex flex-col gap-2">
-              {allNavItems.map((item) => (
-                <Link
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-amber-600 hover:bg-amber-50 rounded-md transition-all"
-                >
-                  {item.label}
-                </Link>
-              ))}
-
-              {isAuthenticated && (
-                <div className="border-t border-border pt-2 mt-2">
-                  <Dropdown overlay={menuItems} placement="bottomRight" arrow>
-                    <Button
-                      type="text"
-                      className="flex items-center gap-2 px-4 py-2 w-full hover:bg-amber-50 rounded-md"
-                    >
-                      <User className="w-5 h-5 text-muted-foreground" />
-                      <span className="text-sm font-medium text-foreground">
-                        {user?.firstName ?? 'User'}
-                      </span>
-                    </Button>
-                  </Dropdown>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
-  );
+      )}
+    </div>
+  </nav>
+);
 }
