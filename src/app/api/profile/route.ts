@@ -10,6 +10,7 @@ import {
   validateMonthlyIncome,
   validateNumberOfSiblings,
 } from '@/lib/validators/profile';
+import { SUCCESS_MESSAGES } from '@/constants/responseConstant/message';
 
 export async function POST(req: NextRequest) {
   try {
@@ -72,8 +73,12 @@ export async function GET(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const userId = await verifyAuth(req);
-    const profile = await removeProfile(userId);
-    return createSuccessResponse({ profile });
+    const isDeleted = await removeProfile(userId);
+    
+    return createSuccessResponse(
+      { deleted: isDeleted },
+      SUCCESS_MESSAGES.PROFILE_DELETED
+    );
   } catch (error) {
     return handleError(error);
   }
