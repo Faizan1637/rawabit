@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
               {/* Introduction */}
               <div className="bg-slate-50 rounded-2xl p-6 border-l-4 border-orange-500">
                 <p className="text-slate-700 leading-relaxed text-lg">
-                  Al-Nikaah.com is the best website for Muslim proposals. Through this website, you can find matches of
+                  Rawabit.com is the best website for Muslim proposals. Through this website, you can find matches of
                   any caste, your required education, Islamic Education, Marital Status, and the choice of any city or
                   country.
                 </p>
@@ -60,13 +60,13 @@ export default function PrivacyPolicy() {
                 </div>
                 <div className="space-y-4 pl-9">
                   <p className="text-slate-700 leading-relaxed">
-                    Al-Nikaah Ribat uz Zawaj is <span className="font-semibold">not responsible</span> for any
+                    Rawabit Ribat uz Zawaj is <span className="font-semibold">not responsible</span> for any
                     misfortune or incident caused by any particular person or any false information provided by any
                     user. We cannot be held liable for actions taken by users outside of our platform.
                   </p>
                   <p className="text-slate-700 leading-relaxed">
                     Families must conduct thorough investigations and marriages after proper due diligence and
-                    satisfying their own grounds. Al-Nikaah will not be responsible for any consequences arising from
+                    satisfying their own grounds. Rawabit will not be responsible for any consequences arising from
                     user interactions or personal decisions.
                   </p>
                 </div>
@@ -121,7 +121,7 @@ export default function PrivacyPolicy() {
               {/* Final Note */}
               <div className="border-l-4 border-red-500 pl-6 py-4">
                 <p className="text-slate-700 leading-relaxed text-lg">
-                  <span className="font-bold text-red-600">Thank you</span> for choosing Al-Nikaah.com as your
+                  <span className="font-bold text-red-600">Thank you</span> for choosing Rawabit.com as your
                   matrimonial partner. We are committed to providing a safe and secure platform for finding your perfect
                   match while respecting your privacy and security.
                 </p>

@@ -368,11 +368,11 @@ export default function RegisterPage() {
                     />
                     <span className="ml-3 text-slate-700 text-sm leading-relaxed">
                       By clicking &quot;Sign up&quot;, you agree to our{' '}
-                      <a href="#" className="text-orange-600 font-semibold hover:text-orange-700">
+                      <a href="/terms-of-use" className="text-orange-600 font-semibold hover:text-orange-700">
                         terms of service
                       </a>{' '}
                       and{' '}
-                      <a href="#" className="text-orange-600 font-semibold hover:text-orange-700">
+                      <a href="/privacy" className="text-orange-600 font-semibold hover:text-orange-700">
                         privacy policy
                       </a>.
                     </span>

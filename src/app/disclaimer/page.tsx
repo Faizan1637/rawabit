@@ -49,7 +49,7 @@ export default function Disclaimer() {
                   <Info className="w-8 h-8 text-red-600 flex-shrink-0 mt-1" />
                   <div>
                     <p className="text-slate-800 leading-relaxed text-lg font-semibold">
-                      Al-Nikaah.com is a matrimonial platform for Muslim proposals. By using this website, you
+                      Rawabit.com is a matrimonial platform for Muslim proposals. By using this website, you
                       acknowledge and accept the disclaimers outlined below.
                     </p>
                   </div>
@@ -72,7 +72,7 @@ export default function Disclaimer() {
                 <div className="border-l-4 border-orange-500 pl-6 py-2">
                   <h4 className="text-xl font-bold text-slate-900 mb-3">No Responsibility for User Actions</h4>
                   <p className="text-slate-700 leading-relaxed">
-                    Al-Nikaah Ribat uz Zawaj is <span className="font-semibold">NOT responsible</span> for any
+                    Rawabit Ribat uz Zawaj is <span className="font-semibold">NOT responsible</span> for any
                     misfortune, fraud, or incident caused by any particular user or any false information provided by
                     any person. Users are solely responsible for their interactions on the platform.
                   </p>
@@ -142,7 +142,7 @@ export default function Disclaimer() {
               <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white">
                 <p className="leading-relaxed text-lg">
                   <span className="font-bold block mb-3">Thank you for your understanding.</span>
-                  By using Al-Nikaah.com, you acknowledge that you have read and accepted this disclaimer. We are
+                  By using Rawabit.com, you acknowledge that you have read and accepted this disclaimer. We are
                   committed to providing a platform that facilitates genuine connections while maintaining ethical
                   standards. Your trust and responsible usage are essential to our community&apos;s success.
                 </p>
