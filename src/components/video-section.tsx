@@ -14,7 +14,7 @@ const videos: VideoCard[] = [
   },
   {
     id: 2,
-    title: "How to create account on AL-NIKAAH",
+    title: "How to create account on Rawabit",
     videoUrl: "https://youtu.be/mfIuw2ZDOrA",
   },
   {

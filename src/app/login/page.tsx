@@ -80,7 +80,7 @@ export default function Login() {
           </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
           <p className="text-slate-300 text-lg mt-6 max-w-2xl">
-            Sign in to your Al-Nikaah account and continue your journey
+            Sign in to your Rawabit account and continue your journey
           </p>
         </div>
       </div>
@@ -293,8 +293,8 @@ export default function Login() {
                   +92-303-4750787
                 </a>
                 {' '}or email{' '}
-                <a href="mailto:admin@al-nikaah.com" className="text-orange-600 hover:text-orange-700 font-semibold">
-                  admin@al-nikaah.com
+                <a href="mailto:admin@Rawabit.com" className="text-orange-600 hover:text-orange-700 font-semibold">
+                  admin@Rawabit.com
                 </a>
               </p>
             </div>

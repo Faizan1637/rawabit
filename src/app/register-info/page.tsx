@@ -41,14 +41,14 @@ export default function HowToRegister() {
               <div className="mb-6">
                 <div className="w-full aspect-[3/4] bg-slate-100 rounded-xl overflow-hidden">
                   <div className="relative w-full h-full">
-  <Image
-    src="https://al-nikaah.com/Content/images/hafiz-saifi-ullah-siddiqui-full.jpg"
-    alt="Hafiz Safi Ullah Siddiqui"
-    fill
-    className="object-cover"
-    priority  // optional: ensures faster load for above-the-fold images
-  />
-</div>
+                  <Image
+                    src="https://al-nikaah.com/Content/images/hafiz-saifi-ullah-siddiqui-full.jpg"
+                    alt="Hafiz Safi Ullah Siddiqui"
+                    fill
+                    className="object-cover"
+                    priority  // optional: ensures faster load for above-the-fold images
+                  />
+                </div>
                 </div>
                 <p className="text-center text-sm text-slate-600 mt-3 italic">need more details</p>
               </div>
@@ -59,7 +59,7 @@ export default function HowToRegister() {
                   Hafiz Safi Ullah Siddiqui
                 </h3>
                 <p className="text-slate-600 font-medium">
-                  CEO Al-Nikaah Ribaat uz Zawaaj
+                  CEO Rawabit Ribaat uz Zawaaj
                 </p>
               </div>
 
@@ -244,7 +244,7 @@ export default function HowToRegister() {
                   <span>Call Us Now</span>
                 </a>
                 <a 
-                  href="mailto:info@al-nikaah.com"
+                  href="mailto:info@rawabit.com"
                   className="flex items-center justify-center space-x-2 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-6 rounded-xl transition-all duration-300 border border-slate-300"
                 >
                   <Mail className="w-5 h-5" />

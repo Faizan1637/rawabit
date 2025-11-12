@@ -47,7 +47,7 @@ export const sendInquiryNotificationToAdmin = async (inquiry: {
   const subject = `🔔 New Inquiry from ${inquiry.fullName}`;
   
   const text = `
-New inquiry received from Al-Nikaah website:
+New inquiry received from Rawabit website:
 
 Name: ${inquiry.fullName}
 Email: ${inquiry.email}
@@ -85,7 +85,7 @@ Please respond to this inquiry at your earliest convenience.
               <tr>
                 <td style="padding: 30px;">
                   <p style="margin: 0 0 20px 0; color: #334155; font-size: 16px; line-height: 1.6;">
-                    A new inquiry has been submitted through the Al-Nikaah website:
+                    A new inquiry has been submitted through the Rawabit website:
                   </p>
                   
                   <!-- Info Box -->
@@ -126,7 +126,7 @@ Please respond to this inquiry at your earliest convenience.
               <tr>
                 <td style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
                   <p style="margin: 0; color: #64748b; font-size: 12px;">
-                    © ${new Date().getFullYear()} Al-Nikaah. All rights reserved.
+                    © ${new Date().getFullYear()} Rawabit. All rights reserved.
                   </p>
                 </td>
               </tr>
@@ -150,17 +150,17 @@ export const sendAutoReplyToUser = async (inquiry: {
   fullName: string;
   email: string;
 }): Promise<boolean> => {
-  const subject = '✅ Thank you for contacting Al-Nikaah';
+  const subject = '✅ Thank you for contacting Rawabit';
   
   const text = `
 Dear ${inquiry.fullName},
 
-Thank you for contacting Al-Nikaah. We have received your message and will get back to you shortly.
+Thank you for contacting Rawabit. We have received your message and will get back to you shortly.
 
 Our support team typically responds within 24-48 hours.
 
 Best regards,
-Al-Nikaah Support Team
+Rawabit Support Team
 
 ---
 This is an automated message. Please do not reply to this email.
@@ -195,7 +195,7 @@ This is an automated message. Please do not reply to this email.
                   </p>
                   
                   <p style="margin: 0 0 20px 0; color: #334155; font-size: 16px; line-height: 1.6;">
-                    Thank you for contacting Al-Nikaah. We have received your message and will get back to you shortly.
+                    Thank you for contacting Rawabit. We have received your message and will get back to you shortly.
                   </p>
                   
                   <!-- Info Box -->
@@ -207,7 +207,7 @@ This is an automated message. Please do not reply to this email.
                   
                   <p style="margin: 20px 0 0 0; color: #334155; font-size: 16px; line-height: 1.6;">
                     Best regards,<br>
-                    <strong style="color: #ea580c;">Al-Nikaah Support Team</strong>
+                    <strong style="color: #ea580c;">Rawabit Support Team</strong>
                   </p>
                 </td>
               </tr>
@@ -219,7 +219,7 @@ This is an automated message. Please do not reply to this email.
                     This is an automated message. Please do not reply to this email.
                   </p>
                   <p style="margin: 0; color: #64748b; font-size: 12px;">
-                    © ${new Date().getFullYear()} Al-Nikaah. All rights reserved.
+                    © ${new Date().getFullYear()} Rawabit. All rights reserved.
                   </p>
                 </td>
               </tr>
@@ -244,7 +244,7 @@ This is an automated message. Please do not reply to this email.
 // ... existing imports/functions
 
 export const sendResetOTPEmail = async (params: { email: string; otp: string }): Promise<boolean> => {
-  const subject = '🔒 Reset Your Al-Nikaah Password';
+  const subject = '🔒 Reset Your Rawabit Password';
 
   const text = `
 Dear User,
@@ -256,7 +256,7 @@ OTP: ${params.otp}
 This OTP is valid for 10 minutes. If you didn't request this, please ignore this email.
 
 Best regards,
-Al-Nikaah Support Team
+Rawabit Support Team
   `.trim();
 
   const html = `
@@ -304,7 +304,7 @@ Al-Nikaah Support Team
                   
                   <p style="margin: 20px 0 0 0; color: #334155; font-size: 16px; line-height: 1.6;">
                     Best regards,<br>
-                    <strong style="color: #ea580c;">Al-Nikaah Support Team</strong>
+                    <strong style="color: #ea580c;">Rawabit Support Team</strong>
                   </p>
                 </td>
               </tr>
@@ -313,7 +313,7 @@ Al-Nikaah Support Team
               <tr>
                 <td style="background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e2e8f0;">
                   <p style="margin: 0; color: #64748b; font-size: 12px;">
-                    © ${new Date().getFullYear()} Al-Nikaah. All rights reserved.
+                    © ${new Date().getFullYear()} Rawabit. All rights reserved.
                   </p>
                 </td>
               </tr>

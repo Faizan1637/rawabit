@@ -15,7 +15,7 @@ const feedbacks: Feedback[] = [
   {
     id: 1,
     name: "Customer Testimonial",
-    title: "Feedback for Al-Nikaah",
+    title: "Feedback for Rawabit",
     videoId: "UBYSNn3gfVI",
     thumbnail: `https://img.youtube.com/vi/UBYSNn3gfVI/maxresdefault.jpg`,
     rating: 5
@@ -23,7 +23,7 @@ const feedbacks: Feedback[] = [
   {
     id: 2,
     name: "Customer Review",
-    title: "Feedback about Al-Nikaah Services",
+    title: "Feedback about Rawabit Services",
     videoId: "z2F127-FHvE",
     thumbnail: `https://img.youtube.com/vi/z2F127-FHvE/maxresdefault.jpg`,
     rating: 5
@@ -47,7 +47,7 @@ const feedbacks: Feedback[] = [
   {
     id: 5,
     name: "Client Testimonial",
-    title: "Feedback about Al-Nikaah",
+    title: "Feedback about Rawabit",
     videoId: "B1SUcVvJoK0",
     thumbnail: `https://img.youtube.com/vi/B1SUcVvJoK0/maxresdefault.jpg`,
     rating: 5
@@ -63,7 +63,7 @@ const feedbacks: Feedback[] = [
   {
     id: 7,
     name: "Customer Review",
-    title: "Al-Nikaah Services Feedback",
+    title: "Rawabit Services Feedback",
     videoId: "RAhrVDjAnkY",
     thumbnail: `https://img.youtube.com/vi/RAhrVDjAnkY/maxresdefault.jpg`,
     rating: 5

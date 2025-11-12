@@ -101,7 +101,7 @@ export default function RegisterPage() {
           </h1>
           <div className="w-24 h-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"></div>
           <p className="text-slate-300 text-lg mt-6 max-w-2xl">
-            Join Al-Nikaah today and start your journey to find your perfect life partner
+            Join Rawabit today and start your journey to find your perfect life partner
           </p>
         </div>
       </div>
@@ -133,7 +133,7 @@ export default function RegisterPage() {
                   Registration Successful!
                 </h3>
                 <p className="text-slate-600">
-                  Welcome to Al-Nikaah. We&apos;ll send you a confirmation email shortly In Shaa ALLAH.
+                  Welcome to Rawabit. We&apos;ll send you a confirmation email shortly In Shaa ALLAH.
                 </p>
               </div>
             ) : (
