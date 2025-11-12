@@ -56,10 +56,10 @@ export default function HowToRegister() {
               {/* Name and Title */}
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                  Hafiz Safi Ullah Siddiqui
+                  Babar Khursheed
                 </h3>
                 <p className="text-slate-600 font-medium">
-                  CEO Rawabit Ribaat uz Zawaaj
+                  CEO Rawabit Babar Khursheed
                 </p>
               </div>
 
@@ -70,11 +70,11 @@ export default function HowToRegister() {
                   <div className="space-y-2">
                     <a href="tel:+923034750787" className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition-colors">
                       <Phone className="w-4 h-4" />
-                      <span className="font-medium">+92-3034750787</span>
+                      <span className="font-medium">+92-333-4829932</span>
                     </a>
                     <a href="tel:+923015467752" className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition-colors">
                       <Phone className="w-4 h-4" />
-                      <span className="font-medium">+92-3015467752</span>
+                      <span className="font-medium">+92-333-4829932</span>
                     </a>
                   </div>
                 </div>
@@ -141,7 +141,7 @@ export default function HowToRegister() {
 
               <div className="space-y-3 text-slate-700">
                 <p><span className="font-semibold">Bank:</span> Meezan Bank Limited</p>
-                <p><span className="font-semibold">Title:</span> Hafiz Muhammad Safi Ullah</p>
+                <p><span className="font-semibold">Title:</span> Babar Khursheed</p>
                 <p>
                   <span className="font-semibold">Account No:</span>{' '}
                   <span className="text-orange-600 font-semibold">0215-0101643530</span>
@@ -236,13 +236,6 @@ export default function HowToRegister() {
                 If you have any questions or need assistance with the registration process, feel free to contact us.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <a 
-                  href="tel:+923034750787"
-                  className="flex items-center justify-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
-                >
-                  <Phone className="w-5 h-5" />
-                  <span>Call Us Now</span>
-                </a>
                 <a 
                   href="mailto:info@rawabit.com"
                   className="flex items-center justify-center space-x-2 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-6 rounded-xl transition-all duration-300 border border-slate-300"

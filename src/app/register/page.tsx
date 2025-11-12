@@ -354,7 +354,7 @@ export default function RegisterPage() {
                 href="tel:+923034750787"
                 className="text-orange-600 hover:text-orange-700 font-semibold"
               >
-                +92-303-4750787
+                +92-333-4829932
               </a>
             </p>
           </div>
