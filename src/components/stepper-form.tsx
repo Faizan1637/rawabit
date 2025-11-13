@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState , useRef} from "react"
-import { Button, message } from "antd"
+import { useState, useRef, useEffect } from "react"
+import { Button, message, Result } from "antd"
 import { UserOutlined, HomeOutlined, PhoneOutlined, CheckCircleOutlined, ArrowRightOutlined, ArrowLeftOutlined } from "@ant-design/icons"
 import PersonalInfoStep from "@/components/steps/personal-info-step"
 import FamilyBackgroundStep from "@/components/steps/family-background-step"
@@ -10,14 +10,17 @@ import ContactInfoStep from "@/components/steps/contact-info-step"
 import type { FormData, StepperFormProps } from "@/types/form"
 import { useProfile } from '@/hooks/useProfile';
 import { ProfileFormData } from '@/types/profile';
+import { useRouter } from 'next/navigation'; // Add this import
 
 const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
   const [current, setCurrent] = useState(0)
   const [formData, setFormData] = useState<Partial<FormData>>(initialData || {})
   const [loading, setLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false) // Track success state
   const personalInfoRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
   const familyRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
   const contactRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
+  const router = useRouter(); // Initialize router
 
   const { createProfile, loading: profileLoading, error: profileError, clearError } = useProfile();
 
@@ -60,25 +63,31 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
     },
   ]
 
+  // Redirect after success
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        router.push('/account/dashboard')
+      }, 2000)
+      return () => clearTimeout(timer)
+    }
+  }, [isSuccess, router])
 
   const handleNext = async (): Promise<void> => {
-  const currentRef = steps[current].ref
-  if (currentRef && currentRef.current) {
-    try {
-      const values = await currentRef.current.validate()
-      setFormData((prev) => ({ ...prev, ...values }))
+    const currentRef = steps[current].ref
+    if (currentRef && currentRef.current) {
+      try {
+        const values = await currentRef.current.validate()
+        setFormData((prev) => ({ ...prev, ...values }))
+        setCurrent((prev) => prev + 1)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } catch (error) {
+        console.error(error)
+      }
+    } else {
       setCurrent((prev) => prev + 1)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-    } catch (error) {
-      // Validation failed, show error automatically by AntD
-      console.error(error)
-      message.error("Please fill all required fields before continuing.")
     }
-  } else {
-    setCurrent((prev) => prev + 1)
   }
-}
-
 
   const handlePrevious = (): void => {
     if (current > 0) {
@@ -88,72 +97,93 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
   }
 
   const handleSubmit = async (): Promise<void> => {
-  setLoading(true);
-  clearError();
-  
-  try {
-    // Transform your formData to ProfileFormData format
-    const profileData: ProfileFormData = {
-      // Map your existing formData fields to ProfileFormData
-      firstName: formData.firstName || '',
-      lastName: formData.lastName || '',
-      email: formData.email || '',
-      gender: formData.gender || 'male',
-      dateOfBirth: formData.dateOfBirth || new Date(),
-      height: formData.height || '',
-      bodyType: formData.bodyType || '',
-      complexion: formData.complexion || '',
-      hasBeard: formData.hasBeard,
-      disabilities: formData.disabilities,
-      fathersName: formData.fathersName || '',
-      fatherAlive: formData.fatherAlive || '',
-      fathersOccupation: formData.fathersOccupation || '',
-      numberOfBrothers: formData.numberOfBrothers || 0,
-      numberOfSisters: formData.numberOfSisters || 0,
-      numberOfMarriedBrothers: formData.numberOfMarriedBrothers || 0,
-      numberOfSons: formData.numberOfSons,
-      numberOfDaughters: formData.numberOfDaughters,
-      parentsMobileNo: formData.parentsMobileNo || '',
-      parentsPhone: formData.parentsPhone || '',
-      address: formData.address || '',
-      fromCountry: formData.fromCountry || '',
-      fromState: formData.fromState || '',
-      fromCity: formData.fromCity || '',
-      livesInCountry: formData.livesInCountry || '',
-      livesInState: formData.livesInState || '',
-      livesInCity: formData.livesInCity || '',
-      religion: formData.religion || '',
-      caste: formData.caste || '',
-      islamicEducation: formData.islamicEducation || '',
-      qualification: formData.qualification || '',
-      degree: formData.degree || '',
-      profession: formData.profession || '',
-      designation: formData.designation,
-      monthlyIncome: formData.monthlyIncome || 0,
-      maritalStatus: formData.maritalStatus || '',
-      lifeStyle: formData.lifeStyle || '',
-      houseStatus: formData.houseStatus || '',
-      requirements: formData.requirements,
-    };
+    setLoading(true);
+    clearError();
+    
+    try {
+      const profileData: ProfileFormData = {
+        firstName: formData.firstName || '',
+        lastName: formData.lastName || '',
+        email: formData.email || '',
+        gender: formData.gender || 'male',
+        dateOfBirth: formData.dateOfBirth || new Date(),
+        height: formData.height || '',
+        bodyType: formData.bodyType || '',
+        complexion: formData.complexion || '',
+        hasBeard: formData.hasBeard,
+        disabilities: formData.disabilities,
+        fathersName: formData.fathersName || '',
+        fatherAlive: formData.fatherAlive || '',
+        fathersOccupation: formData.fathersOccupation || '',
+        numberOfBrothers: formData.numberOfBrothers || 0,
+        numberOfSisters: formData.numberOfSisters || 0,
+        numberOfMarriedBrothers: formData.numberOfMarriedBrothers || 0,
+        numberOfSons: formData.numberOfSons,
+        numberOfDaughters: formData.numberOfDaughters,
+        parentsMobileNo: formData.parentsMobileNo || '',
+        parentsPhone: formData.parentsPhone || '',
+        address: formData.address || '',
+        fromCountry: formData.fromCountry || '',
+        fromState: formData.fromState || '',
+        fromCity: formData.fromCity || '',
+        livesInCountry: formData.livesInCountry || '',
+        livesInState: formData.livesInState || '',
+        livesInCity: formData.livesInCity || '',
+        religion: formData.religion || '',
+        caste: formData.caste || '',
+        islamicEducation: formData.islamicEducation || '',
+        qualification: formData.qualification || '',
+        degree: formData.degree || '',
+        profession: formData.profession || '',
+        designation: formData.designation,
+        monthlyIncome: formData.monthlyIncome || 0,
+        maritalStatus: formData.maritalStatus || '',
+        lifeStyle: formData.lifeStyle || '',
+        houseStatus: formData.houseStatus || '',
+        requirements: formData.requirements,
+      };
 
-    // Call the API
-    const profile = await createProfile(profileData);
-    
-    console.log('Profile created:', profile);
-    message.success("Profile created successfully!");
-    
-    // Optional: Call the original onSubmit if provided
-    if (onSubmit) {
-      onSubmit(formData as FormData);
+      const profile = await createProfile(profileData);
+      
+      console.log('Profile created:', profile);
+      
+      // Show success state
+      setIsSuccess(true);
+      
+      // Optional: Call onSubmit
+      if (onSubmit) {
+        onSubmit(formData as FormData);
+      }
+      
+    } catch (error) {
+      message.error(profileError || "Failed to create profile");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-    
-  } catch (error) {
-    message.error(profileError || "Failed to create profile");
-    console.error(error);
-  } finally {
-    setLoading(false);
   }
-}
+
+  // Show success screen
+  if (isSuccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center py-8 px-4">
+        <div className="w-full max-w-md">
+          <Result
+            status="success"
+            title="Profile Created Successfully!"
+            subTitle="Your profile has been saved. Redirecting to dashboard..."
+            className="bg-white rounded-2xl shadow-xl p-8"
+          />
+          <div className="text-center mt-6">
+            <div className="inline-flex items-center gap-2 text-orange-600">
+              <CheckCircleOutlined className="animate-pulse" />
+              <span className="font-medium">Redirecting in 2 seconds...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 py-8 px-4">
@@ -177,7 +207,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
               return (
                 <div key={index} className="flex-1 relative">
                   <div className="flex flex-col items-center relative z-10">
-                    {/* Circle with Icon */}
                     <div
                       className={`
                         w-16 h-16 rounded-full flex items-center justify-center transition-all duration-300 shadow-lg
@@ -196,7 +225,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
                       )}
                     </div>
                     
-                    {/* Step Title */}
                     <div className="mt-3 text-center">
                       <p className={`
                         text-sm font-semibold transition-all
@@ -210,7 +238,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
                     </div>
                   </div>
 
-                  {/* Connector Line */}
                   {index < steps.length - 1 && (
                     <div className="absolute top-8 left-[60%] w-[80%] h-1 -z-0">
                       <div className="h-full bg-slate-200 rounded">
@@ -240,32 +267,23 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
         </div>
 
         {/* Error Alert */}
-          {profileError && (
-            <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
-              <div className="flex items-center gap-3">
-                <svg
-                  className="w-5 h-5 text-red-500"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <p className="text-red-800 font-medium">{profileError}</p>
-              </div>
-            </div>
-          )}
-
-          {/* Content Card */}
-          <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-10 min-h-96 mb-8">
-            <div className="animate-fadeIn">
-              {steps[current].content}
+        {profileError && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
+            <div className="flex items-center gap-3">
+              <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <p className="text-red-800 font-medium">{profileError}</p>
             </div>
           </div>
+        )}
 
+        {/* Content Card */}
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-10 min-h-96 mb-8">
+          <div className="animate-fadeIn">
+            {steps[current].content}
+          </div>
+        </div>
 
         {/* Navigation Buttons */}
         <div className="flex justify-between items-center gap-4 flex-wrap">
@@ -297,10 +315,10 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
           </div>
 
           {current === steps.length - 1 ? (
-           <Button
+            <Button
               type="primary"
               onClick={handleSubmit}
-              loading={loading || profileLoading}  // Add profileLoading here
+              loading={loading || profileLoading}
               size="large"
               icon={<CheckCircleOutlined />}
               className="px-8 h-12 text-base font-semibold shadow-lg hover:shadow-xl transition-all"
@@ -329,21 +347,12 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
           )}
         </div>
 
-        {/* Add CSS for fade-in animation */}
         <style jsx>{`
           @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
           }
-          .animate-fadeIn {
-            animation: fadeIn 0.4s ease-out;
-          }
+          .animate-fadeIn { animation: fadeIn 0.4s ease-out; }
         `}</style>
       </div>
     </div>
