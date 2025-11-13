@@ -10,7 +10,8 @@ import ContactInfoStep from "@/components/steps/contact-info-step"
 import type { FormData, StepperFormProps } from "@/types/form"
 import { useProfile } from '@/hooks/useProfile';
 import { ProfileFormData } from '@/types/profile';
-import { useRouter } from 'next/navigation'; // Add this import
+import { useRouter } from 'next/navigation'; 
+import {useAuthContext} from "@/context/AuthContext"
 
 const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
   const [current, setCurrent] = useState(0)
@@ -23,6 +24,7 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
   const router = useRouter(); // Initialize router
 
   const { createProfile, loading: profileLoading, error: profileError, clearError } = useProfile();
+  const { refetchUser } = useAuthContext();
 
   const steps = [
     {
@@ -146,6 +148,7 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
       const profile = await createProfile(profileData);
       
       console.log('Profile created:', profile);
+      await refetchUser();
       
       // Show success state
       setIsSuccess(true);
