@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { useAuthContext } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
 import { RegisterFormData } from '@/types/auth.types';
 import { calculateAge } from '@/lib/utils/age-calculator';
 import {
@@ -20,6 +22,8 @@ import {
 
 export default function RegisterPage() {
   const { register, loading, error, clearError } = useAuth();
+  const { refetchUser } = useAuthContext(); // Add this
+  const router = useRouter(); // Add this
   const [formData, setFormData] = useState<RegisterFormData>({
     firstName: '',
     lastName: '',
@@ -35,7 +39,8 @@ export default function RegisterPage() {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+
   const [ageError, setAgeError] = useState<string | null>(null);
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
@@ -86,16 +91,11 @@ export default function RegisterPage() {
     clearError();
     setAgeError(null);
 
-    // Validate age first
-    if (!validateAge()) {
-      return;
-    }
-
+    if (!validateAge()) return;
     if (formData.password !== formData.confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-
     if (!formData.agreeToTerms) {
       alert('Please agree to the terms of service and privacy policy.');
       return;
@@ -103,12 +103,16 @@ export default function RegisterPage() {
 
     try {
       await register(formData);
-      setIsSubmitted(true);
-      setTimeout(() => setIsSubmitted(false), 3000);
+        await refetchUser();
+        setIsRegistered(true);
+
+        setTimeout(() => {
+          router.push('/account/dashboard');
+        }, 1500);
     } catch (err) {
       console.error('Registration failed:', err);
     }
-  };
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-orange-50">
@@ -170,17 +174,12 @@ export default function RegisterPage() {
               </div>
             )}
 
-            {isSubmitted ? (
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-8 text-center">
-                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                  Registration Successful!
-                </h3>
-                <p className="text-slate-600">
-                  Welcome to Rawabit. We&apos;ll send you a confirmation email shortly In Shaa ALLAH.
-                </p>
-              </div>
-            ) : (
+            {isRegistered ? (
+                <div className="bg-green-50 border border-green-200 rounded-xl p-6 text-center">
+                  <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                  <p className="text-green-800 font-semibold">Registration successful! Redirecting...</p>
+                </div>
+              ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Name Fields */}
                 <div className="grid md:grid-cols-2 gap-6">
