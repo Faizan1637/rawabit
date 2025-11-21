@@ -25,14 +25,14 @@ const stats: StatItem[] = [
   },
   {
     icon: <Heart className="w-8 h-8 fill-current" />,
-    count: "8011",
+    count: "801",
     label: "Success Stories",
     gradient: "from-red-500 via-red-600 to-pink-600",
     iconBg: "bg-white/20"
   },
   {
     icon: <MapPin className="w-8 h-8" />,
-    count: "12",
+    count: "2",
     label: "Our Branches",
     gradient: "from-orange-500 via-amber-500 to-yellow-500",
     iconBg: "bg-white/20"
