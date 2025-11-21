@@ -11,14 +11,14 @@ interface StatItem {
 const stats: StatItem[] = [
   {
     icon: <Users className="w-8 h-8" />,
-    count: "199",
+    count: "99",
     label: "Boys Active Profiles",
     gradient: "from-purple-600 via-pink-600 to-pink-700",
     iconBg: "bg-white/20"
   },
   {
     icon: <UserCheck className="w-8 h-8" />,
-    count: "90",
+    count: "58",
     label: "Girls Active Profiles",
     gradient: "from-red-600 via-red-700 to-rose-700",
     iconBg: "bg-white/20"
