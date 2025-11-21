@@ -16,7 +16,7 @@ export default function Navbar() {
   const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Find Partner', href: '/account/findpartner' },
-    { label: 'Packages', href: '/packages' },
+    // { label: 'Packages', href: '/packages' },
     { label: 'Success Stories', href: '/success-stories' },
     // { label: 'Feedbacks', href: '/customer-feedback' },
     // { label: 'Vlogs', href: '/vlog' },
