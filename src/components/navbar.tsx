@@ -15,14 +15,15 @@ export default function Navbar() {
 
   const navItems = [
     { label: 'Home', href: '/' },
+    { label: 'Find Partner', href: '/account/findpartner' },
     { label: 'Packages', href: '/packages' },
     { label: 'Success Stories', href: '/success-stories' },
-    { label: 'Feedbacks', href: '/customer-feedback' },
-    { label: 'Vlogs', href: '/vlog' },
-    { label: 'Tutorials', href: '/tutorial' },
+    // { label: 'Feedbacks', href: '/customer-feedback' },
+    // { label: 'Vlogs', href: '/vlog' },
+    // { label: 'Tutorials', href: '/tutorial' },
     { label: 'How-To-Register', href: '/register-info' },
     { label: 'Contact', href: '/contact-us' },
-    { label: 'Find Match', href: '/account/findpartner' },
+    
   ];
 
   const guestLinks = !isAuthenticated
