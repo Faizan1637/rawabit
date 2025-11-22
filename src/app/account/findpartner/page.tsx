@@ -73,10 +73,7 @@ export default function FindPartnerPage() {
             Find Your Partner
           </h1>
           <p className="text-slate-600 text-lg">
-            {user.gender === 'male' 
-              ? 'Browse female profiles and find your perfect match In Shaa ALLAH'
-              : 'Browse male profiles and find your perfect match In Shaa ALLAH'
-            }
+            Browse profiles and find your perfect match In Shaa ALLAH
           </p>
           <p className="text-slate-500 text-sm mt-2">
             Logged in as: <span className="font-semibold text-orange-600">{user.fullName}</span>
@@ -101,15 +98,6 @@ export default function FindPartnerPage() {
             </div>
           </div>
         )}
-
-        {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-slate-600 text-lg italic text-center">
-            {pagination.total} <span className="font-semibold">
-              {user.gender === 'male' ? 'female' : 'male'} profiles found
-            </span>
-          </p>
-        </div>
 
         {/* Loading State */}
         {loading && (

@@ -12,7 +12,6 @@ interface ProfileQuery {
 
 export const searchProfiles = async (
   filters: SearchFilters,
-  currentUserGender: string,
   currentUserId?: string
 ) => {
   const db = await getDatabase();
@@ -34,8 +33,11 @@ export const searchProfiles = async (
   }
 
   // ✅ Gender filter — opposite gender
-  if (currentUserGender === 'male') query.gender = 'female';
-  else if (currentUserGender === 'female') query.gender = 'male';
+  // if (currentUserGender === 'male') query.gender = 'female';
+  // else if (currentUserGender === 'female') query.gender = 'male';
+
+  //Gender filters
+  if(filters.gender)query.gender=filters.gender;
 
   // ✅ Location filters
   if (filters.country) query.livesInCountry = filters.country;

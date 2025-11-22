@@ -26,14 +26,12 @@ const sanitizeSearchResult = (profile: Profile): ProfileSearchResult => {
 
 export const searchPartnerProfiles = async (
   filters: SearchFilters,
-  currentUserGender: string,
   currentUserId?: string  // ADD this parameter
 ): Promise<SearchResponse> => {
   const { page = 1, limit = 12 } = filters;
   
   const { profiles, total } = await searchProfiles(
     filters, 
-    currentUserGender,
     currentUserId  // PASS it here
   );
 

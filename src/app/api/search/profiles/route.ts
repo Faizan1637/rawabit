@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
     };
 
     // Search profiles - pass user's gender
-    const results = await searchPartnerProfiles(filters, currentUser.gender,userId);
+    const results = await searchPartnerProfiles(filters,userId);
 
     return createSuccessResponse(results);
   } catch (error) {

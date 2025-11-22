@@ -145,7 +145,21 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
             ))}
           </select>
         </div>
-
+              {/* Gender */}
+        <div>
+          <label className="block text-white font-semibold mb-2">Gender</label>
+          <select
+            name="gender"
+            value={filters.gender || ''}
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white outline-none"
+          >
+            <option value="">Select</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        
         {/* Religion */}
         <div>
           <label className="block text-white font-semibold mb-2">Religion</label>

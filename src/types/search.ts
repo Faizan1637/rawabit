@@ -3,6 +3,7 @@ export interface SearchFilters {
   country?: string;
   state?: string;
   city?: string;
+  gender?:string
   
   // Religious & Cultural
   religion?: string;
