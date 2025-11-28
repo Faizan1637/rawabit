@@ -25,6 +25,7 @@ export async function GET(req: NextRequest) {
       country: searchParams.get('country') || undefined,
       state: searchParams.get('state') || undefined,
       city: searchParams.get('city') || undefined,
+      gender:searchParams.get('gender') || undefined,
       religion: searchParams.get('religion') || undefined,
       maslak: searchParams.get('maslak') || undefined,
       islamicEducation: searchParams.get('islamicEducation') || undefined,

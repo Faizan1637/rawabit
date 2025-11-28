@@ -1,6 +1,6 @@
 import Carousel from "@/components/coursel"
 import CTASection from "@/components/cta-section"
-import VideoSection from "@/components/video-section"
+// import VideoSection from "@/components/video-section"
 import MembershipPlans from "@/components/membership-plans"
 import FeaturedProfiles from "@/components/feature-member"
 import InfoBanner from "@/components/info-bannner"
@@ -15,7 +15,7 @@ export default function Home() {
           <Carousel />
         </div>
         <CTASection/>
-        <VideoSection/>
+        {/* <VideoSection/> */}
         <MembershipPlans/>
         <FeaturedProfiles/>
         <InfoBanner/>
