@@ -15,7 +15,8 @@ export interface Profile {
   height: string;
   bodyType: string;
   complexion: string;
-  hasBeard?: string;                   // Optional, only for males
+  hasBeard?: string; 
+  hasHijab?: string;                   
   disabilities?: string;
   
   // Family Information
@@ -63,6 +64,8 @@ export interface Profile {
   createdAt: Date;
   updatedAt: Date;
   isComplete: boolean;                 // Profile completion status
+
+  rishtaCreatedBy: string;
 }
 
 export interface ProfileResponse {
@@ -78,6 +81,8 @@ export interface ProfileResponse {
   bodyType: string;
   complexion: string;
   hasBeard?: string;
+  hasHijab?: string; 
+  rishtaCreatedBy: string;
   disabilities?: string;
   fathersName: string;
   fatherAlive: string;
@@ -123,6 +128,8 @@ export interface CreateProfileInput {
   bodyType: string;
   complexion: string;
   hasBeard?: string;
+  hasHijab?: string; 
+  rishtaCreatedBy: string;
   disabilities?: string;
   fathersName: string;
   fatherAlive: string;
@@ -160,6 +167,8 @@ export interface UpdateProfileInput {
   bodyType?: string;
   complexion?: string;
   hasBeard?: string;
+  hasHijab?: string;    
+  rishtaCreatedBy?: string;
   disabilities?: string;
   fathersName?: string;
   fatherAlive?: string;
@@ -204,8 +213,11 @@ export interface ProfileFormData {
   bodyType: string;
   complexion: string;
   hasBeard?: string;
+  hasHijab?: string; 
   disabilities?: string;
   
+
+  rishtaCreatedBy: string;
   // Family Information
   fathersName: string;
   fatherAlive: string;
@@ -258,6 +270,8 @@ export interface ProfilePayload {
   bodyType: string;
   complexion: string;
   hasBeard?: string;
+  hasHijab?: string;
+  rishtaCreatedBy: string;
   disabilities?: string;
   fathersName: string;
   fatherAlive: string;

@@ -1,4 +1,31 @@
+export const hijabOptions = [
+  { value: "yes", label: "Yes" },
+  { value: "according to sunnah", label: "According to Sunnah" },
+  { value: "no", label: "No" },
+  { value: "yes but for body only", label: "Yes but for body only" }
+];
 
+export const rishtaCreatedByOptions = [
+  { value: "taya abu", label: "Taya Abu" },
+  { value: "taya ammi", label: "Taya Ammi" },
+  { value: "chacho", label: "Chacho" },
+  { value: "chachi", label: "Chachi" },
+  { value: "phupho", label: "Phupho" },
+  { value: "phupher", label: "Phupher" },
+  { value: "dada", label: "Dada" },
+  { value: "dadi", label: "Dadi" },
+  { value: "ammi", label: "Ammi" },
+  { value: "abu", label: "Abu" },
+  { value: "khala", label: "Khala" },
+  { value: "khalo", label: "Khalo" },
+  { value: "nana", label: "Nana" },
+  { value: "nani", label: "Nani" },
+  { value: "mamo", label: "Mamo" },
+  { value: "mami", label: "Mami" },
+  { value: "behn", label: "Behn" },
+  { value: "bhai", label: "Bhai" },
+  { value: "bazaat khud", label: "Bazaat Khud" }
+];
 
 export const genderOptions = [
   { value: "male", label: "Male" },

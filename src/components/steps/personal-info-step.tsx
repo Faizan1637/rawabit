@@ -1,6 +1,6 @@
 "use client"
 
-import { useState , useImperativeHandle,forwardRef} from "react"
+import { useState , useImperativeHandle, forwardRef } from "react"
 import { Form, Input, Select, DatePicker, Upload, Row, Col, Button, InputNumber } from "antd"
 import { UserOutlined, CameraOutlined, MailOutlined, CalendarOutlined, ManOutlined } from "@ant-design/icons"
 import type { UploadFile } from "antd"
@@ -12,6 +12,8 @@ import {
   genderOptions,
   maritalStatusOptions,
   beardOptions,
+  hijabOptions,
+  rishtaCreatedByOptions,
   disabilityOptions,
   complexionOptions,
   bodyTypeOptions,
@@ -27,6 +29,7 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
   const [imageUrl, setImageUrl] = useState<string | null>(data?.profileImage || null)
   const [selectedQualification, setSelectedQualification] = useState<string | undefined>(data?.qualification)
   const [selectedMaritalStatus, setSelectedMaritalStatus] = useState<string | undefined>(data?.maritalStatus)
+  const [selectedGender, setSelectedGender] = useState<string | undefined>(data?.gender || user?.gender)
 
   const handleFormChange = (changedValues: Record<string, unknown>): void => {
     onDataChange(changedValues)
@@ -57,14 +60,14 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
   }
   
   useImperativeHandle(ref, () => ({
-  validate: async () => {
-    try {
-      await form.validateFields()
-      return form.getFieldsValue()
-    } catch (error) {
-      throw error
-    }
-  },
+    validate: async () => {
+      try {
+        await form.validateFields()
+        return form.getFieldsValue()
+      } catch (error) {
+        throw error
+      }
+    },
   }))
 
   return (
@@ -80,8 +83,8 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
                   <Image
                     src={imageUrl}
                     alt="Profile Preview"
-                    width={128} // same as w-32
-                    height={128} // same as h-32
+                    width={128}
+                    height={128}
                     className="rounded-full object-cover border-4 border-orange-400 shadow-lg"
                   />
                 ) : (
@@ -168,7 +171,19 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
         <Row gutter={16}>
           <Col xs={24} sm={12}>
             <Form.Item label="Gender" name="gender" rules={[{ required: true, message: "Please select gender" }]}>
-              <Select placeholder="Select gender">
+              <Select 
+                placeholder="Select gender"
+                onChange={(value) => {
+                  setSelectedGender(value)
+                  // Clear the beard/hijab field when gender changes
+                  if (value === 'male') {
+                    form.setFieldsValue({ hasHijab: undefined })
+                  } else {
+                    form.setFieldsValue({ hasBeard: undefined })
+                  }
+                  onDataChange({ gender: value })
+                }}
+              >
                 {genderOptions.map((opt) => (
                   <Select.Option key={opt.value} value={opt.value}>
                     {opt.label}
@@ -225,17 +240,34 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
         )}
 
         <Row gutter={16}>
-          <Col xs={24} sm={8}>
-            <Form.Item label="Has Beard?" name="hasBeard" rules={[{ required: true, message: "Please select beard status" }]}>
-              <Select placeholder="Select">
-                {beardOptions.map((opt) => (
-                  <Select.Option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
+          {/* Conditionally render Beard or Hijab based on gender */}
+          {selectedGender === 'male' && (
+            <Col xs={24} sm={8}>
+              <Form.Item label="Has Beard?" name="hasBeard" rules={[{ required: true, message: "Please select beard status" }]}>
+                <Select placeholder="Select">
+                  {beardOptions.map((opt) => (
+                    <Select.Option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          )}
+
+          {selectedGender === 'female' && (
+            <Col xs={24} sm={8}>
+              <Form.Item label="Has Hijab?" name="hasHijab" rules={[{ required: true, message: "Please select hijab status" }]}>
+                <Select placeholder="Select">
+                  {hijabOptions.map((opt) => (
+                    <Select.Option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          )}
 
           <Col xs={24} sm={8}>
             <Form.Item label="Disabilities" name="disabilities" rules={[{ required: true, message: "Please select disability status" }]}>
@@ -278,6 +310,17 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
             <Form.Item label="Body Type" name="bodyType" rules={[{ required: true, message: "Please select body type" }]}>
               <Select placeholder="Select body type">
                 {bodyTypeOptions.map((opt) => (
+                  <Select.Option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={8}>
+            <Form.Item label="Rishta Created By" name="rishtaCreatedBy" rules={[{ required: true, message: "Please select who created this rishta" }]}>
+              <Select placeholder="Select">
+                {rishtaCreatedByOptions.map((opt) => (
                   <Select.Option key={opt.value} value={opt.value}>
                     {opt.label}
                   </Select.Option>
@@ -344,7 +387,7 @@ const PersonalInfoStep = forwardRef<unknown, StepProps>(({ data, onDataChange },
         </div>
       </Form>
     </div>
-    )
+  )
 })
 
 export default PersonalInfoStep

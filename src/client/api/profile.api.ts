@@ -1,12 +1,12 @@
 import apiClient from '@/hooks/useAxios';
-import { ProfileFormData, ProfilePayload,ProfileResponse } from '@/types/profile';
-import {User} from "@/types"
+import { ProfileFormData, ProfilePayload, ProfileResponse } from '@/types/profile';
+import { User } from "@/types"
 
 interface ProfileApiResponse {
   success?: boolean;
   data: {
     profile: ProfileResponse;
-    updatedUser:User|null|boolean
+    updatedUser: User | null | boolean
   };
   message?: string;
   error?: string;
@@ -28,7 +28,9 @@ const transformFormDataToPayload = (formData: ProfileFormData): ProfilePayload =
     bodyType: formData.bodyType,
     complexion: formData.complexion,
     hasBeard: formData.hasBeard,
+    hasHijab: formData.hasHijab,
     disabilities: formData.disabilities,
+    rishtaCreatedBy: formData.rishtaCreatedBy,
     fathersName: formData.fathersName.trim(),
     fatherAlive: formData.fatherAlive,
     fathersOccupation: formData.fathersOccupation.trim(),

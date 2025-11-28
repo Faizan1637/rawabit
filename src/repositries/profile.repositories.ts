@@ -87,6 +87,7 @@ export const checkProfileCompletion = (profile: Profile): boolean => {
     'height',
     'bodyType',
     'complexion',
+    'rishtaCreatedBy',  // NEW: Required field
     'fathersName',
     'fatherAlive',
     'fathersOccupation',
@@ -103,7 +104,6 @@ export const checkProfileCompletion = (profile: Profile): boolean => {
 
   type RequiredField = (typeof requiredFields)[number];
 
-  // Use unknown and narrow it safely — avoids `any`
   const rec = profile as unknown as Record<RequiredField, unknown>;
 
   for (const field of requiredFields) {
@@ -114,6 +114,15 @@ export const checkProfileCompletion = (profile: Profile): boolean => {
 
     // empty string check
     if (typeof value === 'string' && value.trim() === '') return false;
+  }
+
+  // Gender-specific validation
+  if (profile.gender === 'male') {
+    // Male profiles must have hasBeard
+    if (!profile.hasBeard || profile.hasBeard.trim() === '') return false;
+  } else if (profile.gender === 'female') {
+    // Female profiles must have hasHijab
+    if (!profile.hasHijab || profile.hasHijab.trim() === '') return false;
   }
 
   return true;

@@ -17,11 +17,11 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
   const [current, setCurrent] = useState(0)
   const [formData, setFormData] = useState<Partial<FormData>>(initialData || {})
   const [loading, setLoading] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false) // Track success state
+  const [isSuccess, setIsSuccess] = useState(false)
   const personalInfoRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
   const familyRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
   const contactRef = useRef<{ validate: () => Promise<Partial<FormData>> }>(null)
-  const router = useRouter(); // Initialize router
+  const router = useRouter();
 
   const { createProfile, loading: profileLoading, error: profileError, clearError } = useProfile();
   const { refetchUser } = useAuthContext();
@@ -65,7 +65,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
     },
   ]
 
-  // Redirect after success
   useEffect(() => {
     if (isSuccess) {
       const timer = setTimeout(() => {
@@ -113,7 +112,9 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
         bodyType: formData.bodyType || '',
         complexion: formData.complexion || '',
         hasBeard: formData.hasBeard,
+        hasHijab: formData.hasHijab,
         disabilities: formData.disabilities,
+        rishtaCreatedBy: formData.rishtaCreatedBy || '',
         fathersName: formData.fathersName || '',
         fatherAlive: formData.fatherAlive || '',
         fathersOccupation: formData.fathersOccupation || '',
@@ -150,10 +151,8 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
       console.log('Profile created:', profile);
       await refetchUser();
       
-      // Show success state
       setIsSuccess(true);
       
-      // Optional: Call onSubmit
       if (onSubmit) {
         onSubmit(formData as FormData);
       }
@@ -166,7 +165,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
     }
   }
 
-  // Show success screen
   if (isSuccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center justify-center py-8 px-4">
@@ -191,7 +189,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 py-8 px-4">
       <div className="w-full max-w-5xl mx-auto">
-        {/* Header Section */}
         <div className="mb-10 text-center">
           <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent mb-3">
             Complete Your Profile
@@ -199,7 +196,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
           <p className="text-slate-600 text-lg">Fill in your information across these simple steps</p>
         </div>
 
-        {/* Custom Stepper */}
         <div className="mb-8">
           <div className="relative flex items-center justify-between">
             {steps.map((step, index) => {
@@ -259,7 +255,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
           </div>
         </div>
 
-        {/* Progress Bar */}
         <div className="mb-8 bg-white rounded-full p-1 shadow-sm border border-slate-200">
           <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
             <div
@@ -269,7 +264,6 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
           </div>
         </div>
 
-        {/* Error Alert */}
         {profileError && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
             <div className="flex items-center gap-3">
@@ -281,14 +275,12 @@ const StepperForm: React.FC<StepperFormProps> = ({ onSubmit, initialData }) => {
           </div>
         )}
 
-        {/* Content Card */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-10 min-h-96 mb-8">
           <div className="animate-fadeIn">
             {steps[current].content}
           </div>
         </div>
 
-        {/* Navigation Buttons */}
         <div className="flex justify-between items-center gap-4 flex-wrap">
           <Button
             onClick={handlePrevious}

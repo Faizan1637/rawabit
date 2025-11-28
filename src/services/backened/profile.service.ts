@@ -3,13 +3,14 @@ import {
   findProfileByUserId,
   findProfileById,
   createProfile,
-  updateProfileByUserId,
+  // updateProfileByUserId,
   deleteProfile,
   findAllProfiles,
   checkProfileCompletion,
 } from '@/repositries/profile.repositories';
 import { findUserById, updateUser } from '@/repositries/user.repositories';
-import { CreateProfileInput, UpdateProfileInput, Profile, ProfileResponse } from '@/types/profile';
+//UpdateProfileInput when you want to update profile
+import { CreateProfileInput, Profile, ProfileResponse } from '@/types/profile';
 import { User } from '@/types'
 import { AppError } from '@/lib/utils/error-handler';
 import {ERROR_MESSAGES} from "@/constants/responseConstant/message"
@@ -29,7 +30,9 @@ export const sanitizeProfile = (profile: Profile): ProfileResponse => {
     bodyType: profile.bodyType,
     complexion: profile.complexion,
     hasBeard: profile.hasBeard,
+    hasHijab: profile.hasHijab,              // NEW
     disabilities: profile.disabilities,
+    rishtaCreatedBy: profile.rishtaCreatedBy, // NEW
     fathersName: profile.fathersName,
     fatherAlive: profile.fatherAlive,
     fathersOccupation: profile.fathersOccupation,
@@ -78,6 +81,14 @@ export const createUserProfile = async (
     throw new AppError('Profile already exists for this user', HTTP_STATUS.CONFLICT);
   }
 
+  // Validate gender-specific fields
+  if (input.gender === 'male' && input.hasHijab) {
+    throw new AppError('Male profiles cannot have hijab field', HTTP_STATUS.BAD_REQUEST);
+  }
+  if (input.gender === 'female' && input.hasBeard) {
+    throw new AppError('Female profiles cannot have beard field', HTTP_STATUS.BAD_REQUEST);
+  }
+
   // Create profile
   const profileData: Omit<Profile, '_id'> = {
     userId: new ObjectId(input.userId),  
@@ -90,7 +101,9 @@ export const createUserProfile = async (
     bodyType: input.bodyType,
     complexion: input.complexion,
     hasBeard: input.hasBeard,
+    hasHijab: input.hasHijab,              // NEW
     disabilities: input.disabilities,
+    rishtaCreatedBy: input.rishtaCreatedBy, // NEW
     fathersName: input.fathersName,
     fatherAlive: input.fatherAlive,
     fathersOccupation: input.fathersOccupation,
@@ -125,7 +138,6 @@ export const createUserProfile = async (
     isComplete: false,
   };
 
-
   // Check completion status
   profileData.isComplete = checkProfileCompletion(profileData as Profile);
 
@@ -135,7 +147,7 @@ export const createUserProfile = async (
   if (!profile) {
     throw new AppError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
   }
-  const updatedUser=await updateUser(user?._id?.toString() ?? "", { ...user, profileCompleted: true })
+  const updatedUser = await updateUser(user?._id?.toString() ?? "", { ...user, profileCompleted: true })
 
   return {
     profile: sanitizeProfile(profile),
@@ -160,33 +172,42 @@ export const getProfileById = async (id: string): Promise<ProfileResponse> => {
   return sanitizeProfile(profile);
 };
 
-export const updateUserProfile = async (
-  userId: string,
-  input: UpdateProfileInput
-): Promise<ProfileResponse> => {
-  const existingProfile = await findProfileByUserId(userId);
-  if (!existingProfile) {
-    throw new AppError('Profile not found', HTTP_STATUS.NOT_FOUND);
-  }
+// export const updateUserProfile = async (
+//   userId: string,
+//   input: UpdateProfileInput
+// ): Promise<ProfileResponse> => {
+//   const existingProfile = await findProfileByUserId(userId);
+//   if (!existingProfile) {
+//     throw new AppError('Profile not found', HTTP_STATUS.NOT_FOUND);
+//   }
 
-  const updated = await updateProfileByUserId(userId, input);
-  if (!updated) {
-    throw new AppError('Failed to update profile', HTTP_STATUS.INTERNAL_ERROR);
-  }
+//   // Validate gender-specific fields if gender or beard/hijab is being updated
+//   const updatedGender = input.gender || existingProfile.gender;
+//   if (updatedGender === 'male' && input.hasHijab) {
+//     throw new AppError('Male profiles cannot have hijab field', HTTP_STATUS.BAD_REQUEST);
+//   }
+//   if (updatedGender === 'female' && input.hasBeard) {
+//     throw new AppError('Female profiles cannot have beard field', HTTP_STATUS.BAD_REQUEST);
+//   }
 
-  const profile = await findProfileByUserId(userId)
+//   const updated = await updateProfileByUserId(userId, input);
+//   if (!updated) {
+//     throw new AppError('Failed to update profile', HTTP_STATUS.INTERNAL_ERROR);
+//   }
+
+//   const profile = await findProfileByUserId(userId)
   
-  // Update completion status
-  if (profile) {
-    const isComplete = checkProfileCompletion(profile);
-    if (isComplete !== profile.isComplete) {
-      await updateProfileByUserId(userId, { isComplete });
-      profile.isComplete = isComplete;
-    }
-  }
+//   // Update completion status
+//   if (profile) {
+//     const isComplete = checkProfileCompletion(profile);
+//     if (isComplete !== profile.isComplete) {
+//       await updateProfileByUserId(userId, { isComplete });
+//       profile.isComplete = isComplete;
+//     }
+//   }
 
-  return sanitizeProfile(profile!);
-};
+//   return sanitizeProfile(profile!);
+// };
 
 export const removeProfile = async (userId: string): Promise<boolean> => {
   const profile = await findProfileByUserId(userId);
@@ -204,7 +225,7 @@ export const removeProfile = async (userId: string): Promise<boolean> => {
 export const getAllProfiles = async (
   page = 1,
   limit = 10,
-  filters:Partial<Profile>
+  filters: Partial<Profile>
 ) => {
   const skip = (page - 1) * limit;
   const { profiles, total } = await findAllProfiles(skip, limit, filters);

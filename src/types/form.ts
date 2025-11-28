@@ -9,6 +9,8 @@ export interface PersonalInfoFormData {
   complexion?: string
   bodyType?: string
   hasBeard?: string
+  hasHijab?: string 
+  rishtaCreatedBy?: string
   disabilities?: string
   profileBy?: string
   lifeStyle?: string
