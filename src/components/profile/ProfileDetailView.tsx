@@ -185,6 +185,8 @@ export default function ProfileDetailView({ profile }: { profile: ProfileRespons
               <span className="capitalize">{p.gender}</span>
               <span>•</span>
               <span className="capitalize">{p.maritalStatus}</span>
+              <span>•</span>
+              <span className="capitalize">Rista Created by {p.rishtaCreatedBy}</span>
             </div>
             <div className="flex items-center justify-center md:justify-start gap-2 mt-3">
               <MapPin className="w-5 h-5" />
@@ -194,7 +196,7 @@ export default function ProfileDetailView({ profile }: { profile: ProfileRespons
             </div>
             <div className="mt-4 inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
               <Text className="text-sm font-semibold">
-                Serial No: {p.serialNo || p.id?.slice(-6) || 'N/A'}
+                Serial No: {p.serialNo || p.id}
               </Text>
             </div>
           </div>
@@ -218,6 +220,7 @@ export default function ProfileDetailView({ profile }: { profile: ProfileRespons
           <Descriptions.Item label="Body Type">{p.bodyType}</Descriptions.Item>
           <Descriptions.Item label="Complexion">{p.complexion}</Descriptions.Item>
           {p.hasBeard && <Descriptions.Item label="Has Beard">{p.hasBeard}</Descriptions.Item>}
+          {p.hasHijab && <Descriptions.Item label="Has Hijab">{p.hasHijab}</Descriptions.Item>}
           {p.disabilities && <Descriptions.Item label="Disabilities">{p.disabilities}</Descriptions.Item>}
         </Descriptions>
       </Card>
