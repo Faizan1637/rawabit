@@ -289,8 +289,8 @@ export default function Login() {
             <div className="text-center">
               <p className="text-slate-700">
                 Need help? Contact us at{' '}
-                <a href="tel:+923034750787" className="text-orange-600 hover:text-orange-700 font-semibold">
-                  +92-303-4750787
+                <a href="tel:+923334829932" className="text-orange-600 hover:text-orange-700 font-semibold">
+                  +92-333-4829932
                 </a>
                 {' '}or email{' '}
                 <a href="mailto:admin@Rawabit.com" className="text-orange-600 hover:text-orange-700 font-semibold">
