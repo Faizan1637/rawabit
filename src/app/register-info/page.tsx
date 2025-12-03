@@ -113,8 +113,8 @@ export default function HowToRegister() {
                   </div>
                   <p className="text-slate-700 text-lg flex-1 pt-2">
                     Select your matches, Send SMS to helpline number{' '}
-                    <a href="tel:+923034750787" className="text-orange-600 font-semibold hover:text-orange-700">
-                      (+92-3034750787)
+                    <a href="tel:+923334829932" className="text-orange-600 font-semibold hover:text-orange-700">
+                      (+923334829932)
                     </a>{' '}
                     and get details of second party
                   </p>
