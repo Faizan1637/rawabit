@@ -15,6 +15,7 @@ import {
   Phone,
   CheckCircle,
   AlertCircle,
+  Copy
 } from 'lucide-react';
 import { transactionApi } from '@/client/api/transaction.api';
 import { calculateAge } from '@/lib/utils/age-calculator';
@@ -162,6 +163,7 @@ function ContactSection({ profileId }: { profileId: string; profileName: string 
 }
 
 export default function ProfileDetailView({ profile }: { profile: ProfileResponse }) {
+  const [copied, setCopied] = useState(false);
   const p = profile;
 
   return (
@@ -194,11 +196,30 @@ export default function ProfileDetailView({ profile }: { profile: ProfileRespons
                 {p.livesInCity}, {p.livesInState}, {p.livesInCountry}
               </span>
             </div>
-            <div className="mt-4 inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Text className="text-sm font-semibold">
-                Serial No: {p.serialNo || p.id}
-              </Text>
+           <div className="mt-4 inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
+            <Text className="text-sm font-semibold">
+              Serial No: {p.serialNo || p.id}
+            </Text>
+            <div className="relative">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(p.serialNo || p.id);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 1200); // auto hide
+                }}
+                className="p-1 rounded hover:bg-white/30 transition"
+              >
+                <Copy className="w-4 h-4 text-black" />
+              </button>
+
+              {copied && (
+                <span className="absolute -top-7 left-1/2 -translate-x-1/2 bg-black/70 text-white text-xs px-2 py-1 rounded shadow-sm animate-fade-in">
+                  Copied!
+                </span>
+              )}
             </div>
+
+          </div>
           </div>
         </div>
       </Card>
