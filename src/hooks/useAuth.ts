@@ -4,13 +4,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authApi } from '@/client/api/auth.api';
 import { RegisterFormData, LoginFormData } from '@/types/auth.types';
-import {useAuthContext} from "@/context/AuthContext"
+import { useAuthContext } from "@/context/AuthContext"
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const {setUser} =useAuthContext()
+  const { setUser } = useAuthContext()
 
   const register = async (formData: RegisterFormData) => {
     try {
@@ -55,14 +55,22 @@ export const useAuth = () => {
 
       const response = await authApi.login(formData);
 
-      
-    if(response.success && response.data?.user) {
-      setUser(response.data.user); // ✅ instantly update context
-      localStorage.setItem('user', JSON.stringify(response.data.user)); // keep in sync
-      router.push('/account/dashboard');
-      return response.data.user;
-    }
-    else {
+      if (response.success && response.data?.user) {
+        const user = response.data.user;
+        
+        // ✅ Update context and localStorage
+        setUser(user);
+        localStorage.setItem('user', JSON.stringify(user));
+        
+        // ✅ Role-based redirect
+        if (user.role === 'admin') {
+          router.push('/account/admin/dashboard');
+        } else {
+          router.push('/account/dashboard');
+        }
+        
+        return user;
+      } else {
         throw new Error(response.error || 'Login failed');
       }
     } catch (err) {

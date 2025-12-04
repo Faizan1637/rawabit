@@ -45,14 +45,20 @@ export default function Navbar() {
     }
   };
 
-  // ✅ Ant Design Dropdown Menu
+  // ✅ Determine dashboard URL based on user role
+  const getDashboardUrl = () => {
+    if (!user) return '/account/dashboard';
+    return user.role === 'admin' ? '/account/admin/dashboard' : '/account/dashboard';
+  };
+
+  // ✅ Ant Design Dropdown Menu with role-based dashboard link
   const menuItems = (
     <AntMenu
       items={[
         {
           key: 'dashboard',
           label: (
-            <Link href="/account/dashboard" className="flex items-center gap-2">
+            <Link href={getDashboardUrl()} className="flex items-center gap-2">
               <LayoutDashboard className="w-4 h-4" /> Dashboard
             </Link>
           ),
@@ -122,6 +128,12 @@ export default function Navbar() {
                   <span className="text-sm font-medium text-foreground">
                     {user?.firstName ?? 'User'}
                   </span>
+                  {/* ✅ Optional: Show role badge for admin */}
+                  {user?.role === 'admin' && (
+                    <span className="ml-1 px-2 py-0.5 text-xs font-semibold bg-orange-100 text-orange-700 rounded-full">
+                      Admin
+                    </span>
+                  )}
                 </Button>
               </Dropdown>
             </div>
@@ -163,6 +175,12 @@ export default function Navbar() {
                     <span className="text-sm font-medium text-foreground">
                       {user?.firstName ?? 'User'}
                     </span>
+                    {/* ✅ Optional: Show role badge for admin in mobile */}
+                    {user?.role === 'admin' && (
+                      <span className="ml-auto px-2 py-0.5 text-xs font-semibold bg-orange-100 text-orange-700 rounded-full">
+                        Admin
+                      </span>
+                    )}
                   </Button>
                 </Dropdown>
               </div>
