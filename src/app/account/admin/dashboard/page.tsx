@@ -3,7 +3,7 @@
 import { useState } from "react";
 import {
   UserOutlined,
-  DashboardOutlined,
+//   DashboardOutlined,
   DeleteOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
@@ -50,7 +50,7 @@ const Dashboard = () => {
   }
 
   const menuItems = [
-    { id: "dashboard", label: "Dashboard", icon: DashboardOutlined },
+    // { id: "dashboard", label: "Dashboard", icon: DashboardOutlined },
     { id: "transaction", label: "Verify Transaction", icon: UserOutlined },
     { id: "find-match", label: "User Profiles", icon: UserOutlined },
     { id: "delete-account", label: "Delete Account", icon: DeleteOutlined },
