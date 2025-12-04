@@ -53,7 +53,7 @@ const Dashboard = () => {
     // { id: "dashboard", label: "Dashboard", icon: DashboardOutlined },
     { id: "transaction", label: "Verify Transaction", icon: UserOutlined },
     { id: "find-match", label: "User Profiles", icon: UserOutlined },
-    { id: "delete-account", label: "Delete Account", icon: DeleteOutlined },
+    { id: "delete-account", label: "Delete User Account", icon: DeleteOutlined },
   ];
 
   const renderContent = () => {
