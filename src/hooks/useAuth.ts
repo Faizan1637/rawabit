@@ -26,7 +26,7 @@ export const useAuth = () => {
         throw new Error('You must agree to the terms and conditions');
       }
 
-      if (formData.password.length < 8) {
+      if (formData.password.length < 6) {
         throw new Error('Password must be at least 6 characters');
       }
 
