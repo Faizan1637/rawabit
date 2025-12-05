@@ -1,24 +1,27 @@
+// services/backend/auth.service.ts
 import { hashPassword, verifyPassword } from '@/lib/auth/password';
-import { findUserByEmail, createUser, findUserById,updateUser } from '@/repositries/user.repositories';
+import { findUserByEmail, createUser, findUserById, updateUser } from '@/repositries/user.repositories';
 import { CreateUserInput, LoginInput, User, UserResponse } from '@/types';
 import { AppError } from '@/lib/utils/error-handler';
 import { ERROR_MESSAGES } from '@/constants/responseConstant/message';
 import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
 import { setResetOTP, clearResetOTP } from '@/repositries/user.repositories';
-import { sendResetOTPEmail } from './email.service';  
+import { sendResetOTPEmail } from './email.service';
 
-// UPDATE the sanitizeUser function
+// UPDATE the sanitizeUser function to include status
 export const sanitizeUser = (user: User): UserResponse => {
   return {
     id: user._id!.toString(),
     email: user.email,
-    firstName: user.firstName,                         
-    lastName: user.lastName,                           
-    fullName: `${user.firstName} ${user.lastName}`,    
-    gender: user.gender,                                
-    dateOfBirth: user.dateOfBirth,                      
+    firstName: user.firstName,
+    lastName: user.lastName,
+    fullName: `${user.firstName} ${user.lastName}`,
+    gender: user.gender,
+    dateOfBirth: user.dateOfBirth,
     role: user.role,
-    profileCompleted:user.profileCompleted,
+    profileCompleted: user.profileCompleted,
+    status: user.status || 'active', // NEW: Include status
+    createdAt: user.createdAt?.toISOString(),
   };
 };
 
@@ -37,14 +40,15 @@ export const registerUser = async (
 
   // Create user with NEW fields
   const userId = await createUser({
-    firstName: input.firstName,          // NEW
-    lastName: input.lastName,            // NEW
+    firstName: input.firstName,
+    lastName: input.lastName,
     email: input.email,
     password: hashedPassword,
-    gender: input.gender,                // NEW
-    dateOfBirth: input.dateOfBirth,      // NEW
+    gender: input.gender,
+    dateOfBirth: input.dateOfBirth,
     role: 'user',
-    profileCompleted:false,
+    profileCompleted: false,
+    status: 'active', // NEW: Default status
     createdAt: new Date(),
     updatedAt: new Date(),
   });
@@ -66,6 +70,14 @@ export const loginUser = async (
   const user = await findUserByEmail(input.email);
   if (!user) {
     throw new AppError(ERROR_MESSAGES.INVALID_CREDENTIALS, HTTP_STATUS.UNAUTHORIZED);
+  }
+
+  // NEW: Check if user is blocked
+  if (user.status === 'blocked') {
+    throw new AppError(
+      'Your account has been blocked. Please contact support.',
+      HTTP_STATUS.FORBIDDEN
+    );
   }
 
   const isValidPassword = await verifyPassword(input.password, user.password);
@@ -111,8 +123,7 @@ export const changeUserPassword = async (
   if (!updated) {
     throw new AppError(ERROR_MESSAGES.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR);
   }
-}
-
+};
 
 export const sendResetOTP = async (email: string): Promise<void> => {
   const user = await findUserByEmail(email);
