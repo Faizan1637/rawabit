@@ -6,7 +6,8 @@ export interface User {
   lastName: string;      
   email: string;
   password: string;
-  gender: string;         
+  gender: string;   
+  status: 'active' | 'blocked';      
   dateOfBirth: string;    
   role: 'user' | 'admin';
   profileCompleted:boolean;
@@ -22,6 +23,8 @@ export interface UserResponse {
   firstName: string;      
   lastName: string;       
   fullName?: string;       
+  status?: 'active' | 'blocked'
+  createdAt?:string;
   gender: string;         
   dateOfBirth: string;    
   role: string;
@@ -33,12 +36,14 @@ export interface CreateUserInput {
   lastName: string;       
   email: string;
   password: string;
-  gender: string;         
+  gender: string;     
+  status?: 'active' | 'blocked'    
   dateOfBirth: string;    
   profileCompleted?:boolean;
 }
 export interface UpdateUserInput {
   name?: string;
+  status?: 'active' | 'blocked'
   email?: string;
   profileCompleted?:boolean;
 }

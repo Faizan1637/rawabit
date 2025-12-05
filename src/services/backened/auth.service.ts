@@ -20,7 +20,7 @@ export const sanitizeUser = (user: User): UserResponse => {
     dateOfBirth: user.dateOfBirth,
     role: user.role,
     profileCompleted: user.profileCompleted,
-    status: user.status || 'active', // NEW: Include status
+    status: user.status || 'active', 
     createdAt: user.createdAt?.toISOString(),
   };
 };
