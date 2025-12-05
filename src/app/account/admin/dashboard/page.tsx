@@ -3,24 +3,20 @@
 import { useState } from "react";
 import {
   UserOutlined,
-//   DashboardOutlined,
-  DeleteOutlined,
+  TeamOutlined,
+  DollarOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Button, Avatar} from "antd";
+import { Button, Avatar } from "antd";
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/context/AuthContext"; 
-import ChangePasswordForm from "@/components/ChangePasswordForm";
-import DeleteProfile from "@/components/DeleteProfile"
+import { useAuthContext } from "@/context/AuthContext";
+import AdminUsersManagement from "@/components/AdminUsersManagement";
 
-const Dashboard = () => {
+const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
- 
-  
-  const router = useRouter();
 
-  // ✅ Get logged-in user from AuthContext
+  const router = useRouter();
   const { user, isAuthenticated, loading } = useAuthContext();
 
   if (loading) {
@@ -32,7 +28,6 @@ const Dashboard = () => {
   }
 
   if (!isAuthenticated || !user) {
-    // ✅ Redirect or message for unauthenticated users
     return (
       <div className="flex flex-col items-center justify-center h-screen text-center space-y-4">
         <p className="text-xl text-slate-700 font-semibold">
@@ -49,11 +44,28 @@ const Dashboard = () => {
     );
   }
 
+  // Check if user is admin
+  if (user.role !== 'admin') {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen text-center space-y-4">
+        <p className="text-xl text-slate-700 font-semibold">
+          Access Denied. Admin privileges required.
+        </p>
+        <Button
+          type="primary"
+          className="bg-orange-500 hover:bg-orange-600 font-semibold"
+          onClick={() => router.push("/account/dashboard")}
+        >
+          Go to Dashboard
+        </Button>
+      </div>
+    );
+  }
+
   const menuItems = [
-    // { id: "dashboard", label: "Dashboard", icon: DashboardOutlined },
-    { id: "transaction", label: "Verify Transaction", icon: UserOutlined },
+    { id: "user-management", label: "User Management", icon: TeamOutlined },
+    { id: "transaction", label: "Verify Transactions", icon: DollarOutlined },
     { id: "find-match", label: "User Profiles", icon: UserOutlined },
-    { id: "delete-account", label: "Delete User Account", icon: DeleteOutlined },
   ];
 
   const renderContent = () => {
@@ -66,23 +78,45 @@ const Dashboard = () => {
               <h1 className="text-2xl md:text-3xl font-bold mb-1">
                 Welcome Admin! {user.firstName}
               </h1>
-              <p className="text-orange-100">
-                Let&apos;s manage operations
-              </p>
+              <p className="text-orange-100">Let&apos;s manage operations</p>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-white rounded-xl p-6 shadow-md border border-slate-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-500 text-sm">Total Users</p>
+                    <p className="text-2xl font-bold text-slate-800">-</p>
+                  </div>
+                  <TeamOutlined className="text-4xl text-orange-500" />
+                </div>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-md border border-slate-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-500 text-sm">Pending Transactions</p>
+                    <p className="text-2xl font-bold text-slate-800">-</p>
+                  </div>
+                  <DollarOutlined className="text-4xl text-orange-500" />
+                </div>
+              </div>
+              <div className="bg-white rounded-xl p-6 shadow-md border border-slate-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-slate-500 text-sm">Active Profiles</p>
+                    <p className="text-2xl font-bold text-slate-800">-</p>
+                  </div>
+                  <UserOutlined className="text-4xl text-orange-500" />
+                </div>
+              </div>
             </div>
           </div>
         );
 
-      case "account":
-        return <ChangePasswordForm />;
-        
-      case "delete-account":
-        return (
-          <div className="bg-white rounded-xl p-5 shadow-md border border-slate-200">
-            <DeleteProfile />
-          </div>
-        )
-        
+      case "user-management":
+        return <AdminUsersManagement />;
+
       default:
         return (
           <div className="bg-white rounded-xl p-8 shadow-md border border-slate-200 text-center">
@@ -98,7 +132,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 pt-0">
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
-          {/* Sidebar - Fixed Height */}
+          {/* Sidebar */}
           <aside
             className={`fixed lg:sticky top-20 left-0 
               w-72 lg:w-64 bg-white rounded-xl shadow-lg border border-slate-200 
@@ -116,7 +150,7 @@ const Dashboard = () => {
               <CloseOutlined className="text-xl" />
             </button>
 
-            {/* User Info - Fixed at top */}
+            {/* User Info */}
             <div className="p-5 border-b border-slate-200 flex-shrink-0">
               <div className="flex flex-col items-center text-center">
                 <Avatar
@@ -125,10 +159,11 @@ const Dashboard = () => {
                   className="bg-gradient-to-br from-orange-500 to-orange-600 mb-3 shadow-md"
                 />
                 <h3 className="text-base font-bold text-slate-800">{user.firstName}</h3>
+                <span className="text-xs text-orange-600 font-semibold">Admin</span>
               </div>
             </div>
 
-            {/* Sidebar Menu - Scrollable */}
+            {/* Sidebar Menu */}
             <nav className="p-3 flex-1 overflow-y-auto">
               <ul className="space-y-1">
                 {menuItems.map((item) => {
@@ -140,12 +175,10 @@ const Dashboard = () => {
                         onClick={() => {
                           setIsSidebarOpen(false);
                           if (item.id === "find-match") {
-                            // Navigate to find match page
                             router.push("/account/findpartner");
-                          }else if(item.id==="transaction"){
-                            router.push("/transactions")
+                          } else if (item.id === "transaction") {
+                            router.push("/transactions");
                           } else {
-                            // Set active tab for other menu items
                             setActiveTab(item.id);
                           }
                         }}
@@ -175,7 +208,7 @@ const Dashboard = () => {
             />
           )}
 
-          {/* Main Content - Scrollable */}
+          {/* Main Content */}
           <main className="flex-1 min-w-0 overflow-y-auto">
             {renderContent()}
           </main>
@@ -185,4 +218,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;
