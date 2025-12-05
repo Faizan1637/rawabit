@@ -1,3 +1,4 @@
+// services/backend/user.service.ts
 import { findUserById, updateUser, deleteUser, findAllUsers } from '@/repositries/user.repositories';
 import { UpdateUserInput, UserResponse } from '@/types';
 import { AppError } from '@/lib/utils/error-handler';
@@ -24,6 +25,25 @@ export const updateUserProfile = async (
 
   const user = await findUserById(id);
   return sanitizeUser(user!);
+};
+
+// NEW: Update user status (active/blocked)
+export const updateUserStatus = async (
+  id: string,
+  status: 'active' | 'blocked'
+): Promise<UserResponse> => {
+  const user = await findUserById(id);
+  if (!user) {
+    throw new AppError(ERROR_MESSAGES.NOT_FOUND, HTTP_STATUS.NOT_FOUND);
+  }
+
+  const updated = await updateUser(id, { status });
+  if (!updated) {
+    throw new AppError('Failed to update user status', HTTP_STATUS.INTERNAL_ERROR);
+  }
+
+  const updatedUser = await findUserById(id);
+  return sanitizeUser(updatedUser!);
 };
 
 export const removeUser = async (id: string): Promise<boolean> => {
