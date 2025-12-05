@@ -1,62 +1,125 @@
 import { NextRequest } from 'next/server';
-import { verifyAuth } from '@/middleware/auth';
-import { getUser, updateUserProfile, removeUser } from '@/services/backened/user.service';
-import { createSuccessResponse, createErrorResponse } from '@/lib/utils/api-response';
-import { handleError } from '@/lib/utils/error-handler';
-import { SUCCESS_MESSAGES, ERROR_MESSAGES } from '@/constants/responseConstant/message';
+import { verifyAuth } from '@/lib/auth/middleware';
+import { 
+  getUserById, 
+  removeUser, 
+  getUser 
+} from '@/services/backened/user.service';
+import { createSuccessResponse } from '@/lib/utils/api-response';
+import { handleError, AppError } from '@/lib/utils/error-handler';
 import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
 
-
 export async function GET(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  request: NextRequest,
+  { params }: { params: { userId: string } }
 ) {
   try {
-    const { id } = await context.params; // ✅ Await params
-    await verifyAuth(req);
-    const user = await getUser(id);
+    // Verify admin
+    const requesterId = await verifyAuth(request);
+    const requester = await getUserById(requesterId);
+    
+    if (requester.role !== 'admin') {
+      throw new AppError('Unauthorized', HTTP_STATUS.FORBIDDEN);
+    }
+
+    const { userId } = params;
+    const user = await getUser(userId);
+
     return createSuccessResponse(user);
   } catch (error) {
     return handleError(error);
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { userId: string } }
 ) {
   try {
-    const { id } = await context.params; // ✅ Await params
-    const userId = await verifyAuth(req);
-
-    // Only allow users to update their own profile
-    if (userId !== id) {
-      return createErrorResponse(ERROR_MESSAGES.FORBIDDEN, HTTP_STATUS.FORBIDDEN);
+    // Verify admin
+    const requesterId = await verifyAuth(request);
+    const requester = await getUserById(requesterId);
+    
+    if (requester.role !== 'admin') {
+      throw new AppError('Unauthorized', HTTP_STATUS.FORBIDDEN);
     }
 
-    const body = await req.json();
-    const user = await updateUserProfile(id, body);
+    const { userId } = params;
 
-    return createSuccessResponse(user, SUCCESS_MESSAGES.USER_UPDATED);
+    // Prevent admin from deleting themselves
+    if (userId === requesterId) {
+      throw new AppError(
+        'You cannot delete your own account',
+        HTTP_STATUS.BAD_REQUEST
+      );
+    }
+
+    // Get user info before deletion
+    const targetUser = await getUser(userId);
+    
+    // Delete user
+    await removeUser(userId);
+
+    return createSuccessResponse(
+      { userId },
+      `User ${targetUser.email} deleted successfully`
+    );
   } catch (error) {
     return handleError(error);
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  context: { params: Promise<{ id: string }> }
+// app/api/admin/users/[userId]/status/route.ts - Update user status
+import { NextRequest } from 'next/server';
+import { verifyAuth } from '@/lib/auth/middleware';
+import { 
+  getUserById, 
+  updateUserStatus 
+} from '@/services/backened/user.service';
+import { createSuccessResponse } from '@/lib/utils/api-response';
+import { handleError, AppError } from '@/lib/utils/error-handler';
+import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
+
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { userId: string } }
 ) {
   try {
-    const { id } = await context.params; // ✅ Await params
-    const userId = await verifyAuth(req);
-
-    if (userId !== id) {
-      return createErrorResponse(ERROR_MESSAGES.FORBIDDEN, HTTP_STATUS.FORBIDDEN);
+    // Verify admin
+    const requesterId = await verifyAuth(request);
+    const requester = await getUserById(requesterId);
+    
+    if (requester.role !== 'admin') {
+      throw new AppError('Unauthorized', HTTP_STATUS.FORBIDDEN);
     }
 
-    await removeUser(id);
-    return createSuccessResponse(null, SUCCESS_MESSAGES.USER_DELETED);
+    const { userId } = params;
+    const body = await request.json();
+    const { status } = body;
+
+    // Validate status
+    if (!status || !['active', 'blocked'].includes(status)) {
+      throw new AppError(
+        'Invalid status. Must be "active" or "blocked"',
+        HTTP_STATUS.BAD_REQUEST
+      );
+    }
+
+    // Prevent admin from blocking themselves
+    if (userId === requesterId) {
+      throw new AppError(
+        'You cannot change your own account status',
+        HTTP_STATUS.BAD_REQUEST
+      );
+    }
+
+    // Update status
+    const updatedUser = await updateUserStatus(userId, status);
+
+    return createSuccessResponse(
+      updatedUser,
+      `User status updated to ${status}`
+    );
   } catch (error) {
     return handleError(error);
   }
