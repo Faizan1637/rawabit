@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Table, Button, Input, Modal, message, Tag, Space, Tooltip, Switch } from 'antd';
+import { Table, Button, Input, message, Tag, Space, Tooltip, Switch } from 'antd';
 import { 
   SearchOutlined, 
   DeleteOutlined, 
@@ -9,7 +9,9 @@ import {
   LockOutlined, 
   UnlockOutlined,
   ReloadOutlined,
-  UserOutlined 
+  UserOutlined,
+  CloseOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 
@@ -52,6 +54,9 @@ export default function AdminUsersManagement() {
   });
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<{ id: string; email: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch users
   const fetchUsers = async (page = 1, limit = 10) => {
@@ -120,34 +125,47 @@ export default function AdminUsersManagement() {
     }
   };
 
-  // Delete user
-  const deleteUser = async (userId: string, userEmail: string) => {
-    Modal.confirm({
-      title: 'Delete User Account',
-      content: `Are you sure you want to permanently delete ${userEmail}? This action cannot be undone.`,
-      okText: 'Yes, Delete',
-      okType: 'danger',
-      cancelText: 'Cancel',
-      onOk: async () => {
-        try {
-          const response = await fetch(`/api/admin/users/${userId}`, {
-            method: 'DELETE',
-          });
+  // Open delete modal
+  const openDeleteModal = (userId: string, userEmail: string) => {
+    setUserToDelete({ id: userId, email: userEmail });
+    setIsDeleteModalOpen(true);
+  };
 
-          const data = await response.json();
+  // Handle delete confirmation
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
+    
+    try {
+      setIsDeleting(true);
+      const response = await fetch(`/api/admin/users/${userToDelete.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-          if (data.success) {
-            message.success('User deleted successfully');
-            fetchUsers(pagination.current, pagination.pageSize);
-          } else {
-            message.error(data.error || 'Failed to delete user');
-          }
-        } catch (error) {
-          message.error('Failed to delete user');
-          console.error(error);
-        }
-      },
-    });
+      const data = await response.json();
+
+      if (data.success || response.ok) {
+        message.success('User deleted successfully');
+        fetchUsers(pagination.current, pagination.pageSize);
+        setIsDeleteModalOpen(false);
+        setUserToDelete(null);
+      } else {
+        message.error(data.error || data.message || 'Failed to delete user');
+      }
+    } catch (error) {
+      message.error('Failed to delete user');
+      console.error(error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  // Close delete modal
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setUserToDelete(null);
   };
 
   useEffect(() => {
@@ -239,7 +257,10 @@ export default function AdminUsersManagement() {
               type="primary"
               icon={<EyeOutlined />}
               size="small"
-              onClick={() => fetchUserById(record.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                fetchUserById(record.id);
+              }}
               className="bg-blue-500 hover:bg-blue-600"
             />
           </Tooltip>
@@ -248,7 +269,10 @@ export default function AdminUsersManagement() {
               type="default"
               icon={record.status === 'active' ? <LockOutlined /> : <UnlockOutlined />}
               size="small"
-              onClick={() => toggleUserStatus(record.id, record.status)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleUserStatus(record.id, record.status);
+              }}
             />
           </Tooltip>
           <Tooltip title="Delete User">
@@ -257,7 +281,10 @@ export default function AdminUsersManagement() {
               danger
               icon={<DeleteOutlined />}
               size="small"
-              onClick={() => deleteUser(record.id, record.email)}
+              onClick={(e) => {
+                e.stopPropagation();
+                openDeleteModal(record.id, record.email);
+              }}
             />
           </Tooltip>
         </Space>
@@ -316,76 +343,160 @@ export default function AdminUsersManagement() {
       </div>
 
       {/* View User Modal */}
-      <Modal
-        title={
-          <div className="flex items-center gap-2">
-            <UserOutlined className="text-orange-500" />
-            <span>User Details</span>
-          </div>
-        }
-        open={isViewModalOpen}
-        onCancel={() => {
-          setIsViewModalOpen(false);
-          setSelectedUser(null);
-        }}
-        footer={[
-          <Button key="close" onClick={() => setIsViewModalOpen(false)}>
-            Close
-          </Button>,
-        ]}
-        width={600}
-      >
-        {selectedUser && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-slate-500 text-sm">User ID</p>
-                <p className="font-mono text-xs bg-slate-100 p-2 rounded">{selectedUser.id}</p>
+      {isViewModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-slate-200 sticky top-0 bg-white">
+              <div className="flex items-center gap-2">
+                <UserOutlined className="text-orange-500 text-xl" />
+                <h2 className="text-xl font-bold text-slate-800">User Details</h2>
               </div>
-              <div>
-                <p className="text-slate-500 text-sm">Role</p>
-                <p className="font-medium">
-                  <Tag color={selectedUser.role === 'admin' ? 'red' : 'blue'}>
-                    {selectedUser.role.toUpperCase()}
-                  </Tag>
-                </p>
+              <button
+                onClick={() => {
+                  setIsViewModalOpen(false);
+                  setSelectedUser(null);
+                }}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                <CloseOutlined className="text-slate-600" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            {selectedUser && (
+              <div className="p-6 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-slate-500 text-sm mb-1">User ID</p>
+                    <p className="font-mono text-xs bg-slate-100 p-2 rounded">{selectedUser.id}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 text-sm mb-1">Role</p>
+                    <p className="font-medium">
+                      <Tag color={selectedUser.role === 'admin' ? 'red' : 'blue'}>
+                        {selectedUser.role.toUpperCase()}
+                      </Tag>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 text-sm mb-1">Full Name</p>
+                    <p className="font-medium text-slate-800">{selectedUser.fullName}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 text-sm mb-1">Email</p>
+                    <p className="font-medium text-slate-800">{selectedUser.email}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 text-sm mb-1">Gender</p>
+                    <p className="font-medium text-slate-800 capitalize">{selectedUser.gender}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 text-sm mb-1">Date of Birth</p>
+                    <p className="font-medium text-slate-800">{selectedUser.dateOfBirth}</p>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 text-sm mb-1">Profile Status</p>
+                    <p className="font-medium">
+                      <Tag color={selectedUser.profileCompleted ? 'green' : 'orange'}>
+                        {selectedUser.profileCompleted ? 'Complete' : 'Incomplete'}
+                      </Tag>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-slate-500 text-sm mb-1">Account Status</p>
+                    <p className="font-medium">
+                      <Tag color={selectedUser.status === 'active' ? 'green' : 'red'}>
+                        {selectedUser.status?.toUpperCase() || 'ACTIVE'}
+                      </Tag>
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="text-slate-500 text-sm">Full Name</p>
-                <p className="font-medium">{selectedUser.fullName}</p>
-              </div>
-              <div>
-                <p className="text-slate-500 text-sm">Email</p>
-                <p className="font-medium">{selectedUser.email}</p>
-              </div>
-              <div>
-                <p className="text-slate-500 text-sm">Gender</p>
-                <p className="font-medium capitalize">{selectedUser.gender}</p>
-              </div>
-              <div>
-                <p className="text-slate-500 text-sm">Date of Birth</p>
-                <p className="font-medium">{selectedUser.dateOfBirth}</p>
-              </div>
-              <div>
-                <p className="text-slate-500 text-sm">Profile Status</p>
-                <p className="font-medium">
-                  <Tag color={selectedUser.profileCompleted ? 'green' : 'orange'}>
-                    {selectedUser.profileCompleted ? 'Complete' : 'Incomplete'}
-                  </Tag>
-                </p>
-              </div>
-              <div>
-                <p className="text-slate-500 text-sm">Account Status</p>
-                <p className="font-medium">
-                  <Tag color={selectedUser.status === 'active' ? 'green' : 'red'}>
-                    {selectedUser.status?.toUpperCase() || 'ACTIVE'}
-                  </Tag>
-                </p>
-              </div>
+            )}
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-slate-200 flex justify-end">
+              <button
+                onClick={() => {
+                  setIsViewModalOpen(false);
+                  setSelectedUser(null);
+                }}
+                className="px-6 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition-colors"
+              >
+                Close
+              </button>
             </div>
           </div>
-        )}
-      </Modal>
+        </div>
+      )}
+
+      {/* Custom Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-slate-200">
+              <div className="flex items-center gap-2 text-red-600">
+                <ExclamationCircleOutlined className="text-2xl" />
+                <h2 className="text-xl font-bold">Delete User Account</h2>
+              </div>
+              <button
+                onClick={closeDeleteModal}
+                disabled={isDeleting}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-50"
+              >
+                <CloseOutlined className="text-slate-600" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-6 space-y-4">
+              <p className="text-slate-700">Are you sure you want to permanently delete:</p>
+              
+              {userToDelete && (
+                <>
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                    <p className="font-semibold text-orange-700">{userToDelete.email}</p>
+                  </div>
+
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                    <span className="text-red-600 text-xl flex-shrink-0">⚠️</span>
+                    <p className="text-red-700 text-sm">
+                      This action cannot be undone. All user data will be permanently removed from the system.
+                    </p>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-slate-200 flex justify-end gap-3">
+              <button
+                onClick={closeDeleteModal}
+                disabled={isDeleting}
+                className="px-6 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+                className="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-2"
+              >
+                {isDeleting ? (
+                  <>
+                    <span className="animate-spin">⏳</span>
+                    Deleting...
+                  </>
+                ) : (
+                  'Yes, Delete'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
