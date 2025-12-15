@@ -12,7 +12,7 @@ import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  context: { params: Promise<{ userId: string }> }
 ) {
   try {
     // Verify admin
@@ -23,7 +23,7 @@ export async function PATCH(
       throw new AppError('Unauthorized', HTTP_STATUS.FORBIDDEN);
     }
 
-    const { userId } = params;
+    const { userId } = await context.params;
     const body = await request.json();
     const { status } = body;
 

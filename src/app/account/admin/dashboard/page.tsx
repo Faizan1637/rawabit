@@ -10,10 +10,10 @@ import {
 import { Button, Avatar } from "antd";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/context/AuthContext";
-import AdminUsersManagement from "@/components/AdminUsersManagement";
+import AdminUsersManagement from "@/components/UserManagement";
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("user-management");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const router = useRouter();
