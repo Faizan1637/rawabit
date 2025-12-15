@@ -13,7 +13,7 @@ import { HTTP_STATUS } from '@/constants/responseConstant/status-codes';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  context: { params: Promise<{ userId: string }> }
 ) {
   try {
     // Verify admin
@@ -24,7 +24,7 @@ export async function GET(
       throw new AppError('Unauthorized', HTTP_STATUS.FORBIDDEN);
     }
 
-    const { userId } = params;
+    const { userId } = await context.params;
     const user = await getUser(userId);
 
     return createSuccessResponse(user);
