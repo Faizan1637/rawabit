@@ -35,7 +35,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+ context: { params: Promise<{ userId: string }> }
 ) {
   try {
     // Verify admin
@@ -46,7 +46,7 @@ export async function DELETE(
       throw new AppError('Unauthorized', HTTP_STATUS.FORBIDDEN);
     }
 
-    const { userId } = params;
+    const { userId } = await context.params;
 
     // Prevent admin from deleting themselves
     if (userId === requesterId) {
