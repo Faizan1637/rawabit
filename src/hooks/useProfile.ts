@@ -4,14 +4,31 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { profileApi } from '@/client/api/profile.api';
 import { ProfileFormData } from '@/types/profile';
-import {useAuthContext} from "@/context/AuthContext"
-
+import { useAuthContext } from "@/context/AuthContext";
+import { User, UserResponse } from '@/types/user';
 
 export const useProfile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const {setUser} =useAuthContext()
+  const { setUser } = useAuthContext();
+
+  // Helper function to transform User to UserResponse
+  const transformUserToResponse = (user: User): UserResponse => {
+    return {
+      id: user._id?.toString(),
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      fullName: `${user.firstName} ${user.lastName}`,
+      status: user.status,
+      createdAt: user.createdAt?.toISOString(), // Convert Date to string
+      gender: user.gender,
+      dateOfBirth: user.dateOfBirth,
+      role: user.role,
+      profileCompleted: user.profileCompleted,
+    };
+  };
 
   const createProfile = async (formData: ProfileFormData) => {
     try {
@@ -21,8 +38,10 @@ export const useProfile = () => {
       const response = await profileApi.createProfile(formData);
 
       if (response.success) {
-       if (response.data?.updatedUser && typeof response.data.updatedUser === 'object') {
-            setUser(response.data.updatedUser);
+        if (response.data?.updatedUser && typeof response.data.updatedUser === 'object') {
+          // Transform User to UserResponse before setting
+          const userResponse = transformUserToResponse(response.data.updatedUser);
+          setUser(userResponse);
         }
         return response.data?.profile;
       } else {
