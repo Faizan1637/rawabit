@@ -58,7 +58,7 @@ export default function Footer() {
                   <MapPin className="w-5 h-5" />
                 </div>
                 <p className="text-slate-300 leading-relaxed">
-                  123 Main Street, Model Town<br />
+                  2nd Floor, Sanawar Center, Samnabad<br />
                   Lahore, Punjab, Pakistan
                 </p>
               </div>
@@ -68,10 +68,10 @@ export default function Footer() {
                   <Phone className="w-5 h-5" />
                 </div>
                 <a
-                  href="tel:+923001234567"
+                  href="tel:tel:+923334829932"
                   className="text-slate-300 hover:text-orange-400 transition-colors"
                 >
-                  +92 300 1234567
+                  +923334829932
                 </a>
               </div>
 
@@ -80,10 +80,10 @@ export default function Footer() {
                   <Mail className="w-5 h-5" />
                 </div>
                 <a
-                  href="mailto:info@rawabit.com"
+                  href="mailto:info@rawabit.pk"
                   className="text-slate-300 hover:text-orange-400 transition-colors"
                 >
-                  info@rawabit.com
+                  info@rawabit.pk
                 </a>
               </div>
             </div>

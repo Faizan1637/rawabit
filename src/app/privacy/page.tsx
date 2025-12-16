@@ -41,10 +41,10 @@ export default function PrivacyPolicy() {
               {/* Introduction */}
               <div className="bg-slate-50 rounded-2xl p-6 border-l-4 border-orange-500 space-y-2">
                 <p className="text-slate-700 leading-relaxed text-lg">
-                  Rawabit.com is the best website for Muslim proposals. Through this website, you can find matches of any caste, your required education, Islamic education, marital status, and the choice of any city or country.
+                  rawabit.pk is the best website for Muslim proposals. Through this website, you can find matches of any caste, your required education, Islamic education, marital status, and the choice of any city or country.
                 </p>
                 <p className="text-slate-700 leading-relaxed text-lg font-semibold text-right">
-                  Rawabit.com مسلمانوں کے رشتوں کے لیے بہترین ویب سائٹ ہے۔ اس ویب سائٹ کے ذریعے آپ کسی بھی ذات، مطلوبہ تعلیم، اسلامی تعلیم، ازدواجی حیثیت اور کسی بھی شہر یا ملک کے مناسب رشتے حاصل کرسکتے ہیں۔
+                  rawabit.pk مسلمانوں کے رشتوں کے لیے بہترین ویب سائٹ ہے۔ اس ویب سائٹ کے ذریعے آپ کسی بھی ذات، مطلوبہ تعلیم، اسلامی تعلیم، ازدواجی حیثیت اور کسی بھی شہر یا ملک کے مناسب رشتے حاصل کرسکتے ہیں۔
                 </p>
               </div>
 
@@ -147,10 +147,10 @@ export default function PrivacyPolicy() {
               {/* Final Note */}
               <div className="border-l-4 border-red-500 pl-6 py-4 space-y-2">
                 <p className="text-slate-700 leading-relaxed text-lg">
-                  Thank you for choosing Rawabit.com. We are committed to providing a safe and trusted platform while respecting your privacy.
+                  Thank you for choosing rawabit.pk. We are committed to providing a safe and trusted platform while respecting your privacy.
                 </p>
                 <p className="text-slate-700 leading-relaxed text-lg font-semibold text-right">
-                  Rawabit.com کے انتخاب کا شکریہ۔ ہم آپ کی پرائیویسی کا مکمل احترام کرتے ہوئے ایک محفوظ اور قابل اعتماد پلیٹ فارم فراہم کرنے کے لیے پرعزم ہیں۔
+                  rawabit.pk کے انتخاب کا شکریہ۔ ہم آپ کی پرائیویسی کا مکمل احترام کرتے ہوئے ایک محفوظ اور قابل اعتماد پلیٹ فارم فراہم کرنے کے لیے پرعزم ہیں۔
                 </p>
               </div>
 

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: "Rawabit – Find Your Perfect Life Partner",
     description:
       "Join Rawabit to discover compatible matches based on personality, lifestyle, and marriage preferences.",
-    url: "https://rawabit.com", // replace with your actual domain
+    url: "https://rawabit.pk", // replace with your actual domain
     siteName: "Rawabit",
     locale: "en_US",
     type: "website",

@@ -237,7 +237,7 @@ export default function HowToRegister() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <a 
-                  href="mailto:info@rawabit.com"
+                  href="mailto:info@rawabit.pk"
                   className="flex items-center justify-center space-x-2 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-6 rounded-xl transition-all duration-300 border border-slate-300"
                 >
                   <Mail className="w-5 h-5" />

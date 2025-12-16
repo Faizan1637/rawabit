@@ -1,9 +1,9 @@
 export const emailConfig = {
   // Admin email to receive inquiries
-  adminEmail: process.env.ADMIN_EMAIL || 'admin@rawabit.com',
+  adminEmail: process.env.ADMIN_EMAIL || 'admin@rawabit.pk',
   
   // From email configuration
-  fromEmail: process.env.FROM_EMAIL || 'noreply@rawabit.com',
+  fromEmail: process.env.FROM_EMAIL || 'noreply@rawabit.pk',
   fromName: process.env.FROM_NAME || 'Rawabit Support',
   
   // SMTP Configuration

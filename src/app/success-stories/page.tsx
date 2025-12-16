@@ -219,7 +219,7 @@ export default function SuccessStoriesHero() {
               {/* Main Message */}
               <div className="prose prose-lg max-w-none mb-12">
                 <p className="text-slate-700 leading-relaxed text-lg mb-6">
-                  <span className="font-semibold text-slate-900">Praise be to the Lord (Alhamdulillah)</span>, thank to Allah (Almighty) Who chose us to ensure purity of the society by providing us opportunity to bind people&apos;s home with sacred relation of Nikaah. Underneath are the details and photos of couples whose weddings are carried out through Rawabit.com.
+                  <span className="font-semibold text-slate-900">Praise be to the Lord (Alhamdulillah)</span>, thank to Allah (Almighty) Who chose us to ensure purity of the society by providing us opportunity to bind people&apos;s home with sacred relation of Nikaah. Underneath are the details and photos of couples whose weddings are carried out through rawabit.pk.
                 </p>
                 <p className="text-slate-700 leading-relaxed text-lg mb-6">
                   This is the Muslim&apos;s Nikaah website through which hundreds of Muslims have been put through to marriage. If you&apos;re concerned about the relations of your loved ones, don&lsquo;t waste to log in in; order to find your match. Subsequent to registration get your required profile&apos;s number from us!
@@ -257,7 +257,7 @@ export default function SuccessStoriesHero() {
                       </a>
                       
                       <a 
-                        href="mailto:info@Rawabit.com" 
+                        href="mailto:info@rawabit.pk" 
                         className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105"
                       >
                         <Mail className="w-5 h-5" />

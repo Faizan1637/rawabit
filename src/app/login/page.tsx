@@ -294,7 +294,7 @@ export default function Login() {
                 </a>
                 {' '}or email{' '}
                 <a href="mailto:admin@Rawabit.pk" className="text-orange-600 hover:text-orange-700 font-semibold">
-                  admin@Rawabit.com
+                  admin@rawabit.pk
                 </a>
               </p>
             </div>

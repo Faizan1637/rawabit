@@ -47,7 +47,7 @@ export default function Disclaimer() {
                   <Info className="w-8 h-8 text-red-600 flex-shrink-0 mt-1" />
                   <div>
                     <p className="text-slate-800 leading-relaxed text-lg font-semibold">
-                      Rawabit.com is a matrimonial platform for Muslim proposals. By using this website, you acknowledge and accept the disclaimers outlined below.
+                      rawabit.pk is a matrimonial platform for Muslim proposals. By using this website, you acknowledge and accept the disclaimers outlined below.
                     </p>
                     <p className="text-slate-800 leading-relaxed text-lg font-semibold mt-2">
                       راوابِط ڈاٹ کام مسلم شادیوں کے لیے ایک میٹرِمونیئل پلیٹ فارم ہے۔ اس ویب سائٹ کو استعمال کرنے سے، آپ نیچے دیے گئے ڈس کلیمرز کو قبول کرتے ہیں۔
@@ -145,7 +145,7 @@ export default function Disclaimer() {
               <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white">
                 <p className="leading-relaxed text-lg">
                   <span className="font-bold block mb-3">Thank you for your understanding / آپ کے تعاون کا شکریہ۔</span>
-                  By using Rawabit.com, you acknowledge that you have read and accepted this disclaimer. We are committed to providing a platform that facilitates genuine connections while maintaining ethical standards. Your trust and responsible usage are essential to our community&apos;s success.
+                  By using rawabit.pk, you acknowledge that you have read and accepted this disclaimer. We are committed to providing a platform that facilitates genuine connections while maintaining ethical standards. Your trust and responsible usage are essential to our community&apos;s success.
                 </p>
                 <p className="leading-relaxed text-lg mt-2">
                   راوابِط ڈاٹ کام استعمال کرنے سے، آپ اس ڈس کلیمر کو پڑھ کر قبول کرتے ہیں۔ ہم ایک ایسا پلیٹ فارم فراہم کرنے کے لیے پرعزم ہیں جو حقیقی روابط قائم کرے اور اخلاقی معیار برقرار رکھے۔

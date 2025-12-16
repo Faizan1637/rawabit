@@ -238,8 +238,8 @@ export default function ContactUs() {
                   </div>
                   <div>
                     <p className="text-slate-700 font-semibold mb-2">Email</p>
-                    <a href="mailto:admin@rawabit.com" className="text-orange-600 hover:text-orange-700">
-                      admin@rawabit.com
+                    <a href="mailto:admin@rawabit.pk" className="text-orange-600 hover:text-orange-700">
+                      admin@rawabit.pk
                     </a>
                   </div>
                 </div>
