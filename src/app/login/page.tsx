@@ -293,7 +293,7 @@ export default function Login() {
                   +92-333-4829932
                 </a>
                 {' '}or email{' '}
-                <a href="mailto:admin@Rawabit.com" className="text-orange-600 hover:text-orange-700 font-semibold">
+                <a href="mailto:admin@Rawabit.pk" className="text-orange-600 hover:text-orange-700 font-semibold">
                   admin@Rawabit.com
                 </a>
               </p>

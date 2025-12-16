@@ -42,8 +42,8 @@ export default function HowToRegister() {
                 <div className="w-full aspect-[3/4] bg-slate-100 rounded-xl overflow-hidden">
                   <div className="relative w-full h-full">
                   <Image
-                    src="https://al-nikaah.com/Content/images/hafiz-saifi-ullah-siddiqui-full.jpg"
-                    alt="Hafiz Safi Ullah Siddiqui"
+                    src="/babar.jpeg"
+                    alt="Babar Khursheed"
                     fill
                     className="object-cover"
                     priority  // optional: ensures faster load for above-the-fold images
@@ -56,10 +56,10 @@ export default function HowToRegister() {
               {/* Name and Title */}
               <div className="text-center mb-6">
                 <h3 className="text-2xl font-bold text-slate-900 mb-2">
-                  Babar Khursheed
+                  Muhammad Saleem Akhtar
                 </h3>
                 <p className="text-slate-600 font-medium">
-                  CEO Rawabit Babar Khursheed
+                  CEO Rawabit Muhammad Saleem Akhtar
                 </p>
               </div>
 
@@ -68,11 +68,11 @@ export default function HowToRegister() {
                 <div>
                   <p className="text-sm font-semibold text-slate-700 mb-2">Helpline Numbers:</p>
                   <div className="space-y-2">
-                    <a href="tel:+923034750787" className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition-colors">
+                    <a href="tel:+923334829932" className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition-colors">
                       <Phone className="w-4 h-4" />
                       <span className="font-medium">+92-333-4829932</span>
                     </a>
-                    <a href="tel:+923015467752" className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition-colors">
+                    <a href="tel:+923334829932" className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition-colors">
                       <Phone className="w-4 h-4" />
                       <span className="font-medium">+92-333-4829932</span>
                     </a>
@@ -166,14 +166,14 @@ export default function HowToRegister() {
               <div className="space-y-3 text-slate-700">
                 <p>
                   <span className="font-semibold">Easypaisa Account No:</span>{' '}
-                  <a href="tel:+923034750787" className="text-orange-600 font-semibold hover:text-orange-700">
-                    +92-3034750787
+                  <a href="tel:+923334829932" className="text-orange-600 font-semibold hover:text-orange-700">
+                    +923334829932
                   </a>
                 </p>
                 <p>
                   <span className="font-semibold">Jazz Cash Account No:</span>{' '}
-                  <a href="tel:+923015467752" className="text-orange-600 font-semibold hover:text-orange-700">
-                    +92-3015467752
+                  <a href="tel:+923334829932" className="text-orange-600 font-semibold hover:text-orange-700">
+                    +923334829932
                   </a>
                 </p>
               </div>
@@ -222,8 +222,8 @@ export default function HowToRegister() {
                 </div>
 
               <div className="space-y-2 text-slate-700">
-                <p><span className="font-semibold">First Name:</span> Hafiz Muhammad</p>
-                <p><span className="font-semibold">Last Name:</span> Safi Ullah</p>
+                <p><span className="font-semibold">First Name:</span> Muhammad Saleem</p>
+                <p><span className="font-semibold">Last Name:</span> Akhtar</p>
                 <p><span className="font-semibold">City:</span> Lahore</p>
                 <p><span className="font-semibold">Country:</span> Pakistan</p>
               </div>
