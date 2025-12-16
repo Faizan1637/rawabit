@@ -300,7 +300,7 @@ export default function SearchFilters({ onSearch, onClear, loading }: SearchFilt
           </select>
         </div>
 
-        {/* Serial No */}
+        {/* Id or Serial No  */}
         <div>
           <label className="block text-white font-semibold mb-2">Serial No</label>
           <input
