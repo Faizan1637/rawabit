@@ -66,9 +66,9 @@ export const searchProfiles = async (
   if (filters.minQualification) query.qualification = filters.minQualification;
 
   // ✅ Serial number search
-  if (filters.serialNo) {
+  if (filters._id) {
     try {
-      query._id = new ObjectId(filters.serialNo);
+      query._id = new ObjectId(filters._id);
     } catch {
       query._id = filters.serialNo;
     }

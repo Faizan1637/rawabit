@@ -20,7 +20,7 @@ const sanitizeSearchResult = (profile: Profile): ProfileSearchResult => {
     caste: profile.caste,
     religion: profile.religion,
     islamicEducation: profile.islamicEducation,
-    serialNo: profile._id!.toString().slice(-6), // Last 6 chars as serial
+    serialNo: profile._id!.toString(), 
   };
 };
 

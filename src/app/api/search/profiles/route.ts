@@ -21,7 +21,12 @@ export async function GET(req: NextRequest) {
     // Parse query parameters
     const { searchParams } = new URL(req.url);
     
+   // Get serialNo and use it as _id
+    const serialNo = searchParams.get('serialNo');
+    const _id = serialNo && serialNo.trim() !== '' ? serialNo.trim() : undefined;
+
     const filters: SearchFilters = {
+      _id,
       country: searchParams.get('country') || undefined,
       state: searchParams.get('state') || undefined,
       city: searchParams.get('city') || undefined,
@@ -32,7 +37,6 @@ export async function GET(req: NextRequest) {
       caste: searchParams.get('caste') || undefined,
       maritalStatus: searchParams.get('maritalStatus') || undefined,
       minQualification: searchParams.get('minQualification') || undefined,
-      serialNo: searchParams.get('serialNo') || undefined,
       minAge: searchParams.get('minAge') ? parseInt(searchParams.get('minAge')!) : undefined,
       maxAge: searchParams.get('maxAge') ? parseInt(searchParams.get('maxAge')!) : undefined,
       page: searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1,

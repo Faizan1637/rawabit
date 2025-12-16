@@ -16,7 +16,8 @@ export interface SearchFilters {
   minAge?: number;
   maxAge?: number;
   serialNo?: string;
-  
+  _id?:string;
+
   // Education
   minQualification?: string;
   
