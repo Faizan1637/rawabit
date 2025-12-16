@@ -3,6 +3,7 @@ import { getDatabase } from '@/lib/db/mongodb';
 import { Profile } from '@/types/profile';
 
 const COLLECTION = 'profiles';
+const SUBSCRIPTIONS_COLLECTION = 'subscriptions';
 
 export const findProfileByUserId = async (userId: string): Promise<Profile | null> => {
   const db = await getDatabase();
@@ -126,4 +127,52 @@ export const checkProfileCompletion = (profile: Profile): boolean => {
   }
 
   return true;
+};
+
+/**
+ * Get latest featured profiles from users with active subscriptions
+ */
+export const getFeaturedProfiles = async (limit: number = 8): Promise<Profile[]> => {
+  const db = await getDatabase();
+  const now = new Date();
+
+  const activeSubscriptions = await db
+    .collection(SUBSCRIPTIONS_COLLECTION)
+    .find({
+      status: 'active',
+      endDate: { $gte: now },
+    })
+    .toArray();
+
+  const subscribedUserIds = [...new Set(activeSubscriptions.map(sub => sub.userId))];
+
+  if (subscribedUserIds.length === 0) {
+    return [];
+  }
+
+  const userObjectIds = subscribedUserIds
+    .map(id => {
+      try {
+        return typeof id === 'string' ? new ObjectId(id) : id;
+      } catch {
+        return null;
+      }
+    })
+    .filter((id): id is ObjectId => id !== null);
+
+  if (userObjectIds.length === 0) {
+    return [];
+  }
+
+  const profiles = await db
+    .collection<Profile>(COLLECTION)
+    .find({
+      userId: { $in: userObjectIds },
+      isComplete: true,
+    })
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .toArray();
+
+  return profiles;
 };

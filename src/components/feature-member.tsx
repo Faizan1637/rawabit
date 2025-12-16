@@ -1,88 +1,112 @@
-import { Heart } from "lucide-react"
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Heart } from 'lucide-react';
 
 interface Profile {
-  name: string
-  gender: "Male" | "Female"
-  age: number
-  maritalStatus: string
-  caste?: string
-  sect: string
-  education?: string
-  profession?: string
-  location: string
-  serialNo: string
+  id: string;
+  name: string;
+  gender: 'Male' | 'Female';
+  age: number;
+  maritalStatus: string;
+  caste?: string;
+  sect: string;
+  education?: string;
+  profession?: string;
+  location: string;
+  serialNo: string;
 }
 
-const profiles: Profile[] = [
-  {
-    name: "Aimen Tanveer",
-    gender: "Female",
-    age: 25,
-    maritalStatus: "Un-Married",
-    caste: "Mughal",
-    sect: "Ahle Hadees",
-    education: "Masters Degree",
-    location: "Pakistan - Rawalpindi",
-    serialNo: "009683"
-  },
-  {
-    name: "Binte Muhammad Shehzad",
-    gender: "Female",
-    age: 23,
-    maritalStatus: "Un-Married",
-    caste: "Butt",
-    sect: "Sunni (Ahle Sunnat)",
-    profession: "Doctor",
-    location: "Pakistan - Lahore",
-    serialNo: "009664"
-  },
-  {
-    name: "Rida Rafique",
-    gender: "Female",
-    age: 28,
-    maritalStatus: "Un-Married",
-    caste: "Bhatti-Rajpoot",
-    sect: "Sunni (Ahle Sunnat)",
-    education: "Bachelors Degree",
-    location: "Pakistan - Lahore",
-    serialNo: "009663"
-  },
-  {
-    name: "Nimra Fiyaz",
-    gender: "Female",
-    age: 24,
-    maritalStatus: "Un-Married",
-    caste: "Rajpoot",
-    sect: "Sunni (Ahle Sunnat)",
-    education: "Bachelors Degree",
-    location: "Pakistan - Lahore",
-    serialNo: "009656"
-  },
-  {
-    name: "Bilal Sadaqat",
-    gender: "Male",
-    age: 33,
-    maritalStatus: "For 2nd Marriage",
-    caste: "Bhatti-Rajpoot",
-    sect: "Sunni (Ahle Sunnat)",
-    education: "Masters Degree",
-    location: "Pakistan - Rawalpindi",
-    serialNo: "009691"
-  },
-  {
-    name: "Iftikhar Ahmed",
-    gender: "Male",
-    age: 54,
-    maritalStatus: "For 2nd Marriage",
-    caste: "Gujjar",
-    sect: "Deobandi",
-    education: "Non Matriculation",
-    location: "Pakistan - Gujrat",
-    serialNo: "009682"
-  }
-]
-
 export default function FeaturedProfiles() {
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/featured-profiles');
+        const data = await response.json();
+
+        if (data.success) {
+          setProfiles(data.data?.profiles || []);
+        } else {
+          setError(data.error || 'Failed to load profiles');
+        }
+      } catch (err) {
+        setError('Failed to load featured profiles');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfiles();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="flex justify-center mb-4">
+              <Heart className="w-16 h-16 text-orange-500 fill-none stroke-2" strokeWidth={3} />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+              Featured Profiles
+            </h2>
+            <p className="text-gray-500 text-lg">makes you happier :)</p>
+          </div>
+
+          {/* Loading Skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gray-300" />
+                <div className="space-y-2">
+                  <div className="h-4 bg-gray-300 rounded w-3/4 mx-auto" />
+                  <div className="h-3 bg-gray-200 rounded w-1/2 mx-auto" />
+                  <div className="h-3 bg-gray-200 rounded w-2/3 mx-auto" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <p className="text-red-500">{error}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (profiles.length === 0) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="flex justify-center mb-4">
+              <Heart className="w-16 h-16 text-orange-500 fill-none stroke-2" strokeWidth={3} />
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+              Featured Profiles
+            </h2>
+            <p className="text-gray-500 text-lg">No featured profiles available yet</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -99,19 +123,12 @@ export default function FeaturedProfiles() {
 
         {/* Profiles Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {profiles.map((profile, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center text-center"
-            >
+          {profiles.map((profile) => (
+            <div key={profile.id} className="flex flex-col items-center text-center">
               {/* Avatar */}
               <div className="w-32 h-32 mb-4 rounded-full bg-gray-300 flex items-center justify-center overflow-hidden">
-                <svg
-                  viewBox="0 0 100 100"
-                  className="w-full h-full"
-                  fill="#9CA3AF"
-                >
-                  {profile.gender === "Female" ? (
+                <svg viewBox="0 0 100 100" className="w-full h-full" fill="#9CA3AF">
+                  {profile.gender === 'Female' ? (
                     // Female avatar with hijab
                     <>
                       <ellipse cx="50" cy="45" rx="20" ry="25" fill="#9CA3AF" />
@@ -137,12 +154,10 @@ export default function FeaturedProfiles() {
               <div className="space-y-1">
                 <h3 className="text-lg font-bold text-gray-800">{profile.name}</h3>
                 <p className="text-sm text-gray-600">
-                  {profile.gender}, {profile.age} Years,
+                  {profile.gender}, {profile.age} Years
                 </p>
                 <p className="text-sm text-gray-600">{profile.maritalStatus}</p>
-                {profile.caste && (
-                  <p className="text-sm text-gray-600">{profile.caste}</p>
-                )}
+                {profile.caste && <p className="text-sm text-gray-600">{profile.caste}</p>}
                 <p className="text-sm text-gray-600">{profile.sect}</p>
                 {profile.profession && (
                   <p className="text-sm text-gray-600">{profile.profession}</p>
@@ -151,12 +166,12 @@ export default function FeaturedProfiles() {
                   <p className="text-sm text-gray-600">{profile.education}</p>
                 )}
                 <p className="text-sm text-gray-600">{profile.location}</p>
-                <p className="text-sm text-gray-500">Serial No: {profile.serialNo}</p>
+                <p className="text-sm text-gray-500">Serial No: {profile.id}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }
