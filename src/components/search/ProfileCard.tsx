@@ -67,7 +67,7 @@ export default function ProfileCard({ profile }: ProfileCardProps) {
             <span className="font-semibold">Country:</span> {profile.country}
           </p>
           <p className="text-slate-600 text-xs">
-            <span className="font-semibold">Serial No:</span> {profile.serialNo}
+            <span className="font-semibold">Serial No:</span> {profile.id}
           </p>
         </div>
 
